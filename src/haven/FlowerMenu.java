@@ -93,10 +93,28 @@ public class FlowerMenu extends Widget {
             return (ta(Coord.sc(a, r)));
         }
     }
-
+    
     public class Opening extends NormAnim {
         Opening() {
             super(0.15);
+        }
+
+        public void ntick(double s) {
+            Petal pick = null;
+            for (Petal p : opts) {
+                p.move(p.ta + ((1 - s) * PI), p.tr * s);
+                p.a = s;
+                if (p.name.equals("Pick"))
+                    pick = p;
+            }
+            if (Config.autopick && pick != null && s == 1.0)
+                choose(pick);
+        }
+    }
+    
+    public class OpeningFast extends NormAnim {
+        OpeningFast() {
+            super(0.0);
         }
 
         public void ntick(double s) {
@@ -143,6 +161,21 @@ public class FlowerMenu extends Widget {
     public class Cancel extends NormAnim {
         Cancel() {
             super(0.20);
+        }
+
+        public void ntick(double s) {
+            for (Petal p : opts) {
+                p.move(p.ta + ((s) * PI), p.tr * (1 - s));
+                p.a = 1 - s;
+            }
+            if (s == 1.0)
+                ui.destroy(FlowerMenu.this);
+        }
+    }
+    
+    public class CancelFast extends NormAnim {
+        CancelFast() {
+            super(0.0);
         }
 
         public void ntick(double s) {
@@ -205,6 +238,9 @@ public class FlowerMenu extends Widget {
         mg = ui.grabmouse(this);
         kg = ui.grabkeys(this);
         organize(opts);
+        if (Config.fastflower)
+        new OpeningFast(); 
+        else 
         new Opening();
     }
 
@@ -218,7 +254,10 @@ public class FlowerMenu extends Widget {
 
     public void uimsg(String msg, Object... args) {
         if (msg == "cancel") {
-            new Cancel();
+        	if (Config.fastflower)
+        		new CancelFast();
+        	else
+        		new Cancel();
             mg.remove();
             kg.remove();
         } else if (msg == "act") {

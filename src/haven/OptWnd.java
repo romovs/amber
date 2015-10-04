@@ -923,6 +923,20 @@ public class OptWnd extends Window {
                 a = val;
             }
         }, new Coord(0, y));
+        //
+        y += 35;
+        general.add(new CheckBox("Fast Flower Menu") {
+            {
+                a = Config.fastflower;
+            } 
+
+            public void set(boolean val) {
+                Utils.setprefb("autopick", val);
+                Config.fastflower = val;
+                a = val;
+            }
+        }, new Coord(0, y));
+        //
 
         general.add(new PButton(200, "Back", 27, main), new Coord(270, 360));
         general.pack();
