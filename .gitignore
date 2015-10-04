@@ -6,3 +6,4 @@
 *.iml
 *.zip
 amber-*.zip
+/bin/

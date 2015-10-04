@@ -57,11 +57,14 @@ public class MapView extends PView implements DTarget, Console.Directory {
     private boolean showgrid;
     private TileOutline gridol;
     private Coord lasttc = Coord.z;
-    private static final Map<String, Gob.Overlay> radmap = new HashMap<String, Gob.Overlay>(4) {{
+    private static final Map<String, Gob.Overlay> radmap = new HashMap<String, Gob.Overlay>(7) {{
         put("gfx/terobjs/minesupport", new Gob.Overlay(new BPRadSprite(100.0F, 0)));
         put("gfx/terobjs/column", new Gob.Overlay(new BPRadSprite(125.0F, 0)));
         put("gfx/terobjs/trough", new Gob.Overlay(new BPRadSprite(200.0F, -10.0F)));
         put("gfx/terobjs/beehive", new Gob.Overlay(new BPRadSprite(151.0F, -10.0F)));
+        put("gfx/kritter/bear/bear", new Gob.Overlay(new BPRadSprite(125.0F, -10.0F)));
+        put("gfx/kritter/boar/boar", new Gob.Overlay(new BPRadSprite(125.0F, -10.0F)));
+        put("gfx/terobjs/vehicle/bram", new Gob.Overlay(new BPRadSprite(125.0F, -10.0F)));
     }};
 
     public interface Delayed {
