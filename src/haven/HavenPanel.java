@@ -75,7 +75,7 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
         setSize(this.w = w, this.h = h);
         newui(null);
         initgl();
-        if (Toolkit.getDefaultToolkit().getMaximumCursorColors() >= 256)
+        if (Toolkit.getDefaultToolkit().getMaximumCursorColors() >= 256 || Config.hwcursor)
             cursmode = "awt";
         setCursor(Toolkit.getDefaultToolkit().createCustomCursor(TexI.mkbuf(new Coord(1, 1)), new java.awt.Point(), ""));
     }

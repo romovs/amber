@@ -109,6 +109,7 @@ public class Config {
     public static boolean autopick = Utils.getprefb("autopick", false);
     public static Coord chatsz = Utils.getprefc("chatsz", Coord.z);
     public static boolean alternmapctrls = Utils.getprefb("alternmapctrls", false);
+    public static boolean hwcursor = false;
     public static byte[] authck = null;
     public static String prefspec = "hafen";
     public static String version;
@@ -227,6 +228,7 @@ public class Config {
         out.println("  -d                 Display debug text");
         out.println("  -P                 Enable profiling");
         out.println("  -G                 Enable GPU profiling");
+        out.println("  -c                 Force hardware cursor");
         out.println("  -U URL             Use specified external resource URL");
         out.println("  -r DIR             Use specified resource directory (or HAVEN_RESDIR)");
         out.println("  -A AUTHSERV[:PORT] Use specified authentication server");
@@ -235,7 +237,7 @@ public class Config {
     }
 
     public static void cmdline(String[] args) {
-        PosixArgs opt = PosixArgs.getopt(args, "hdPGU:r:A:u:C:");
+        PosixArgs opt = PosixArgs.getopt(args, "hdPGcU:r:A:u:C:");
         if (opt == null) {
             usage(System.err);
             System.exit(1);
@@ -280,6 +282,9 @@ public class Config {
                     break;
                 case 'C':
                     authck = Utils.hex2byte(opt.arg);
+                    break;
+                case 'c':
+                    hwcursor = true;
                     break;
             }
         }
