@@ -46,5 +46,6 @@ public class GobPath extends Sprite {
         gl.glVertex3f(0, 0, 0);
         gl.glVertex3f(x, y, z);
         gl.glEnd();
+        gl.glDisable(GL2.GL_LINE_SMOOTH);
     }
 }

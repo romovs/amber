@@ -72,10 +72,30 @@ public class Tabs {
             }
             @Override
             public void wdgmsg(Widget sender, String msg, Object... args) {
-                if(Config.studylock && msg.equals("invxf"))
+                if(Config.studylock && msg.equals("invxf")) {
                     return;
-                else
-                    super.wdgmsg(sender, msg, args);
+                } else if (Config.studylock && msg.equals("drop")) {
+                    Coord c = (Coord) args[0];
+                    for (Widget invwdg = this.lchild; invwdg != null; invwdg = invwdg.prev) {
+                        if (invwdg instanceof Inventory) {
+                            Inventory inv = (Inventory) invwdg;
+                            for (Widget witm = inv.lchild; witm != null; witm = witm.prev) {
+                                if (witm instanceof WItem) {
+                                    WItem itm = (WItem) witm;
+                                    for (int x = itm.c.x; x < itm.c.x + itm.sz.x; x += Inventory.sqsz.x) {
+                                        for (int y = itm.c.y; y < itm.c.y + itm.sz.y; y += Inventory.sqsz.y) {
+                                            if (x / Inventory.sqsz.x == c.x && y / Inventory.sqsz.y == c.y)
+                                                return;
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+
+                super.wdgmsg(sender, msg, args);
             }
         }, c));
     }

@@ -375,21 +375,20 @@ public class LocalMiniMap extends Widget {
             }
         }
         if (cur != null) {
-            int ht = (sz.x / 100 + 2) / 2;
-            if (ht == 2)
-                ht++;
-            int vt = (sz.y / 100 + 2) / 2;
-            if (vt == 1)
-                vt++;
+            int hhalf = sz.x / 2;
+            int vhalf = sz.y / 2;
 
-            int pox = cur.x * 100 - cc.x + sz.x / 2 + delta.x;
-            int poy = cur.y * 100 - cc.y + sz.y / 2 + delta.y;
+            int ht = (hhalf / 100) + 2;
+            int vt = (vhalf / 100) + 2;
+
+            int pox = cur.x * 100 - cc.x + hhalf + delta.x;
+            int poy = cur.y * 100 - cc.y + vhalf + delta.y;
 
             int tox = pox / 100 - 1;
             int toy = poy / 100 - 1;
 
-            for (int x = -ht; x <= ht; x++) {
-                for (int y = -vt; y <= vt; y++) {
+            for (int x = -ht; x < ht + ht; x++) {
+                for (int y = -vt; y < vt + vt; y++) {
                     BufferedImage mt = maptiles.get(cur.add(x - tox, y - toy));
                     if (mt != null) {
                         int mtcx = (x - tox) * 100 + pox;

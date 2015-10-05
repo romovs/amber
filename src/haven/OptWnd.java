@@ -696,6 +696,18 @@ public class OptWnd extends Window {
                 a = val;
             }
         }, new Coord(260, y));
+        y += 35;
+        display.add(new CheckBox("Show study remaining time") {
+            {
+                a = Config.showstudylefttime;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("showstudylefttime", val);
+                Config.showstudylefttime = val;
+                a = val;
+            }
+        }, new Coord(260, y));
 
         display.add(new Button(220, "Reset Windows (req. logout)") {
             @Override

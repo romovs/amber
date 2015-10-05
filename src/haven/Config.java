@@ -106,10 +106,12 @@ public class Config {
     public static boolean servertime = Utils.getprefb("servertime", false);
     public static boolean showplayerpaths = Utils.getprefb("showplayerpaths", false);
     public static boolean showanimalpaths = Utils.getprefb("showanimalpaths", false);
+    public static boolean showstudylefttime = Utils.getprefb("showstudylefttime", false);
     public static boolean autopick = Utils.getprefb("autopick", false);
     public static boolean fastflower = Utils.getprefb("fastflower", false);
     public static Coord chatsz = Utils.getprefc("chatsz", Coord.z);
     public static boolean alternmapctrls = Utils.getprefb("alternmapctrls", false);
+    public static boolean autostudy = Utils.getprefb("autostudy", true);
     public static boolean hwcursor = false;
     public static byte[] authck = null;
     public static String prefspec = "hafen";

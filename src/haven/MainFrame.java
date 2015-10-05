@@ -378,6 +378,11 @@ public class MainFrame extends java.awt.Frame implements Runnable, Console.Direc
     }
 
     private static void main2(String[] args) {
+        new Thread(new Runnable() {
+            public void run() {
+                StudyTimes.updatestudytimes();
+            }
+        }).start();
         Config.cmdline(args);
         try {
             javabughack();

@@ -43,6 +43,9 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
     public static final Color vitalityclr = new Color(157, 201, 72);
     private Quality quality;
     public Tex metertex;
+    private double studytime = 0.0;
+    public Tex timelefttex;
+    private String name = "";
 
     public static class Quality {
         private static final DecimalFormat shortfmt = new DecimalFormat("#.#");
@@ -126,6 +129,43 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
         this(res, Message.nil);
     }
 
+    public String getname() {
+        if (rawinfo == null) {
+            return "";
+        }
+
+        try {
+            return ItemInfo.find(ItemInfo.Name.class, info()).str.text;
+        } catch (Exception ex) {
+            return "";
+        }
+    }
+
+    public boolean updatetimelefttex() {
+        synchronized (this) {
+            if (name.isEmpty()) {
+                if ((name = getname()).isEmpty()) {
+                    return false;
+                }
+            }
+
+            if (studytime == 0.0) {
+                if ((studytime = StudyTimes.getstudytime(getname())) == 0.0) {
+                    return false;
+                }
+            }
+
+            double timeneeded = studytime * 60;
+            int timeleft = (int) timeneeded * (100 - meter) / 100;
+            int hoursleft = timeleft / 60;
+            int minutesleft = timeleft - hoursleft * 60;
+
+            timelefttex = Text.renderstroked(String.format("%d:%d", hoursleft, minutesleft), Color.WHITE, Color.BLACK).tex();
+        }
+
+        return true;
+    }
+
     private Random rnd = null;
 
     public Random mkrandoom() {
@@ -190,6 +230,7 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
         } else if (name == "meter") {
             meter = (Integer) args[0];
             metertex = Text.renderstroked(String.format("%d%%", meter), Color.WHITE, Color.BLACK).tex();
+            timelefttex = null;
         }
     }
 
