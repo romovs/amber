@@ -131,7 +131,7 @@ public class Inventory extends Widget implements DTarget {
         }
     }
 
-    private List<WItem> getitems(GItem item) {
+    public List<WItem> getitems(GItem item) {
         List<WItem> items = new ArrayList<WItem>();
         String name = item.spr().getname();
         String resname = item.resource().name;

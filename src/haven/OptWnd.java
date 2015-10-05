@@ -708,6 +708,18 @@ public class OptWnd extends Window {
                 a = val;
             }
         }, new Coord(260, y));
+        y += 35;
+        display.add(new CheckBox("Auto replace curiosities") {
+            {
+                a = Config.autoreplacecurios;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("autoreplacecurios", val);
+                Config.autoreplacecurios = val;
+                a = val;
+            }
+        }, new Coord(260, y));
 
         display.add(new Button(220, "Reset Windows (req. logout)") {
             @Override

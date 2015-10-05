@@ -294,6 +294,15 @@ public class WItem extends Widget implements DTarget {
                 Resource.Tooltip tt = item.resource().layer(Resource.Tooltip.class);
                 if (tt != null)
                     gameui().syslog.append(tt.t + " LP: " + ci.exp, Color.LIGHT_GRAY);
+
+                if (Config.autoreplacecurios) {
+                    // It doesn't work properly when several container-like widgets opened,
+                    // but I don't see any better way to accomplish this task
+                    List<WItem> similaritems = gameui().maininv.getitems(this.item);
+                    if (similaritems.size() > 0) {
+                        similaritems.get(0).item.wdgmsg("transfer", Coord.z);
+                    }
+                }
             }
         } catch (Loading l) {
         }
