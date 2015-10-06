@@ -1,3 +1,8 @@
+Version 1.0.1
+	New:
+	Added option to log out after 5 minutes of not doing anything in client
+	Added system time display with Dewy Mantle time alert
+	Added Changelog
 Version 1.0.0
 	New:
 	Added option to toggle instant flower menus
