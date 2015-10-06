@@ -31,6 +31,7 @@
 	<pathelement path="lib/jnlp.jar" />
 	<pathelement path="lib/jorbis.jar" />
     <pathelement path="lib/jsoup-1.8.3.jar" />
+    <pathelement path="lib/pircbot.jar" />
 	<pathelement path="lib/jogg.jar" />
 	<pathelement path="lib/jglob.jar" />
       </classpath>
@@ -71,7 +72,7 @@
       <fileset dir="build/classes-lib" />
       <manifest>
 	<attribute name="Main-Class" value="haven.MainFrame" />
-	<attribute name="Class-Path" value="jogl.jar gluegen-rt.jar builtin-res.jar hafen-res.jar amber-res.jar" />
+	<attribute name="Class-Path" value="jogl.jar gluegen-rt.jar builtin-res.jar hafen-res.jar amber-res.jar pircbot.jar" />
       </manifest>
     </jar>
     <chmod file="build/hafen.jar" perm="a+x" />
@@ -92,6 +93,7 @@
 	<include name="hafen-res.jar" />
 	<include name="builtin-res.jar" />
 	<include name="amber-res.jar" />
+    <include name="pircbot.jar" />
       </fileset>
       <fileset dir="lib/jogl-natives" includes="*.jar">
       </fileset>

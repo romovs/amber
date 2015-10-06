@@ -60,6 +60,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     private WItem vhand;
     public ChatUI chat;
     public ChatUI.Channel syslog;
+    public ChatUI.Channel globalchat;
     public double prog = -1;
     private boolean afk = false;
     @SuppressWarnings("unchecked")
@@ -142,6 +143,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         }, new Coord(10, 10));
         buffs = ulpanel.add(new Bufflist(), new Coord(95, 65));
         syslog = chat.add(new ChatUI.Log("System"));
+        globalchat = chat.add(new ChatUI.GlobalChat(StatusWdg.username));
         opts = add(new OptWnd());
         opts.hide();
         zerg = add(new Zergwnd(), 187, 50);

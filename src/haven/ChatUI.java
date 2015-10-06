@@ -41,6 +41,8 @@ import java.net.URL;
 import java.util.regex.*;
 import java.awt.datatransfer.*;
 
+import org.jibble.pircbot.*;
+
 public class ChatUI extends Widget {
     private static final Resource alarmsfx = Resource.local().loadwait("sfx/chatalarm");
     public static final RichText.Foundry fndsml = new RichText.Foundry(new ChatParser(TextAttribute.FONT, Text.dfont.deriveFont(10f), TextAttribute.FOREGROUND, Color.BLACK));
@@ -671,6 +673,128 @@ public class ChatUI extends Widget {
         public void send(String text) {
             history.add(text);
             wdgmsg("msg", text);
+        }
+    }
+
+    public static class GlobalChat extends EntryChannel {
+        public static final String name = "Global chat";
+        public static final String server = "irc.synirc.net";
+        public static final String channel = "#hafenworld";
+        private IRCHelper irchelper;
+
+        public GlobalChat(String username) {
+            super(false);
+
+            this.irchelper = new IRCHelper(username);
+
+            new Thread(new Runnable() {
+                public void run() {
+                    connectionchecker();
+                }
+            }).start();
+        }
+
+        private void printinfo(String message) {
+            append(message, Color.YELLOW);
+        }
+
+        private void printerror(String message) {
+            append(message, Color.RED);
+        }
+
+        private void printincomingmessage(String message) {
+            append(message, Color.WHITE);
+        }
+
+        private void printoutgoingmessage(String message) {
+            append(message, Color.GREEN);
+        }
+
+        private void connectionchecker() {
+            while (true) {
+                if (!irchelper.isconnected()) {
+                    printinfo("Connecting...");
+                    try {
+                        irchelper.connect(server);
+                        irchelper.joinChannel(channel);
+                    } catch (Exception ex) {
+                        printerror("Unable to connect: " + ex.getMessage());
+                    }
+                }
+
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException ie) {
+                    return;
+                }
+            }
+        }
+
+        private void onconnect() {
+            printinfo("Connected");
+        }
+
+        private void ondisconnect() {
+            printinfo("Disconnected from server");
+        }
+
+        private void onmessage(String sender, String message) {
+            printincomingmessage(String.format("%s: %s", sender, message));
+        }
+
+        public void wdgmsg(String msg, Object... args) {
+            if (msg == "msg") {
+                String line = (String) args[0];
+                irchelper.sendmessage(line);
+                printoutgoingmessage(String.format("You: %s", line));
+            } else {
+                super.uimsg(msg, args);
+            }
+        }
+
+        public String name() {
+            return (name);
+        }
+
+        public class IRCHelper extends PircBot {
+            private boolean connected;
+
+            public IRCHelper(String username) {
+                this.setName(username);
+                try {
+                    this.setEncoding("UTF-8");
+                } catch (Exception ex) {
+                    // NOP
+                }
+            }
+
+            public boolean isconnected() {
+                synchronized (this) {
+                    return connected;
+                }
+            }
+
+            protected void onConnect() {
+                synchronized (this) {
+                    connected = true;
+                }
+                onconnect();
+            }
+
+            protected void onDisconnect() {
+                synchronized (this) {
+                    connected = false;
+                }
+                ondisconnect();
+            }
+
+            protected void onMessage(String channel, String sender, String login, String hostname, String message) {
+                onmessage(sender, message);
+            }
+
+            public void sendmessage(String message) {
+                sendMessage(channel, message);
+            }
         }
     }
 
