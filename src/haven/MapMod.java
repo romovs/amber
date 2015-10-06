@@ -50,10 +50,10 @@ public class MapMod extends Window implements MapView.Grabber {
     public MapMod() {
         super(new Coord(200, 100), "Kartlasskostning");
         walkmod = false;
-        cbox = add(new CheckBox("Walk drawing"), Coord.z);
+        cbox = add(new CheckBox("Walk drawing", true), Coord.z);
         cbox.canactivate = true;
         btn = add(new Button(40, "Change"), asz.add(-50, -30));
-        text = add(new Label(String.format(fmt, 0, 0)), Coord.z);
+        text = add(new Label(String.format(fmt, 0, 0)), 0, 0);
         tilenm = add(new TextEntry(50, ""), new Coord(0, 40));
         tilenm.canactivate = true;
     }
@@ -79,6 +79,8 @@ public class MapMod extends Window implements MapView.Grabber {
     public boolean mmousedown(Coord mc, int button) {
         if (button != 1)
             return (false);
+        if (mgrab != null)
+            mgrab.remove();
         Coord tc = mc.div(MCache.tilesz);
         if (ol != null)
             ol.destroy();
@@ -94,8 +96,11 @@ public class MapMod extends Window implements MapView.Grabber {
     }
 
     public boolean mmouseup(Coord mc, int button) {
-        grab.mv = false;
-        mgrab.remove();
+        if (mgrab != null) {
+            grab.mv = false;
+            mgrab.remove();
+            mgrab = null;
+        }
         return (true);
     }
 
@@ -129,7 +134,7 @@ public class MapMod extends Window implements MapView.Grabber {
             return;
         }
         if (sender == cbox) {
-            walkmod = (Boolean) args[0];
+            walkmod = ((Integer) args[0]) != 0;
             if (!walkmod) {
                 mv.grab(grab);
             } else {

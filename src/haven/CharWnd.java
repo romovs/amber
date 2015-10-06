@@ -1453,7 +1453,18 @@ public class CharWnd extends Window {
                     Config.studylock = val;
                     a = val;
                 }
-            }, new Coord(415, 10));
+            }, new Coord(412, 10));
+            sattr.add(new CheckBox("Auto") {
+                {
+                    a = Config.autostudy;
+                }
+
+                public void set(boolean val) {
+                    Utils.setprefb("autostudy", val);
+                    Config.autostudy = val;
+                    a = val;
+                }
+            }, new Coord(460, 10));
             Frame.around(sattr, Collections.singletonList(inf));
         } else if (place == "fmg") {
             fgt.add(child, 0, 0);
