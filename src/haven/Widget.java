@@ -598,7 +598,7 @@ public class Widget {
             parent.wdgmsg(sender, msg, args);
     }
 
-    public void tick(double dt) {
+    public void tick(double dt) throws InterruptedException {
         Widget next;
 
         for (Widget wdg = child; wdg != null; wdg = next) {

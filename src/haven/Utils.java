@@ -1115,7 +1115,16 @@ public class Utils {
                 ((float) c.getAlpha() / 255.0f)
         });
     }
-
+    
+    public static String formatGameTime(long milliseconds) {
+    	
+    	        long seconds = milliseconds / 1000;
+    	        long hours = (seconds / 3600) % 24;
+    	        long minutes = (seconds / 60) % 60;
+    	
+    	        return String.format("%02d:%02d", hours, minutes);
+    	    }
+    
     @SuppressWarnings("unchecked")
     public static <T> T[] mkarray(Class<T> cl, int len) {
         return ((T[]) Array.newInstance(cl, len));

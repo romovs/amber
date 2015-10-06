@@ -31,6 +31,7 @@ import java.util.*;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.image.WritableRaster;
+import java.lang.*;
 
 import static haven.Inventory.invsq;
 
@@ -38,6 +39,8 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     public static final Text.Foundry msgfoundry = new Text.Foundry(Text.dfont, 14);
     public static final Text.Foundry progressf = new Text.Foundry(Text.sansb, 12).aa(true);
     private static final int blpw = 142, brpw = 142;
+    private final Label timelbl;
+    public boolean dewyTime = false;
     public final String chrid;
     public final long plid;
     private final Hidepanel ulpanel, urpanel, brpanel, menupanel;
@@ -113,6 +116,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         setcanfocus(true);
         setfocusctl(true);
         chat = add(new ChatUI(0, 0));
+        timelbl = add(new Label("", 20));
         if (Utils.getprefb("chatvis", true)) {
             chat.resize(0, chat.savedh);
             chat.show();
@@ -612,14 +616,30 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         }
     }
 
-    public void tick(double dt) {
+    public void tick(double dt) throws InterruptedException {
         super.tick(dt);
         if (!afk && (System.currentTimeMillis() - ui.lastevent > 300000)) {
             afk = true;
             wdgmsg("afk");
+            if(Config.afklogout)
+                getparent(GameUI.class).act("lo");
+            Thread.sleep(10000);
         } else if (afk && (System.currentTimeMillis() - ui.lastevent < 300000)) {
             afk = false;
         }
+       timelbl.settext(Utils.formatGameTime(ui.sess.glob.globtime()));
+        
+        if (((ui.sess.glob.globtime() / 1000) / 3600 % 24) < 8 && ((ui.sess.glob.globtime() / 1000) / 3600 % 24) > 4) {
+            timelbl.setcolor(new Color(50, 255, 50));
+            if (!dewyTime) {
+            	syslog.append(String.format("It's Dewy Mantle Time!"), new Color(0, 255, 0));
+                dewyTime = true;
+            }
+        } else {
+            timelbl.setcolor(new Color(200, 200, 200));
+            if (dewyTime)
+                dewyTime = false;
+       }
     }
 
     public void uimsg(String msg, Object... args) {
@@ -910,6 +930,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     public void act(String... args) {
         wdgmsg("act", (Object[]) args);
     }
+
 
     public void act(int mods, Coord mc, Gob gob, String... args) {
         int n = args.length;
