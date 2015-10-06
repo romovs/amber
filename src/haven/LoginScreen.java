@@ -44,7 +44,7 @@ public class LoginScreen extends Widget {
         textf = new Text.Foundry(Text.sans, 16).aa(true);
         textfs = new Text.Foundry(Text.sans, 14).aa(true);
     }
-
+    
     public LoginScreen() {
         super(bg.sz());
         setfocustab(true);
@@ -55,8 +55,7 @@ public class LoginScreen extends Widget {
         this.add(ll);
         ll.show();
         ll.raise();
-    }
-
+    	}
     private static abstract class Login extends Widget {
         abstract Object[] data();
 
