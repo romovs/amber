@@ -227,8 +227,10 @@ public class WItem extends Widget implements DTarget {
                         g.image(quality.maxtex, new Coord(0, sz.y - 12));
                     } else if (Config.showqualitymode == 1) {
                         g.image(Config.qualitywhole ? quality.avgwholetex : quality.avgtex, new Coord(0, sz.y - 12));
-                    } else {
+                    } else if (Config.showqualitymode == 3) {
                         g.image(Config.qualitywhole ? quality.avgsvwholetex : quality.avgsvtex, new Coord(0, sz.y - 12));
+                    } else {
+                        g.image(quality.mintex, new Coord(0, sz.y - 12));
                     }
                 }
             }

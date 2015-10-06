@@ -143,10 +143,13 @@ public class Config {
             "spindlytaproot", "stingingnettle", "dragonfly", "toad", "bram", "rowboat"};
     public static String[] iconssel = Utils.getprefsa("iconssel", null);
 
-    public final static Map<String, Tex> additonalicons = new HashMap<String, Tex>(3) {{
+    public final static Map<String, Tex> additonalicons = new HashMap<String, Tex>(6) {{
         put("gfx/terobjs/vehicle/bram", Resource.loadtex("gfx/icons/bram"));
         put("gfx/kritter/toad/toad", Resource.loadtex("gfx/icons/toad"));
         put("gfx/terobjs/vehicle/rowboat", Resource.loadtex("gfx/icons/rowboat"));
+        put("gfx/kritter/chicken/chicken", Resource.loadtex("gfx/icons/deadhen"));
+        put("gfx/kritter/chicken/rooster", Resource.loadtex("gfx/icons/deadrooster"));
+        put("gfx/kritter/rabbit/rabbit", Resource.loadtex("gfx/icons/deadrabbit"));
     }};
     
     static {

@@ -50,31 +50,46 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
     public static class Quality {
         private static final DecimalFormat shortfmt = new DecimalFormat("#.#");
         private static final DecimalFormat longfmt = new DecimalFormat("#.###");
-        public int max;
+        public int max, min;
         public Tex etex, stex, vtex;
-        public Tex maxtex, avgtex, avgwholetex, lpgaintex, avgsvtex, avgsvwholetex;
+        public Tex maxtex, mintex, avgtex, avgwholetex, lpgaintex, avgsvtex, avgsvwholetex;
         public boolean curio;
 
         public Quality(int e, int s, int v, boolean curio) {
             this.curio = curio;
 
-            Color color;
+            Color colormax;
             if (e == s && e == v) {
                 max = e;
-                color = Color.WHITE;
+                colormax = Color.WHITE;
             } else if (e >= s && e >= v) {
                 max = e;
-                color = essenceclr;
+                colormax = essenceclr;
             } else if (s >= e && s >= v) {
                 max = s;
-                color = substanceclr;
+                colormax = substanceclr;
             } else {
                 max = v;
-                color = vitalityclr;
+                colormax = vitalityclr;
             }
 
-            double avg =  (double)(e + s + v)/3.0;
-            double avgsv =  (double)(s + v)/2.0;
+            Color colormin;
+            if (e == s && e == v) {
+                min = e;
+                colormin = Color.WHITE;
+            } else if (e <= s && e <= v) {
+                min = e;
+                colormin = essenceclr;
+            } else if (s <= e && s <=v) {
+                min = s;
+                colormin = substanceclr;
+            } else {
+                min = v;
+                colormin = vitalityclr;
+            }
+
+            double avg =  Math.cbrt(e * s * v);
+            double avgsv =  Math.sqrt(s * v);
             if (curio) {
                 double lpgain = Math.sqrt(Math.sqrt((double) (e * e + s * s + v * v) / 300.0));
                 lpgaintex = Text.renderstroked(longfmt.format(lpgain), Color.WHITE, Color.BLACK).tex();
@@ -82,11 +97,12 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
             etex = Text.renderstroked(e + "", essenceclr, Color.BLACK).tex();
             stex = Text.renderstroked(s + "", substanceclr, Color.BLACK).tex();
             vtex = Text.renderstroked(v + "", vitalityclr, Color.BLACK).tex();
-            maxtex = Text.renderstroked(max + "", color, Color.BLACK).tex();
-            avgtex = Text.renderstroked(shortfmt.format(avg), color, Color.BLACK).tex();
-            avgsvtex = Text.renderstroked(shortfmt.format(avgsv), color, Color.BLACK).tex();
-            avgwholetex = Text.renderstroked(Math.round(avg) + "", color, Color.BLACK).tex();
-            avgsvwholetex = Text.renderstroked(Math.round(avgsv) + "", color, Color.BLACK).tex();
+            mintex = Text.renderstroked(min + "", colormin, Color.BLACK).tex();
+            maxtex = Text.renderstroked(max + "", colormax, Color.BLACK).tex();
+            avgtex = Text.renderstroked(shortfmt.format(avg), colormax, Color.BLACK).tex();
+            avgsvtex = Text.renderstroked(shortfmt.format(avgsv), colormax, Color.BLACK).tex();
+            avgwholetex = Text.renderstroked(Math.round(avg) + "", colormax, Color.BLACK).tex();
+            avgsvwholetex = Text.renderstroked(Math.round(avgsv) + "", colormax, Color.BLACK).tex();
         }
     }
 
