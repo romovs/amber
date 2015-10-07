@@ -295,7 +295,7 @@ public class LocalMiniMap extends Widget {
                     if (Config.alarmram) {
                     	 try {
                              Resource res = gob.getres();
-                             if (res != null && "dandelion".equals(res.basename())) {
+                             if (res != null && "bram".equals(res.basename())) {
                                  if (!sgobs.contains(gob.id)) {
                                      sgobs.add(gob.id);
                             	 Audio.play(alarmramsfx, Config.alarmramvol);
