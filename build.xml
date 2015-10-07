@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 
 <project name="hafen" default="deftgt">
-  <property name="name" value="amber"/>
+  <property name="name" value="Purus Pasta"/>
   <property name="version" value=""/>
 
   <target name="build-env">
@@ -39,7 +39,7 @@
       <!-- <compilerarg value="-Xbarda" /> -->
     </javac>
     <copy todir="build/classes">
-      <fileset dir="src" excludes="**/*.java" />
+     	 <fileset dir="src" excludes="**/*.java" />
     </copy>
     <copy todir="build/classes/haven" file="etc/ressrv.crt" />
     <copy todir="build/classes/haven" file="etc/authsrv.crt" />
@@ -71,7 +71,7 @@
       <fileset dir="build/classes-lib" />
       <manifest>
 	<attribute name="Main-Class" value="haven.MainFrame" />
-	<attribute name="Class-Path" value="jogl.jar gluegen-rt.jar builtin-res.jar hafen-res.jar amber-res.jar" />
+	<attribute name="Class-Path" value="jogl.jar gluegen-rt.jar builtin-res.jar hafen-res.jar amber-res.jar pasta-res.jar" />
       </manifest>
     </jar>
     <chmod file="build/hafen.jar" perm="a+x" />
@@ -92,6 +92,7 @@
 	<include name="hafen-res.jar" />
 	<include name="builtin-res.jar" />
 	<include name="amber-res.jar" />
+    <include name ="pasta-res.jar" />
       </fileset>
       <fileset dir="lib/jogl-natives" includes="*.jar">
       </fileset>
