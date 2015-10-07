@@ -67,6 +67,8 @@ public class Config {
     public static boolean chattimestamp = Utils.getprefb("chattimestamp", false);
     public static boolean alarmunknown = Utils.getprefb("alarmunknown", false);
     public static double alarmunknownvol = Utils.getprefd("alarmunknownvol", 0.32);
+    public static boolean alarmram = Utils.getprefb("alarmram", false);
+    public static double alarmramvol = Utils.getprefd("alarmramvol", 0.32);
     public static boolean alarmred = Utils.getprefb("alarmred", false);
     public static double alarmredvol = Utils.getprefd("alarmredvol", 0.32);
     public static boolean showquality = Utils.getprefb("showquality", false);

@@ -618,7 +618,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
 
     public void tick(double dt) throws InterruptedException {
         super.tick(dt);
-        if (!afk && (System.currentTimeMillis() - ui.lastevent > 300000)) {
+        if (!afk && (System.currentTimeMillis() - ui.lastevent > (300000))) {
             afk = true;
             wdgmsg("afk");
             if(Config.afklogout)

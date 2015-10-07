@@ -384,6 +384,33 @@ public class OptWnd extends Window {
                 Utils.setprefd("alarmredvol", vol);
             }
         }, new Coord(0, y));
+        //
+        y += 20;
+        audio.add(new CheckBox("Alarm on Battering Rams") {
+            {
+                a = Config.alarmram;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("alarmram", val);
+                Config.alarmram = val;
+                a = val;
+            }
+        }, new Coord(0, y));
+        y += 15;
+        audio.add(new HSlider(200, 0, 1000, 0) {
+            protected void attach(UI ui) {
+                super.attach(ui);
+                val = (int) (Config.alarmramvol * 1000);
+            }
+
+            public void changed() {
+                double vol = val / 1000.0;
+                Config.alarmramvol = vol;
+                Utils.setprefd("alarmramvol", vol);
+            }
+        }, new Coord(0, y));
+        //
         y += 20;
         audio.add(new Label("Timers alarm volume"), new Coord(0, y));
         y += 15;
@@ -950,7 +977,7 @@ public class OptWnd extends Window {
             }
         }, new Coord(0, y));
         y += 35;
-        general.add(new CheckBox("Auto Logout after 5 min afk") {
+        general.add(new CheckBox("Auto Logout after 5 minutes afking") {
             {
                 a = Config.afklogout;
             } 

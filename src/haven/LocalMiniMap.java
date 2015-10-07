@@ -45,6 +45,7 @@ public class LocalMiniMap extends Widget {
     private Coord doff = Coord.z;
     private Coord delta = Coord.z;
 	private static final Resource alarmplayersfx = Resource.local().loadwait("sfx/alarmplayer");
+	private static final Resource alarmramsfx = Resource.local().loadwait("sfx/alarmram");
 	private final HashSet<Long> sgobs = new HashSet<Long>();
     private final HashMap<Coord, BufferedImage> maptiles = new HashMap<Coord, BufferedImage>(28, 0.75f);
     private final Map<Coord, Defer.Future<Coord>> cache = new LinkedHashMap<Coord, Defer.Future<Coord>>(7, 0.75f, true) {
@@ -291,6 +292,19 @@ public class LocalMiniMap extends Widget {
                         } catch (Exception e) {
                         }
                     }
+                    if (Config.alarmram) {
+                    	 try {
+                             Resource res = gob.getres();
+                             if (res != null && "dandelion".equals(res.basename())) {
+                                 if (!sgobs.contains(gob.id)) {
+                                     sgobs.add(gob.id);
+                            	 Audio.play(alarmramsfx, Config.alarmramvol);
+                                 }
+                             }
+                    } 
+                    	 catch (Exception e) { 
+                    	 }
+                    	 }
                 } catch (Loading l) {
                 }
             }
