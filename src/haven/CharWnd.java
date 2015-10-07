@@ -31,6 +31,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.font.TextAttribute;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import static haven.Window.wbox;
 import static haven.PUtils.*;
@@ -778,12 +779,13 @@ public class CharWnd extends Window {
     public class Experience {
         public final Indir<Resource> res;
         public final int mtime, score;
+        public final int lastobtainedtime;
         private String sortkey = "\uffff";
         private Tex small;
         private final Text.UText<?> rnm = new Text.UText<String>(attrf) {
             public String value() {
                 try {
-                    return (res.get().layer(Resource.tooltip).t);
+                    return (res.get().layer(Resource.tooltip).t + " (" + getinfoaboutlastobtainedtime() + " ago)");
                 } catch (Loading l) {
                     return ("...");
                 }
@@ -794,6 +796,14 @@ public class CharWnd extends Window {
             this.res = res;
             this.mtime = mtime;
             this.score = score;
+
+            String lasttimeoption = StatusWdg.username + ".lore." + res.get().name;
+            int lastobtainedtime = Utils.getprefi(lasttimeoption, 0);
+            if (lastobtainedtime == 0) {
+                lastobtainedtime = (int) (System.currentTimeMillis() / 1000L);
+            }
+            this.lastobtainedtime = lastobtainedtime;
+            Utils.setprefi(lasttimeoption, this.lastobtainedtime);
         }
 
         public String rendertext() {
@@ -803,8 +813,24 @@ public class CharWnd extends Window {
             buf.append("$b{$font[serif,16]{" + res.layer(Resource.tooltip).t + "}}\n\n\n");
             if (score > 0)
                 buf.append("Experience points: " + Utils.thformat(score) + "\n\n");
-            buf.append(res.layer(Resource.pagina).text);
+            buf.append(res.layer(Resource.pagina).text + "\n\n");
+            buf.append("Received: " + getinfoaboutlastobtainedtime() + " ago");
             return (buf.toString());
+        }
+
+        private String getinfoaboutlastobtainedtime() {
+            Date prev = new Date((long) this.lastobtainedtime * 1000);
+            Date now = new Date(System.currentTimeMillis());
+
+            long daysdelta = getdatesdiff(prev, now, TimeUnit.DAYS);
+            long hoursdelta = getdatesdiff(prev, now, TimeUnit.HOURS);
+
+            return String.format("%dd %dh", daysdelta, hoursdelta);
+        }
+
+        private long getdatesdiff(Date date1, Date date2, TimeUnit timeUnit) {
+            long diffinmillies = date2.getTime() - date1.getTime();
+            return timeUnit.convert(diffinmillies, TimeUnit.MILLISECONDS);
         }
     }
 
