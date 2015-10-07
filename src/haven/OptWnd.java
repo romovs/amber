@@ -239,14 +239,19 @@ public class OptWnd extends Window {
                         a = val;
                     }
                 }, new Coord(0, y));
-
-                add(new Button(200, "Reset to defaults") {
-                    public void click() {
-                        cf.cfg.resetprefs();
-                        curcf.destroy();
-                        curcf = null;
+                y += 35;
+                add(new CheckBox("Limit background FPS to 1") {
+                    {
+                        a = Config.limitbgfps;
                     }
-                }, new Coord(270, 320));
+
+                    public void set(boolean val) {
+                        Utils.setprefb("limitbgfps", val);
+                        Config.limitbgfps = val;
+                        a = val;
+                        HavenPanel.bgfd = val ? 1000 : 200;
+                    }
+                }, new Coord(0, y));
                 pack();
             }
         }

@@ -118,7 +118,10 @@ public class Inventory extends Widget implements DTarget {
                 for (Widget w = stockpile.lchild; w != null; w = w.prev) {
                     if (w instanceof ISBox) {
                         ISBox isb = (ISBox) w;
+                        int freespace = isb.getfreespace();
                         for (WItem item : getitems((GItem) args[0])) {
+                            if (freespace-- <= 0)
+                                break;
                             item.item.wdgmsg("take", new Coord(item.sz.x / 2, item.sz.y / 2));
                             isb.drop(null, null);
                         }

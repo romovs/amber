@@ -27,7 +27,9 @@
 package haven;
 
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.image.BufferedImage;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -255,12 +257,27 @@ public class WItem extends Widget implements DTarget {
         }
     }
 
+    private void openwebpage(String url) {
+        Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+        if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+            try {
+                desktop.browse(new URL(url).toURI());
+            } catch (Exception e) {
+                // NOP
+            }
+        }
+    }
+
     public boolean mousedown(Coord c, int btn) {
         if (btn == 1) {
             if (ui.modctrl && ui.modmeta)
                 wdgmsg("drop-identical", this.item);
             else if (ui.modshift && ui.modmeta) {
                 wdgmsg("transfer-identical", this.item);
+            } else if (ui.modctrl && ui.modshift) {
+                String name = ItemInfo.find(ItemInfo.Name.class, item.info()).str.text;
+                String url = String.format("http://ringofbrodgar.com/wiki/%s", name.replace(' ', '_'));
+                openwebpage(url);
             }
             else if (ui.modshift)
                 item.wdgmsg("transfer", c);

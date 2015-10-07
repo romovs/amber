@@ -79,14 +79,13 @@ public class MapGridSave {
         int blackpxs = 0;
         for (c.y = 0; c.y < sz.y; c.y++) {
             for (c.x = 0; c.x < sz.x; c.x++) {
-                int t = g.gettile(c);
-                if (t == 100)
-                    blackpxs++;
-                BufferedImage tex = tileimg(t, texes);
+                BufferedImage tex = tileimg(g.gettile(c), texes);
                 int rgb = 0;
                 if (tex != null)
                     rgb = tex.getRGB(Utils.floormod(c.x, tex.getWidth()),
                             Utils.floormod(c.y, tex.getHeight()));
+                if (rgb == 0xFF000000)
+                    blackpxs++;
                 buf.setRGB(c.x, c.y, rgb);
             }
         }

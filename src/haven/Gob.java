@@ -53,8 +53,9 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
             Text.renderstroked("4", stagecolor, Color.BLACK, gobhpf).tex(),
             Text.renderstroked("5", stagecolor, Color.BLACK, gobhpf).tex()
     };
-    private PView.Draw2D[] cropstgd = new  PView.Draw2D[4];
+    private PView.Draw2D[] cropstgd = new PView.Draw2D[4];
     private Overlay gobpath = null;
+    private static final Tex[] treestg = new Tex[90];
 
     public static class Overlay implements Rendered {
         public Indir<Resource> res;
@@ -98,6 +99,12 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
             if (spr != null)
                 rl.add(spr, null);
             return (false);
+        }
+    }
+
+    static {
+        for (int i = 10; i < 100; i++) {
+            treestg[i - 10] = Text.renderstroked(i + "", stagecolor, Color.BLACK, gobhpf).tex();
         }
     }
 
@@ -247,10 +254,10 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
         final GobHealth hlt = getattr(GobHealth.class);
         if (hlt != null) {
             rl.prepc(hlt.getfx());
-            if (Config.showgobhp) {
+            if (Config.showgobhp && hlt.hp < 4) {
                 PView.Draw2D d = new PView.Draw2D() {
                     public void draw2d(GOut g) {
-                        if (sc != null && hlt.hp < 4)
+                        if (sc != null)
                             g.image(gobhp[hlt.hp - 1], sc.sub(15, 10));
                     }
                 };
@@ -270,6 +277,25 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                                 int stage = ((ResDrawable) rd).sdt.peekrbuf(0);
                                 if (stage > 0 && stage < 5)
                                     rl.add(cropstgd[stage-1], null);
+                            } catch (ArrayIndexOutOfBoundsException e) { // ignored
+                            }
+                        }
+                    }
+
+                    if (res != null && res.name.startsWith("gfx/terobjs/trees")) {
+                        ResDrawable rd = getattr(ResDrawable.class);
+                        if (rd != null && !rd.sdt.eom()) {
+                            try {
+                                final int stage = rd.sdt.peekrbuf(0);
+                                if (stage < 100) {
+                                    PView.Draw2D treestgdrw = new PView.Draw2D() {
+                                        public void draw2d(GOut g) {
+                                            if (sc != null)
+                                                g.image(treestg[stage - 10], sc.sub(10, 5));
+                                        }
+                                    };
+                                    rl.add(treestgdrw, null);
+                                }
                             } catch (ArrayIndexOutOfBoundsException e) { // ignored
                             }
                         }
