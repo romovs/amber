@@ -42,7 +42,7 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
     boolean inited = false;
     public static int w, h;
     public boolean bgmode = false;
-    public static long bgfd = Config.limitbgfps ? 1000 : 200;
+    public static long bgfd = Utils.getprefi("bghz", 200);
     long fd = 10, fps = 0;
     double uidle = 0.0, ridle = 0.0;
     Queue<InputEvent> events = new LinkedList<InputEvent>();
@@ -618,6 +618,7 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
         cmdmap.put("bghz", new Console.Command() {
             public void run(Console cons, String[] args) {
                 bgfd = 1000 / Integer.parseInt(args[1]);
+                Utils.setprefi("bghz", (int) bgfd);
             }
         });
     }

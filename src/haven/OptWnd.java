@@ -239,19 +239,6 @@ public class OptWnd extends Window {
                         a = val;
                     }
                 }, new Coord(0, y));
-                y += 35;
-                add(new CheckBox("Limit background FPS to 1") {
-                    {
-                        a = Config.limitbgfps;
-                    }
-
-                    public void set(boolean val) {
-                        Utils.setprefb("limitbgfps", val);
-                        Config.limitbgfps = val;
-                        a = val;
-                        HavenPanel.bgfd = val ? 1000 : 200;
-                    }
-                }, new Coord(0, y));
                 pack();
             }
         }
