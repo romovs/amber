@@ -585,7 +585,36 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             g.atextstroked((int)(prog * 100) + "%", (sz.y * 4) / 10 - curprog.sz().y / 2 + 1, Color.WHITE, Color.BLACK, progressf);
     }
 
+    private void throwleeches() {
+        if (equwnd != null) {
+            Equipory equipory = null;
+            for (Widget w = equwnd.lchild; w != null; w = w.prev) {
+                if (w instanceof Equipory) {
+                    equipory = (Equipory) w;
+                    break;
+                }
+            }
+
+            if (equipory != null) {
+                Iterator it = equipory.wmap.entrySet().iterator();
+                while (it.hasNext()) {
+                    Map.Entry pair = (Map.Entry) it.next();
+                    WItem[] witems = (WItem[]) pair.getValue();
+                    for (WItem witem : witems) {
+                        if (witem.item.getname().equals("Leech")) {
+                            witem.item.wdgmsg("drop", Coord.z);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public void draw(GOut g) {
+        if (Config.autothrowleeches) {
+            throwleeches();
+        }
+
         beltwdg.c = new Coord(chat.c.x, Math.min(chat.c.y - beltwdg.sz.y + 4, sz.y - beltwdg.sz.y));
         super.draw(g);
         if (prog >= 0)

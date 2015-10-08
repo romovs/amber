@@ -928,6 +928,18 @@ public class OptWnd extends Window {
                 a = val;
             }
         }, new Coord(0, y));
+        y += 35;
+        general.add(new CheckBox("Auto-throw leeches") {
+            {
+                a = Config.autothrowleeches;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("autothrowleeches", val);
+                Config.autothrowleeches = val;
+                a = val;
+            }
+        }, new Coord(0, y));
 
         general.add(new PButton(200, "Back", 27, main), new Coord(270, 360));
         general.pack();
