@@ -53,6 +53,7 @@ public class CharWnd extends Window {
     public final Constipations cons;
     public final SkillList csk, nsk;
     public final ExperienceList exps;
+    public static boolean firstexpsmessagereceived;
     public final Widget woundbox;
     public final WoundList wounds;
     public Wound.Info wound;
@@ -779,7 +780,6 @@ public class CharWnd extends Window {
     public class Experience {
         public final Indir<Resource> res;
         public final int mtime, score;
-        public final int lastobtainedtime;
         private String sortkey = "\uffff";
         private Tex small;
         private final Text.UText<?> rnm = new Text.UText<String>(attrf) {
@@ -796,14 +796,6 @@ public class CharWnd extends Window {
             this.res = res;
             this.mtime = mtime;
             this.score = score;
-
-            String lasttimeoption = StatusWdg.username + ".lore." + res.get().name;
-            int lastobtainedtime = Utils.getprefi(lasttimeoption, 0);
-            if (lastobtainedtime == 0) {
-                lastobtainedtime = (int) (System.currentTimeMillis() / 1000L);
-            }
-            this.lastobtainedtime = lastobtainedtime;
-            Utils.setprefi(lasttimeoption, this.lastobtainedtime);
         }
 
         public String rendertext() {
@@ -819,7 +811,18 @@ public class CharWnd extends Window {
         }
 
         private String getinfoaboutlastobtainedtime() {
-            Date prev = new Date((long) this.lastobtainedtime * 1000);
+            String charname = gameui().buddies.getCharName();
+            if (charname == null || charname.isEmpty()) {
+                return "?";
+            }
+
+            String lasttimeoption = charname + ".lore." + res.get().name;
+            int lastobtainedtime = Utils.getprefi(lasttimeoption, 0);
+            if (lastobtainedtime == 0) {
+                return "?";
+            }
+
+            Date prev = new Date((long) lastobtainedtime * 1000);
             Date now = new Date(System.currentTimeMillis());
 
             long daysdelta = getdatesdiff(prev, now, TimeUnit.DAYS);
@@ -1042,8 +1045,34 @@ public class CharWnd extends Window {
             sb.val = 0;
             sb.max = exps.length - h;
             sel = null;
+
+            if (firstexpsmessagereceived) {
+                String charname = gameui().buddies.getCharName();
+                if (charname != null && !charname.isEmpty()) {
+                    for (Experience newexp : exps) {
+                        String lasttimeoption = charname + ".lore." + newexp.res.get().name;
+
+                        boolean newlore = true;
+                        for (Experience prevexp : this.exps) {
+                            if (prevexp.res.get().name.equals(newexp.res.get().name)) {
+                                if (prevexp.mtime != newexp.mtime) {
+                                    Utils.setprefi(lasttimeoption, (int) (System.currentTimeMillis() / 1000L));
+                                }
+                                newlore = false;
+                                break;
+                            }
+                        }
+
+                        if (newlore) {
+                            Utils.setprefi(lasttimeoption, (int) (System.currentTimeMillis() / 1000L));
+                        }
+                    }
+                }
+            }
+
             this.exps = exps;
             loading = true;
+            firstexpsmessagereceived = true;
         }
     }
 
@@ -1164,6 +1193,8 @@ public class CharWnd extends Window {
 
     public CharWnd(Glob glob) {
         super(new Coord(300, 290), "Character Sheet");
+
+        firstexpsmessagereceived = false;
 
         final Tabs tabs = new Tabs(new Coord(15, 10), Coord.z, this);
         Tabs.Tab battr;
