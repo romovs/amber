@@ -88,8 +88,8 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
                 colormin = vitalityclr;
             }
 
-            double avg =  Math.cbrt(e * s * v);
-            double avgsv =  Math.sqrt(s * v);
+            double avg = Math.sqrt((double) (e * e + s * s + v * v) / 3.0);
+            double avgsv = Math.sqrt((double) (s * s + v * v) / 2.0);
             if (curio) {
                 double lpgain = Math.sqrt(Math.sqrt((double) (e * e + s * s + v * v) / 300.0));
                 lpgaintex = Text.renderstroked(longfmt.format(lpgain), Color.WHITE, Color.BLACK).tex();
