@@ -84,7 +84,7 @@ public class SessWidget extends AWidget {
         });
     }
 
-    public void tick(double dt) {
+    public void tick(double dt) throws InterruptedException {
         super.tick(dt);
         if (!rep && conn.done()) {
             wdgmsg("res", conn.get().error);

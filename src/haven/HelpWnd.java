@@ -48,7 +48,7 @@ public class HelpWnd extends Window {
         }, new Coord(100, 410));
     }
 
-    public void tick(double dt) {
+    public void tick(double dt) throws InterruptedException {
         super.tick(dt);
         if (res != showing) {
             try {

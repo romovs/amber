@@ -131,7 +131,7 @@ public class UI {
         }
     }
 
-    public void tick() {
+    public void tick() throws InterruptedException {
         long now = System.currentTimeMillis();
         root.tick((now - lasttick) / 1000.0);
         lasttick = now;
