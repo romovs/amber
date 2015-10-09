@@ -784,7 +784,7 @@ public class CharWnd extends Window {
         private final Text.UText<?> rnm = new Text.UText<String>(attrf) {
             public String value() {
                 try {
-                    return (res.get().layer(Resource.tooltip).t + " (" + getinfoaboutlastobtainedtime() + " ago)");
+                    return (res.get().layer(Resource.tooltip).t);
                 } catch (Loading l) {
                     return ("...");
                 }
@@ -805,21 +805,7 @@ public class CharWnd extends Window {
             if (score > 0)
                 buf.append("Experience points: " + Utils.thformat(score) + "\n\n");
             buf.append(res.layer(Resource.pagina).text + "\n\n");
-            buf.append("Received: " + getinfoaboutlastobtainedtime() + " ago");
             return (buf.toString());
-        }
-
-        private String getinfoaboutlastobtainedtime() {
-            long globtime = ui.sess.glob.globtime();
-
-            long secsdelta = (globtime / 1000L - mtime) / 3;
-            long secsinday = 60 * 60 * 24;
-            long secsinhour = 60 * 60;
-            long daysdelta = secsdelta / secsinday;
-            long hoursdelta = (secsdelta - daysdelta * secsinday) / secsinhour;
-            long minsdelta = (secsdelta - (daysdelta * secsinday + hoursdelta * secsinhour)) / 60;
-
-            return String.format("%dd %dh %dm", daysdelta, hoursdelta, minsdelta);
         }
     }
 
@@ -978,7 +964,11 @@ public class CharWnd extends Window {
         private boolean loading = false;
         private final Comparator<Experience> comp = new Comparator<Experience>() {
             public int compare(Experience a, Experience b) {
-                return (a.sortkey.compareTo(b.sortkey));
+                if (Config.sortloresbylastobtainedtime) {
+                    return (Integer.compare(a.mtime, b.mtime));
+                } else {
+                    return (a.sortkey.compareTo(b.sortkey));
+                }
             }
         };
 
@@ -997,8 +987,12 @@ public class CharWnd extends Window {
                         loading = true;
                     }
                 }
-                Arrays.sort(exps, comp);
+                sort();
             }
+        }
+
+        public void sort() {
+            Arrays.sort(exps, comp);
         }
 
         protected Experience listitem(int idx) {

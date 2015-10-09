@@ -928,6 +928,19 @@ public class OptWnd extends Window {
                 a = val;
             }
         }, new Coord(0, y));
+        y += 35;
+        general.add(new CheckBox("Sort lores by last obtained time") {
+            {
+                a = Config.sortloresbylastobtainedtime;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("sortloresbylastobtainedtime", val);
+                Config.sortloresbylastobtainedtime = val;
+                a = val;
+                gameui().chrwdg.exps.sort();
+            }
+        }, new Coord(0, y));
 
         general.add(new PButton(200, "Back", 27, main), new Coord(270, 360));
         general.pack();

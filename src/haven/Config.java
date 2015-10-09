@@ -108,6 +108,7 @@ public class Config {
     public static boolean showanimalpaths = Utils.getprefb("showanimalpaths", false);
     public static boolean showstudylefttime = Utils.getprefb("showstudylefttime", false);
     public static boolean autopick = Utils.getprefb("autopick", false);
+    public static boolean sortloresbylastobtainedtime = Utils.getprefb("sortloresbylastobtainedtime", false);
     public static Coord chatsz = Utils.getprefc("chatsz", Coord.z);
     public static boolean alternmapctrls = Utils.getprefb("alternmapctrls", false);
     public static boolean autostudy = Utils.getprefb("autostudy", true);
