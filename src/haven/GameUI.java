@@ -71,6 +71,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     public TimersWnd timerswnd;
     public QuickSlotsWdg quickslots;
     public StatusWdg statuswindow;
+    private boolean firstdraw = true;
 
     public abstract class Belt extends Widget {
         public Belt(Coord sz) {
@@ -586,6 +587,11 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     }
 
     public void draw(GOut g) {
+        if (Config.selectsyslogonlogin && firstdraw) {
+            chat.select(syslog);
+        }
+        firstdraw = false;
+
         beltwdg.c = new Coord(chat.c.x, Math.min(chat.c.y - beltwdg.sz.y + 4, sz.y - beltwdg.sz.y));
         super.draw(g);
         if (prog >= 0)
