@@ -104,6 +104,7 @@ public class Config {
     public static boolean showweather = Utils.getprefb("showweather", true);
     public static boolean simplecrops = Utils.getprefb("simplecrops", false);
     public static boolean simpleforage = Utils.getprefb("simpleforage", false);
+    public static boolean hidecrops = Utils.getprefb("hidecrops", false);
     public static boolean autohearth = Utils.getprefb("autohearth", false);
     public static boolean servertime = Utils.getprefb("servertime", false);
     public static boolean showplayerpaths = Utils.getprefb("showplayerpaths", false);

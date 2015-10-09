@@ -239,6 +239,18 @@ public class OptWnd extends Window {
                         a = val;
                     }
                 }, new Coord(0, y));
+                y += 35;
+                add(new CheckBox("Hide crops") {
+                    {
+                        a = Config.simpleforage;
+                    }
+
+                    public void set(boolean val) {
+                        Utils.setprefb("hidecrops", val);
+                        Config.hidecrops = val;
+                        a = val;
+                    }
+                }, new Coord(0, y));
                 pack();
             }
         }
