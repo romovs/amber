@@ -96,6 +96,10 @@
       </fileset>
       <fileset dir="lib/jogl-natives" includes="*.jar">
       </fileset>
+    	<fileset dir="etc">
+    		<include name="run.bat" />
+    		<include name="run_debug.bat" />
+    	</fileset>
     </copy>
   </target>
 
