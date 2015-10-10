@@ -1030,7 +1030,19 @@ public class OptWnd extends Window {
                 Config.toggletracking = val;
                 a = val;
             }
-        }, new Coord(0, y));
+        }, new Coord(500, y));
+        y += 25;
+        general.add(new CheckBox("Toggle Criminal Acts on logon") {
+            {
+                a = Config.togglecriminalacts;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("togglecriminalacts", val);
+                Config.togglecriminalacts = val;
+                a = val;
+            }
+        }, new Coord(500, y));
         general.add(new PButton(200, "Back", 27, main), new Coord(270, 360));
         general.pack();
 

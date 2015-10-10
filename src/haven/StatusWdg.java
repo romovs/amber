@@ -228,6 +228,9 @@ public class StatusWdg extends Widget {
                 	if (Config.toggletracking) {
                 		getparent(GameUI.class).act("tracking");
                 	}
+                	if (Config.togglecriminalacts) {
+                		getparent(GameUI.class).act("crime");
+                	}
             	AlreadyExecuted = true;
                 }
                 CookieHandler.setDefault(new CookieManager());

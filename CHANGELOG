@@ -4,6 +4,7 @@ Version 1.2.0
 	Added thing that shows how long cooldown remaining on combat
 	Added text to combat UI moves indicating hotkey to trigger it
 	Added Option to toggle tracking on logon
+	Added Option to toggle criminal acts on logon
 Version 1.1.0
 	New:
 	Added option to enable alert sound for battering rams
