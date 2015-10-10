@@ -29,6 +29,7 @@ package haven;
 import java.util.*;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
+import java.text.DecimalFormat;
 
 public class Fightsess extends Widget {
     public static final Tex lframe = Resource.loadtex("gfx/hud/combat/lframe");
@@ -113,6 +114,9 @@ public class Fightsess extends Widget {
             g.chcolor(255, 0, 128, 255);
             g.frect(pcc.add(-w, 20), new Coord(w * 2, 15));
             g.chcolor();
+            double cc = (fv.atkct - now);
+            DecimalFormat df = new DecimalFormat("#.#");
+            g.astext(df.format(cc) + "s", pcc.add(11, 35), 1, 1, Color.WHITE, Color.BLACK);
         }
         Coord ca = pcc.add(-(actions.length * actpitch) / 2, 45);
         for (int i = 0; i < actions.length; i++) {

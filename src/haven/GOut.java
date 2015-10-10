@@ -608,4 +608,12 @@ public class GOut {
     public void getimage(final Callback<BufferedImage> cb) {
         getimage(Coord.z, sz, cb);
     }
+    public void astext(String text, Coord c, double ax, double ay, Color ca, Color cb) {
+        Text t = Text.renderstroked(text, ca, cb);
+        Tex T = t.tex();
+        Coord sz = t.sz();
+        image(T, c.add((int)((double)sz.x * -ax), (int)((double)sz.y * -ay)));
+        T.dispose();
+        checkerr();
+    }
 }
