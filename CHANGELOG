@@ -1,3 +1,6 @@
+Version 1.2.0
+	New:
+	Added button to limit background fps to 1 -> Lowers CPU usage when window is not focused
 Version 1.1.0
 	New:
 	Added option to enable alert sound for battering rams
