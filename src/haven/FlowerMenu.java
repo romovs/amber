@@ -101,14 +101,19 @@ public class FlowerMenu extends Widget {
 
         public void ntick(double s) {
             Petal pick = null;
+            Petal harvest = null;
             for (Petal p : opts) {
                 p.move(p.ta + ((1 - s) * PI), p.tr * s);
                 p.a = s;
                 if (p.name.equals("Pick"))
                     pick = p;
+                else if (p.name.equals("Harvest"))
+                    harvest = p;
             }
             if (Config.autopick && pick != null && s == 1.0)
                 choose(pick);
+            else if (Config.autoharvest && harvest != null && s == 1.0)
+                choose(harvest);
         }
     }
     

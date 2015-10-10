@@ -317,11 +317,29 @@ public class WItem extends Widget implements DTarget {
 
                 if (Config.autostudy) {
                     Window invwnd = gameui().getwnd("Inventory");
+                    Window cupwnd = gameui().getwnd("Cupboard");
                     Resource res = item.resource();
                     if (res != null) {
                         for (Widget invwdg = invwnd.lchild; invwdg != null; invwdg = invwdg.prev) {
                             if (invwdg instanceof Inventory) {
                                 Inventory inv = (Inventory) invwdg;
+                                for (Widget witm = inv.lchild; witm != null; witm = witm.prev) {
+                                    if (witm instanceof WItem) {
+                                        GItem ngitm = ((WItem) witm).item;
+                                        Resource nres = ngitm.resource();
+                                        if (nres != null && nres.name.equals(res.name)) {
+                                            ngitm.wdgmsg("take", witm.c);
+                                            ((Inventory) parent).drop(Coord.z, c);
+                                            break;
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                        for (Widget cupwdg = cupwnd.lchild; cupwdg != null; cupwdg = cupwdg.prev) {
+                            if (cupwdg instanceof Inventory) {
+                                Inventory inv = (Inventory) cupwdg;
                                 for (Widget witm = inv.lchild; witm != null; witm = witm.prev) {
                                     if (witm instanceof WItem) {
                                         GItem ngitm = ((WItem) witm).item;

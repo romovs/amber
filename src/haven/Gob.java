@@ -282,7 +282,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                         }
                     }
 
-                    if (res != null && res.name.startsWith("gfx/terobjs/trees")) {
+                    if (res != null && (res.name.startsWith("gfx/terobjs/trees") || res.name.startsWith("gfx/terobjs/bushes"))) {
                         ResDrawable rd = getattr(ResDrawable.class);
                         if (rd != null && !rd.sdt.eom()) {
                             try {

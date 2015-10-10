@@ -242,7 +242,7 @@ public class OptWnd extends Window {
                 y += 35;
                 add(new CheckBox("Hide crops") {
                     {
-                        a = Config.simpleforage;
+                        a = Config.hidecrops;
                     }
 
                     public void set(boolean val) {
@@ -993,7 +993,18 @@ public class OptWnd extends Window {
             }
         }, new Coord(0, y));
         //
+        y += 35;
+        general.add(new CheckBox("Automatically select 'Harvest' action") {
+            {
+                a = Config.autoharvest;
+            }
 
+            public void set(boolean val) {
+                Utils.setprefb("autoharvest", val);
+                Config.autoharvest = val;
+                a = val;
+            }
+        }, new Coord(0, y));
         general.add(new PButton(200, "Back", 27, main), new Coord(270, 360));
         general.pack();
 
