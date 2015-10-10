@@ -126,6 +126,9 @@ public class Fightsess extends Widget {
                     Tex img = act.get().layer(Resource.imgc).tex();
                     g.image(img, ca);
                     g.image(dyn[i] ? lframe : Buff.frame, ca.sub(Buff.imgoff));
+                    String hotkeyText;
+                    hotkeyText = ""+(i+1);
+                    g.astext(hotkeyText, ca.add( img.sz().x/2 + 5, img.sz().y + 1), 1, 1, Color.WHITE, Color.BLACK);
                     if (i == use) {
                         g.chcolor(255, 0, 128, 255);
                         Coord cc = ca.add(img.sz().x / 2, img.sz().y + 5);
