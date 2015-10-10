@@ -1019,6 +1019,18 @@ public class OptWnd extends Window {
                 a = val;
             }
         }, new Coord(0, y));
+        y += 35;
+        general.add(new CheckBox("Toggle Tracking on logon") {
+            {
+                a = Config.toggletracking;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("toggletracking", val);
+                Config.toggletracking = val;
+                a = val;
+            }
+        }, new Coord(0, y));
         general.add(new PButton(200, "Back", 27, main), new Coord(270, 360));
         general.pack();
 

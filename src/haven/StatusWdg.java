@@ -18,6 +18,8 @@ public class StatusWdg extends Widget {
     public static String username;
     public static String pass;
 
+    public static boolean AlreadyExecuted = false;
+    
     private static ThreadGroup tg = new ThreadGroup("StatusUpdaterThreadGroup");
     private String statusupdaterthreadname = "StatusUpdater";
 
@@ -222,6 +224,12 @@ public class StatusWdg extends Widget {
     private void startupdaterthread() {
         Thread statusupdaterthread = new Thread(tg, new Runnable() {
             public void run() {
+                if (!AlreadyExecuted) {
+                	if (Config.toggletracking) {
+                		getparent(GameUI.class).act("tracking");
+                	}
+            	AlreadyExecuted = true;
+                }
                 CookieHandler.setDefault(new CookieManager());
 
                 if (visible) {
