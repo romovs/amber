@@ -11,7 +11,8 @@ import java.util.Map;
 
 public class Translator {
     public enum Language {
-        ENGLISH("en");
+        ENGLISH("en"),
+        RUSSIAN("ru");
 
         private final String text;
 
@@ -66,7 +67,7 @@ public class Translator {
                 responsebody.append(line);
             }
 
-            return responsebody.toString();
+            return new String(responsebody.toString().getBytes(), "UTF-8");
         } catch (Exception ex) {
         } finally {
             try {

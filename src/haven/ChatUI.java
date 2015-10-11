@@ -97,11 +97,14 @@ public class ChatUI extends Widget {
     private static String translatemessage(String msg) {
         String res = msg;
 
-        if (!Config.translatetoen) {
+        if (!Config.translateincomingmessages) {
             return res;
         }
 
-        String translatedmsg = Translator.translate(msg, Translator.Language.ENGLISH.toString());
+        String translatedmsg = Translator.translate(
+            msg,
+            Config.translatelanguage == 0 ? Translator.Language.ENGLISH.toString() : Translator.Language.RUSSIAN.toString()
+        );
         if (translatedmsg.isEmpty()) {
             res += " (unable to translate)";
         } else {
