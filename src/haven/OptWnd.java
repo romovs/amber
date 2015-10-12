@@ -251,6 +251,49 @@ public class OptWnd extends Window {
                         a = val;
                     }
                 }, new Coord(0, y));
+
+                // -------------------------------------------- 2nd column
+                y = 0;
+                {
+                    add(new Label("Background FPS limit"), new Coord(260, y));
+                    final Label dpy = add(new Label(""), new Coord(260 + 165, y + 15));
+                    add(new HSlider(160, 1, 60, Config.bgfpslimit) {
+                        protected void added() {
+                            dpy();
+                        }
+
+                        void dpy() {
+                            dpy.settext(String.format("%d", val));
+                        }
+
+                        public void changed() {
+                            Config.bgfpslimit = val;
+                            Utils.setprefi("bgfpslimit", val);
+                            dpy();
+                        }
+                    }, new Coord(260, y + 15));
+                }
+                y += 35;
+                {
+                    add(new Label("Foreground FPS limit"), new Coord(260, y));
+                    final Label dpy = add(new Label(""), new Coord(260 + 165, y + 15));
+                    add(new HSlider(160, 1, 60, Config.fgfpslimit) {
+                        protected void added() {
+                            dpy();
+                        }
+
+                        void dpy() {
+                            dpy.settext(String.format("%d", val));
+                        }
+
+                        public void changed() {
+                            Config.fgfpslimit = val;
+                            Utils.setprefi("fgfpslimit", val);
+                            dpy();
+                        }
+                    }, new Coord(260, y + 15));
+                }
+
                 pack();
             }
         }
