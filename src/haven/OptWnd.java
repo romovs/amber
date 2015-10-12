@@ -257,7 +257,7 @@ public class OptWnd extends Window {
                 {
                     add(new Label("Background FPS limit"), new Coord(260, y));
                     final Label dpy = add(new Label(""), new Coord(260 + 165, y + 15));
-                    add(new HSlider(160, 1, 60, Config.bgfpslimit) {
+                    add(new HSlider(160, 1, 100, Config.bgfpslimit) {
                         protected void added() {
                             dpy();
                         }
@@ -277,7 +277,7 @@ public class OptWnd extends Window {
                 {
                     add(new Label("Foreground FPS limit"), new Coord(260, y));
                     final Label dpy = add(new Label(""), new Coord(260 + 165, y + 15));
-                    add(new HSlider(160, 1, 60, Config.fgfpslimit) {
+                    add(new HSlider(160, 1, 100, Config.fgfpslimit) {
                         protected void added() {
                             dpy();
                         }
