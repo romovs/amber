@@ -6,7 +6,7 @@ import java.net.URL;
 import org.json.JSONObject;
 
 public class UpdateChecker extends Thread {
-    private final String url = "https://api.github.com/repos/romovs/amber/releases/latest";
+    private final String url = "https://api.github.com/repos/puruscor/purus-pasta/releases/latest";
 
     public void run() {
         try {
