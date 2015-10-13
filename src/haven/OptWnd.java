@@ -1042,7 +1042,8 @@ public class OptWnd extends Window {
                 Config.togglecriminalacts = val;
                 a = val;
             }
-        }, new Coord(0,y));
+        }, new Coord(500,y));
+        y -= 25;
         general.add(new CheckBox("Run on login") {
             {
                 a = Config.runonlogin;
@@ -1053,7 +1054,7 @@ public class OptWnd extends Window {
                 Config.runonlogin = val;
                 a = val;
             }
-        }, new Coord(500, y));
+        }, new Coord(0, y));
         general.add(new PButton(200, "Back", 27, main), new Coord(270, 360));
         general.pack();
 
