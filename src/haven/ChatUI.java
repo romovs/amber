@@ -65,6 +65,7 @@ public class ChatUI extends Widget {
     private QuickLine qline = null;
     private final LinkedList<Notification> notifs = new LinkedList<Notification>();
     private UI.Grab qgrab;
+    public static final String CMD_PREFIX_HLIGHT = "@";
 
     public ChatUI(int w, int h) {
         super(new Coord(w, h));
@@ -79,13 +80,17 @@ public class ChatUI extends Widget {
         switch (Config.chatfontsize) {
             default:
             case 0:
-                fnd = fndsml; break;
+                fnd = fndsml;
+                break;
             case 1:
-                fnd = fndmed; break;
+                fnd = fndmed;
+                break;
             case 2:
-                fnd = fndlrg; break;
+                fnd = fndlrg;
+                break;
             case 3:
-                fnd = fndxlr; break;
+                fnd = fndxlr;
+                break;
         }
     }
 
@@ -778,6 +783,20 @@ public class ChatUI extends Widget {
             if (msg == "msg") {
                 Integer from = (Integer) args[0];
                 String line = (String) args[1];
+
+                if (name.equals("Area Chat") && line.startsWith(CMD_PREFIX_HLIGHT)) {
+                    try {
+                        long gobid = Long.parseLong(line.substring(1));
+                        Gob gob = gameui().map.glob.oc.getgob(gobid);
+                        if (gob != null) {
+                            gob.delattr(GobHighlight.class);
+                            gob.setattr(new GobHighlight(gob));
+                            return;
+                        }
+                    } catch (NumberFormatException nfe) {
+                    }
+                }
+
                 if (from == null) {
                     MyMessage my = new MyMessage(line, iw());
                     append(my);
@@ -864,7 +883,7 @@ public class ChatUI extends Widget {
                     save(cmsg.text().text, getparent(GameUI.class).buddies.find(other).name);
 
                     long time = System.currentTimeMillis();
-                    if (lastmsg == 0 || (time-lastmsg)/1000/60 > 10) {
+                    if (lastmsg == 0 || (time - lastmsg) / 1000 / 60 > 10) {
                         Audio.play(alarmsfx, Config.chatalarmvol);
                         lastmsg = time;
                     }
@@ -934,7 +953,7 @@ public class ChatUI extends Widget {
             chan.c = chansel.c.add(chansel.sz.x, 0);
             chan.resize(sz.x - marg.x - chan.c.x, sz.y - chan.c.y);
             super.add(w);
-            select(chan);
+            select(chan, false);
             chansel.add(chan);
             return (w);
         } else {
@@ -1082,14 +1101,19 @@ public class ChatUI extends Widget {
         }
     }
 
-    public void select(Channel chan) {
+    public void select(Channel chan, boolean focus) {
         Channel prev = sel;
         sel = chan;
         if (prev != null)
             prev.hide();
         sel.show();
         resize(sz);
-        setfocus(chan);
+        if (focus || hasfocus)
+            setfocus(chan);
+    }
+
+    public void select(Channel chan) {
+        select(chan, true);
     }
 
     private class Notification {
@@ -1200,6 +1224,11 @@ public class ChatUI extends Widget {
         new Spring(targeth = h);
     }
 
+    public void hresize(int h) {
+        clearanims(Spring.class);
+        resize(sz.x, targeth = h);
+    }
+
     public void move(Coord base) {
         this.c = (this.base = base).add(0, -sz.y);
     }
@@ -1242,6 +1271,7 @@ public class ChatUI extends Widget {
     public int savedh = Math.max(111, Config.chatsz.y);
 
     private boolean resizehoriz = false;
+
     public boolean mousedown(Coord c, int button) {
         int bmfx = (sz.x - bmf.sz().x) / 2;
         if (button == 1 && c.x > sz.x - 9) {
@@ -1249,8 +1279,7 @@ public class ChatUI extends Widget {
             doff = c;
             resizehoriz = true;
             return (true);
-        }
-        else if ((button == 1) && (c.y < bmf.sz().y) && (c.x >= bmfx) && (c.x <= (bmfx + bmf.sz().x))) {
+        } else if ((button == 1) && (c.y < bmf.sz().y) && (c.x >= bmfx) && (c.x <= (bmfx + bmf.sz().x))) {
             dm = ui.grabmouse(this);
             doff = c;
             return (true);

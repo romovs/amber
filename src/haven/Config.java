@@ -116,6 +116,7 @@ public class Config {
     public static boolean autoharvest = Utils.getprefb("autoharvest", false);
     public static boolean toggletracking = Utils.getprefb("toggletracking", false);
     public static boolean togglecriminalacts = Utils.getprefb("togglecriminalacts", false);
+    public static boolean runonlogin = Utils.getprefb("runonlogin", false);
     public static Coord chatsz = Utils.getprefc("chatsz", Coord.z);
     public static boolean alternmapctrls = Utils.getprefb("alternmapctrls", false);
     public static boolean autostudy = Utils.getprefb("autostudy", true);

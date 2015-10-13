@@ -1061,14 +1061,14 @@ public class MapView extends PView implements DTarget, Console.Directory {
             partydraw(g);
             glob.map.reqarea(cc.div(tilesz).sub(MCache.cutsz.mul(view + 1)),
                     cc.div(tilesz).add(MCache.cutsz.mul(view + 1)));
-        // change grid overlay position when player moves by 20 tiles
-        if (showgrid) {
-            Coord tc = cc.div(MCache.tilesz);
-            if (tc.manhattan2(lasttc) > 20) {
-                lasttc = tc;
-                gridol.update(tc.sub(MCache.cutsz.mul(view + 1)));
+            // change grid overlay position when player moves by 20 tiles
+            if (showgrid) {
+                Coord tc = cc.div(MCache.tilesz);
+                if (tc.manhattan2(lasttc) > 20) {
+                    lasttc = tc;
+                    gridol.update(tc.sub(MCache.cutsz.mul(view + 1)));
+                }
             }
-        }
         } catch (Loading e) {
             lastload = e;
             String text = e.getMessage();
@@ -1247,10 +1247,12 @@ public class MapView extends PView implements DTarget, Console.Directory {
                 gl.glClear(GL.GL_DEPTH_BUFFER_BIT | GL.GL_COLOR_BUFFER_BIT);
                 checkmapclick(g, pc, new Callback<Coord>() {
                     public void done(Coord mc) {
-                        if (mc != null)
-                            hit(pc, mc);
-                        else
-                            nohit(pc);
+                        synchronized (ui) {
+                            if (mc != null)
+                                hit(pc, mc);
+                            else
+                                nohit(pc);
+                        }
                     }
                 });
             } finally {
@@ -1304,14 +1306,16 @@ public class MapView extends PView implements DTarget, Console.Directory {
 
         private void ckdone(int fl) {
             synchronized (this) {
-                if ((dfl |= fl) == 3) {
-                    if (mapcl != null) {
-                        if (gobcl == null)
-                            hit(clickc, mapcl, null);
-                        else
-                            hit(clickc, mapcl, gobcl);
-                    } else {
-                        nohit(clickc);
+                synchronized (ui) {
+                    if ((dfl |= fl) == 3) {
+                        if (mapcl != null) {
+                            if (gobcl == null)
+                                hit(clickc, mapcl, null);
+                            else
+                                hit(clickc, mapcl, gobcl);
+                        } else {
+                            nohit(clickc);
+                        }
                     }
                 }
             }
@@ -1341,6 +1345,17 @@ public class MapView extends PView implements DTarget, Console.Directory {
             if (inf == null) {
                 wdgmsg("click", pc, mc, clickb, ui.modflags());
             } else {
+                if (ui.modmeta && clickb == 1) {
+                    for (Widget w = gameui().chat.lchild; w != null; w = w.prev) {
+                        if (w instanceof ChatUI.MultiChat) {
+                            ChatUI.MultiChat chat = (ChatUI.MultiChat) w;
+                            if (chat.name().equals("Area Chat")) {
+                                chat.send(ChatUI.CMD_PREFIX_HLIGHT + inf.gob.id);
+                                break;
+                            }
+                        }
+                    }
+                }
                 if (inf.ol == null) {
                     wdgmsg("click", pc, mc, clickb, ui.modflags(), 0, (int) inf.gob.id, inf.gob.rc, 0, getid(inf.r));
                 } else {
@@ -1455,15 +1470,15 @@ public class MapView extends PView implements DTarget, Console.Directory {
 
     public boolean globtype(char c, KeyEvent ev) {
         int code = ev.getKeyCode();
-        if(code == KeyEvent.VK_ADD)
+        if (code == KeyEvent.VK_ADD)
             camera.wheel(Coord.z, -1);
-        else if(code == KeyEvent.VK_SUBTRACT)
+        else if (code == KeyEvent.VK_SUBTRACT)
             camera.wheel(Coord.z, 1);
         else if (ev.isShiftDown() && code == KeyEvent.VK_C) {
             if (camera != null) {
-                String cam =  camera instanceof OrthoCam ? "bad" : "ortho";
+                String cam = camera instanceof OrthoCam ? "bad" : "ortho";
                 String[] args = new String[0];
-                camera = makecam(camtypes.get(cam) , args);
+                camera = makecam(camtypes.get(cam), args);
                 Utils.setpref("defcam", cam);
                 Utils.setprefb("camargs", Utils.serialize(args));
             }

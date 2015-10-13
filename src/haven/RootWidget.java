@@ -36,6 +36,7 @@ public class RootWidget extends ConsoleHost {
     public RootWidget(UI ui, Coord sz) {
         super(ui, new Coord(0, 0), sz);
         setfocusctl(true);
+        hasfocus = true;
         cursor = defcurs.indir();
     }
 

@@ -292,7 +292,7 @@ public class Session {
                         } else if (type == OD_SPEECH) {
                             float zo = msg.int16() / 100.0f;
                             String text = msg.string();
-                            if (gob != null)
+                            if (gob != null && !text.startsWith(ChatUI.CMD_PREFIX_HLIGHT))
                                 oc.speak(gob, zo, text);
                         } else if (type == OD_COMPOSE) {
                             Indir<Resource> base = getres(msg.uint16());

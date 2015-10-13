@@ -183,11 +183,12 @@ public class Equipory extends Widget implements DTarget {
                         }
                     }
                 }
+                armorclass = Text.render("Armor Class: " + h + "/" + s, Color.BLACK, acf).tex();
             } catch (Exception e) { // fail silently
             }
-            armorclass = Text.render("Armor Class: " + h + "/" + s, Color.BLACK, acf).tex();
         }
-        g.image(armorclass, new Coord(acx - armorclass.sz().x/2, bg.sz().y - 15));
+        if (armorclass != null)
+            g.image(armorclass, new Coord(acx - armorclass.sz().x/2, bg.sz().y - 15));
     }
 
     public boolean iteminteract(Coord cc, Coord ul) {

@@ -158,7 +158,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         quickslots = new QuickSlotsWdg();
         if (!Config.quickslots)
             quickslots.hide();
-        add(quickslots, Utils.getprefc("quickslotsc", new Coord(430, HavenPanel.h-160)));
+        add(quickslots, Utils.getprefc("quickslotsc", new Coord(430, HavenPanel.h - 160)));
 
         statuswindow = new StatusWdg();
         if (!Config.statuswdgvisible)
@@ -587,7 +587,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         g.aimage(curprog, new Coord(sz.x / 2, (sz.y * 4) / 10), 0.5, 0.5);
 
         if (Config.showprogressperc)
-            g.atextstroked((int)(prog * 100) + "%", (sz.y * 4) / 10 - curprog.sz().y / 2 + 1, Color.WHITE, Color.BLACK, progressf);
+            g.atextstroked((int) (prog * 100) + "%", (sz.y * 4) / 10 - curprog.sz().y / 2 + 1, Color.WHITE, Color.BLACK, progressf);
     }
 
     public void draw(GOut g) {
@@ -602,14 +602,14 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             by = Math.min(by, beltwdg.c.y);
         if (cmdline != null) {
             drawcmd(g, new Coord(blpw + 10, by -= 20));
-	} else if(lastmsg != null) {
-	    if((System.currentTimeMillis() - msgtime) > 3000) {
-		lastmsg = null;
+        } else if (lastmsg != null) {
+            if ((System.currentTimeMillis() - msgtime) > 3000) {
+                lastmsg = null;
             } else {
                 g.chcolor(0, 0, 0, 192);
-		g.frect(new Coord(blpw + 8, by - 22), lastmsg.sz().add(4, 4));
+                g.frect(new Coord(blpw + 8, by - 22), lastmsg.sz().add(4, 4));
                 g.chcolor();
-		g.image(lastmsg.tex(), new Coord(blpw + 10, by -= 20));
+                g.image(lastmsg.tex(), new Coord(blpw + 10, by -= 20));
             }
         }
         if (!chat.visible) {
@@ -647,9 +647,9 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         if (msg == "err") {
             String err = (String) args[0];
             error(err);
-	} else if(msg == "msg") {
-	    String text = (String)args[0];
-	    msg(text);
+        } else if (msg == "msg") {
+            String text = (String) args[0];
+            msg(text);
         } else if (msg == "prog") {
             if (args.length > 0)
                 prog = ((Number) args[0]).doubleValue() / 100.0;
@@ -837,7 +837,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             Utils.setprefb("statuswdgvisible", !curstatus);
             Config.statuswdgvisible = !curstatus;
             return true;
-        }  else if (ev.isAltDown() && ev.getKeyCode() == KeyEvent.VK_Z) {
+        } else if (ev.isAltDown() && ev.getKeyCode() == KeyEvent.VK_Z) {
             quickslots.drop(QuickSlotsWdg.lc, Coord.z);
             quickslots.mousedown(QuickSlotsWdg.lc, 1);
             return true;
@@ -908,7 +908,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     }
 
     public void msg(String msg, Color color) {
-	msg(msg, color, color);
+        msg(msg, color, color);
     }
 
     private static final Resource errsfx = Resource.local().loadwait("sfx/error");
