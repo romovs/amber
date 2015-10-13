@@ -264,7 +264,7 @@ public class OptWnd extends Window {
                 		HavenPanel.bgfd = val ? 1000 : 200;
                 	}
                 }, new Coord(0, y));
-                y += 35;
+                y = 0; //2nd column
                 add(new CheckBox("Show FPS") {
                     {
                         a = Config.showfps;
@@ -275,7 +275,7 @@ public class OptWnd extends Window {
                         Config.showfps = val;
                         a = val;
                     }
-                }, new Coord(0, y));
+                }, new Coord(250, y));
                 pack();
             }
         }
