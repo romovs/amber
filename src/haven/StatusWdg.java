@@ -26,10 +26,12 @@ public class StatusWdg extends Widget {
     private static final Tex hearthlingsplayingdef = Text.render("Players: ?", Color.WHITE).tex();
     private static final Tex pingtimedef = Text.render("Ping: ?", Color.WHITE).tex();
     private static final Tex accountstatusdef = Text.render("Account status: ?", Color.WHITE).tex();
+    private static final Tex servertimedef = Text.render("Server time: ?", Color.WHITE).tex();
 
     private Tex hearthlingsplaying = hearthlingsplayingdef;
     private Tex pingtime = pingtimedef;
     private Tex accountstatus = accountstatusdef;
+    private Tex servertime = servertimedef;
 
     private static final int RETRY_COUNT = 6;
     private int retries;
@@ -221,6 +223,30 @@ public class StatusWdg extends Widget {
         }
     }
 
+    private void updateservertime() {
+        long secinday = 60 * 60 * 24;
+
+        long globtime = ui.sess.glob.globtime();
+        long secs = globtime / 1000;
+        long day = secs / secinday;
+        long secintoday = secs % secinday;
+
+        long hours = secintoday / 3600;
+        long mins = (secintoday % 3600) / 60;
+
+        StringBuilder servertimetext = new StringBuilder();
+        servertimetext.append(String.format("Server time: Day %d, %02d:%02d", day, hours, mins));
+        long dewyladysmantletimemin = 4 * 60 * 60 + 45 * 60;
+        long dewyladysmantletimemax = 7 * 60 * 60 + 15 * 60;
+        if (secintoday >= dewyladysmantletimemin && secintoday <= dewyladysmantletimemax) {
+            servertimetext.append(" (Dewy Lady's Mantle)");
+        }
+
+        synchronized (StatusWdg.class) {
+            servertime = Text.render(servertimetext.toString(), Color.WHITE).tex();
+        }
+    }
+
     private void startupdaterthread() {
         Thread statusupdaterthread = new Thread(tg, new Runnable() {
             public void run() {
@@ -252,6 +278,10 @@ public class StatusWdg extends Widget {
                             return;
 
                         updateaccountstatus();
+                        if (Thread.interrupted())
+                            return;
+
+                        updateservertime();
                         if (Thread.interrupted())
                             return;
                     }
@@ -327,6 +357,7 @@ public class StatusWdg extends Widget {
             texturesToDisplay.add(this.hearthlingsplaying);
             texturesToDisplay.add(this.pingtime);
             texturesToDisplay.add(this.accountstatus);
+            texturesToDisplay.add(this.servertime);
 
             int requiredwidth = 0;
             int requiredheight = 0;

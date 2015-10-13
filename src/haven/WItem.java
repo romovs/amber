@@ -30,7 +30,6 @@ import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.image.BufferedImage;
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.util.*;
 
 import static haven.Inventory.sqsz;
@@ -41,6 +40,7 @@ public class WItem extends Widget implements DTarget {
     public final GItem item;
     private Resource cspr = null;
     private Message csdt = Message.nil;
+    private static final Color famountclr = new Color(24, 116, 205);
 
     public WItem(GItem item) {
         super(sqsz);
@@ -252,9 +252,42 @@ public class WItem extends Widget implements DTarget {
             if (!studylefttimedisplayed && item.meter > 0 && Config.itempercentage && item.metertex != null) {
                 g.image(item.metertex, Coord.z);
             }
+
+            if (Config.showfillamount) {
+                try {
+                    for (ItemInfo info : item.info()) {
+                        if (info instanceof ItemInfo.Contents) {
+                            if (((ItemInfo.Contents) info).content > 0)
+                                drawamountbar(g, ((ItemInfo.Contents) info).content);
+                        }
+                    }
+                } catch (Exception e) { // fail silently if info is not ready
+                }
+            }
         } else {
             g.image(missing.layer(Resource.imgc).tex(), Coord.z, sz);
         }
+    }
+
+    private void drawamountbar(GOut g, double content) {
+        double capacity;
+        String name = item.getname();
+        if (name.equals("Waterskin"))
+            capacity = 3.0D;
+        else if (name.equals("Bucket"))
+            capacity = 10.0D;
+        else if (name.equals("Waterflask"))
+            capacity = 2.0D;
+        else
+            return;
+
+        int h = (int) (content / capacity * sz.y) - 1;
+        if (h < 0)
+            return;
+
+        g.chcolor(famountclr);
+        g.frect(new Coord(sz.x - 4, sz.y - h - 1), new Coord(3, h));
+        g.chcolor();
     }
 
     private void openwebpage(String url) {

@@ -1,5 +1,5 @@
 /*
- *  This file is part of the Haven & Hearth game client.
+  *  This file is part of the Haven & Hearth game client.
  *  Copyright (C) 2009 Fredrik Tolf <fredrik@dolda2000.com>, and
  *                     Björn Johannessen <johannessen.bjorn@gmail.com>
  *
@@ -265,6 +265,17 @@ public class OptWnd extends Window {
                 	}
                 }, new Coord(0, y));
                 y += 35;
+                add(new CheckBox("Show FPS") {
+                    {
+                        a = Config.showfps;
+                    }
+
+                    public void set(boolean val) {
+                        Utils.setprefb("showfps", val);
+                        Config.showfps = val;
+                        a = val;
+                    }
+                }, new Coord(0, y));
                 pack();
             }
         }
@@ -754,6 +765,30 @@ public class OptWnd extends Window {
                 a = val;
             }
         }, new Coord(260, y));
+        y += 35;
+        display.add(new CheckBox("Show inventory on login") {
+            {
+                a = Config.showinvonlogin;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("showinvonlogin", val);
+                Config.showinvonlogin = val;
+                a = val;
+            }
+        }, new Coord(260, y));
+        y += 35;
+        display.add(new CheckBox("Show fill amount bars for buckets/flasks") {
+            {
+                a = Config.showfillamount;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("showfillamount", val);
+                Config.showfillamount = val;
+                a = val;
+            }
+        }, new Coord(260, y));
 
         display.add(new Button(220, "Reset Windows (req. logout)") {
             @Override
@@ -765,6 +800,12 @@ public class OptWnd extends Window {
                 Utils.delpref("mmapsz");
                 Utils.delpref("quickslotsc");
                 Utils.delpref("chatsz");
+                Utils.delpref("chatvis");
+                Utils.delpref("gui-bl-visible");
+                Utils.delpref("gui-br-visible");
+                Utils.delpref("gui-ul-visible");
+                Utils.delpref("gui-ur-visible");
+                Utils.delpref("menu-visible");
             }
         }, new Coord(260, 320));
         display.add(new PButton(200, "Back", 27, main), new Coord(270, 360));

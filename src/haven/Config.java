@@ -105,11 +105,13 @@ public class Config {
     public static boolean simplecrops = Utils.getprefb("simplecrops", false);
     public static boolean simpleforage = Utils.getprefb("simpleforage", false);
     public static boolean hidecrops = Utils.getprefb("hidecrops", false);
+    public static boolean showfps = Utils.getprefb("showfps", false);
     public static boolean autohearth = Utils.getprefb("autohearth", false);
     public static boolean servertime = Utils.getprefb("servertime", false);
     public static boolean showplayerpaths = Utils.getprefb("showplayerpaths", false);
     public static boolean showanimalpaths = Utils.getprefb("showanimalpaths", false);
     public static boolean showstudylefttime = Utils.getprefb("showstudylefttime", false);
+    public static boolean showinvonlogin = Utils.getprefb("showinvonlogin", false);
     public static boolean autopick = Utils.getprefb("autopick", false);
     public static boolean fastflower = Utils.getprefb("fastflower", false);
     public static boolean afklogout = Utils.getprefb("afklogout", false);
@@ -121,6 +123,7 @@ public class Config {
     public static boolean alternmapctrls = Utils.getprefb("alternmapctrls", false);
     public static boolean autostudy = Utils.getprefb("autostudy", true);
     public static boolean limitbgfps = Utils.getprefb("limitbgfps", false);
+    public static boolean showfillamount = Utils.getprefb("showfillamount", false);
     public static boolean hwcursor = false;
     public static byte[] authck = null;
     public static String prefspec = "hafen";

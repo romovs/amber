@@ -481,7 +481,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             };
             invwnd.add(maininv = (Inventory) child, Coord.z);
             invwnd.pack();
-            invwnd.hide();
+            invwnd.show(Config.showinvonlogin);
             add(invwnd, new Coord(100, 100));
         } else if (place == "equ") {
             equwnd = new Hidewnd(Coord.z, "Equipment");
