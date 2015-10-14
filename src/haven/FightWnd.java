@@ -26,6 +26,9 @@
 
 package haven;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.*;
 import java.awt.Color;
 
@@ -40,6 +43,7 @@ public class FightWnd extends Widget {
     public int usesave;
     private final Text[] saves;
     private final CharWnd.LoadingTextBox info;
+    private CombatSchools combatschools = new CombatSchools(5);
 
     public class Action {
         public final Indir<Resource> res;
@@ -283,18 +287,35 @@ public class FightWnd extends Widget {
         savelist = add(new Savelist(250, 3), new Coord(245, 225).add(wbox.btloff()));
         Frame.around(this, Collections.singletonList(savelist));
 
-        add(new Button(110, "Load", false) {
+        add(new Button(70, "Load", false) {
             public void click() {
                 load(savelist.sel);
                 use(savelist.sel);
             }
         }, 5, 274);
-        add(new Button(110, "Save", false) {
+        add(new Button(70, "Save", false) {
             public void click() {
                 save(savelist.sel);
                 use(savelist.sel);
             }
-        }, 127, 274);
+        }, 86, 274);
+        add(new Button(70, "Rename", false) {
+            public void click() {
+                GameUI gui = gameui();
+                int idx = savelist.sel;
+                if (saves[idx].text.equals("Unused save"))
+                    return;
+
+                String name = combatschools.getname(idx + 1);
+                if (name == null)
+                    name = String.format("Saved school %d", idx + 1);
+
+                SchoolRenameWnd renwnd = new SchoolRenameWnd("Rename School", combatschools, saves, idx, name);
+                gui.add(renwnd, new Coord(gui.sz.x / 2 - 200, gui.sz.y / 2 - 200));
+                renwnd.show();
+            }
+        }, 167, 274);
+
     /*
     int y = actlist.sz.y;
 	for(int i = nsave - 1; i >= 0; i--) {
@@ -343,15 +364,76 @@ public class FightWnd extends Widget {
         } else if (nm == "saved") {
             int fl = (Integer) args[0];
             for (int i = 0; i < nsave; i++) {
-                if ((fl & (1 << i)) != 0)
+                if ((fl & (1 << i)) != 0) {
+                    if (combatschools.size() > 0) {
+                        String name = combatschools.getname(i + 1);
+                        if (name != null) {
+                            saves[i] = attrf.render(String.format(name));
+                            continue;
+                        }
+                    }
                     saves[i] = attrf.render(String.format("Saved school %d", i + 1));
-                else
+                } else {
                     saves[i] = unused;
+                }
             }
         } else if (nm == "use") {
             usesave = (Integer) args[0];
         } else {
             super.uimsg(nm, args);
+        }
+    }
+
+    public void loadschools() {
+        try {
+            String schoolsjson = Utils.getpref("schools_" + gameui().chrid, null);
+            if (schoolsjson == null)
+                return;
+            JSONArray arr = new JSONArray(schoolsjson);
+            for (int i = 0; i < arr.length(); i++) {
+                JSONObject s = arr.getJSONObject(i);
+                combatschools.add(new CombatSchools.School(s.getInt("idx"), s.get("name").toString()));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static class CombatSchools extends ArrayList<CombatSchools.School> {
+        public CombatSchools(int initialCapacity) {
+            super(initialCapacity);
+        }
+
+        public String getname(int i) {
+            for (CombatSchools.School school : this) {
+                if (school.idx == i)
+                    return school.name;
+            }
+            return null;
+        }
+
+        public void setname(int i, String name) {
+            for (CombatSchools.School school : this) {
+                if (school.idx == i) {
+                    school.name = name;
+                    return;
+                }
+            }
+            this.add(new School(i, name));
+        }
+
+        public void add(int idx, String name) {
+            add(new CombatSchools.School(idx, name));
+        }
+
+        public static class School {
+            public int idx;
+            public String name;
+
+            public School(int idx, String name) {
+                this.idx = idx;
+                this.name = name;
+            }
         }
     }
 }

@@ -253,7 +253,7 @@ public class WItem extends Widget implements DTarget {
                 g.image(item.metertex, Coord.z);
             }
 
-            if (Config.showfillamount) {
+            if (Config.showcontentsbars) {
                 try {
                     for (ItemInfo info : item.info()) {
                         if (info instanceof ItemInfo.Contents) {
@@ -350,25 +350,11 @@ public class WItem extends Widget implements DTarget {
 
                 if (Config.autostudy) {
                     Window invwnd = gameui().getwnd("Inventory");
+                    Window cupboard = gameui().getwnd("Cupboard");
                     Resource res = item.resource();
                     if (res != null) {
-                        for (Widget invwdg = invwnd.lchild; invwdg != null; invwdg = invwdg.prev) {
-                            if (invwdg instanceof Inventory) {
-                                Inventory inv = (Inventory) invwdg;
-                                for (Widget witm = inv.lchild; witm != null; witm = witm.prev) {
-                                    if (witm instanceof WItem) {
-                                        GItem ngitm = ((WItem) witm).item;
-                                        Resource nres = ngitm.resource();
-                                        if (nres != null && nres.name.equals(res.name)) {
-                                            ngitm.wdgmsg("take", witm.c);
-                                            ((Inventory) parent).drop(Coord.z, c);
-                                            break;
-                                        }
-                                    }
-                                }
-                                break;
-                            }
-                        }
+                        if (!replacecurio(invwnd, res) && cupboard != null)
+                            replacecurio(cupboard, res);
                     }
                 }
             }
@@ -377,5 +363,26 @@ public class WItem extends Widget implements DTarget {
 
         if (Config.studyalarm && ci != null && item.meter >= 99)
             Audio.play(studyalarmsfx, Config.studyalarmvol);
+    }
+
+    private boolean replacecurio(Window wnd, Resource res) {
+        for (Widget invwdg = wnd.lchild; invwdg != null; invwdg = invwdg.prev) {
+            if (invwdg instanceof Inventory) {
+                Inventory inv = (Inventory) invwdg;
+                for (Widget witm = inv.lchild; witm != null; witm = witm.prev) {
+                    if (witm instanceof WItem) {
+                        GItem ngitm = ((WItem) witm).item;
+                        Resource nres = ngitm.resource();
+                        if (nres != null && nres.name.equals(res.name)) {
+                            ngitm.wdgmsg("take", witm.c);
+                            ((Inventory) parent).drop(Coord.z, c);
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+        }
+        return false;
     }
 }

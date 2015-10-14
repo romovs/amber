@@ -537,6 +537,21 @@ public class OptWnd extends Window {
                 Utils.setprefd("sfxsqueakvol", vol);
             }
         }, new Coord(250, y));
+        y += 20;
+        audio.add(new Label("Quern sound volume"), new Coord(250, y));
+        y += 15;
+        audio.add(new HSlider(200, 0, 1000, 0) {
+            protected void attach(UI ui) {
+                super.attach(ui);
+                val = (int) (Config.sfxquernvol * 1000);
+            }
+
+            public void changed() {
+                double vol = val / 1000.0;
+                Config.sfxquernvol = vol;
+                Utils.setprefd("sfxquernvol", vol);
+            }
+        }, new Coord(250, y));
 
         audio.add(new PButton(200, "Back", 27, main), new Coord(270, 360));
         audio.pack();
@@ -778,14 +793,14 @@ public class OptWnd extends Window {
             }
         }, new Coord(260, y));
         y += 35;
-        display.add(new CheckBox("Show fill amount bars for buckets/flasks") {
+        display.add(new CheckBox("Show contents bars for buckets/flasks") {
             {
-                a = Config.showfillamount;
+                a = Config.showcontentsbars;
             }
 
             public void set(boolean val) {
-                Utils.setprefb("showfillamount", val);
-                Config.showfillamount = val;
+                Utils.setprefb("showcontentsbars", val);
+                Config.showcontentsbars = val;
                 a = val;
             }
         }, new Coord(260, y));
@@ -1096,6 +1111,19 @@ public class OptWnd extends Window {
                 a = val;
             }
         }, new Coord(0, y));
+        y += 35;
+        general.add(new CheckBox("Drop any seeds placed into inventory") {
+            {
+                a = Config.dropseeds;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("dropseeds", val);
+                Config.dropseeds = val;
+                a = val;
+            }
+        }, new Coord(0, y));
+
         general.add(new PButton(200, "Back", 27, main), new Coord(270, 360));
         general.pack();
 

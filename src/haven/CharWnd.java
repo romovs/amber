@@ -1468,6 +1468,8 @@ public class CharWnd extends Window {
             Frame.around(sattr, Collections.singletonList(inf));
         } else if (place == "fmg") {
             fgt.add(child, 0, 0);
+            if (child instanceof FightWnd)
+                ((FightWnd)child).loadschools();
         } else if (place == "wound") {
             this.wound = (Wound.Info) child;
             woundbox.add(child, Coord.z);

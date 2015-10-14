@@ -154,6 +154,24 @@ public class UI {
                 throw (new UIException("Null parent widget " + parent + " for " + id, type, cargs));
             Widget wdg = pwdg.makechild(f, pargs, cargs);
             bind(wdg, id);
+
+            if (Config.dropseeds && wdg instanceof GItem) {
+                final GItem i = (GItem)wdg;
+                GameUI gui = pwdg.gameui();
+                if (gui != null && gui.maininv == pwdg) {
+                    Defer.later(new Defer.Callable<Void>() {
+                        public Void call() {
+                        try {
+                            if (i.resource().name.startsWith("gfx/invobjs/seed-"))
+                                i.wdgmsg("drop", Coord.z);
+                        } catch (Loading e) {
+                            Defer.later(this);
+                        }
+                        return null;
+                        }
+                    });
+                }
+            }
         }
     }
 

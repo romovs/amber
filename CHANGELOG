@@ -1,3 +1,324 @@
+<<<<<<< HEAD
+=======
+Version 1.19.0
+    New:
+        * Object highlighting with Alt+LMB.
+        * Option to set running speed on login.
+        * Option to show inventory on login.
+        * Option to display FPS.
+        * Option to show contents bars for buckets, flasks, and waterskins.
+        * Combat schools renaming.
+        * Slider for adjusting Quern sound volume.
+        * Option to automatically drop seeds from inventory.
+
+    Fixed:
+        * Armor class summary not being recalculated under certain conditions.
+
+    Misc:
+        * Reset Windows button will reset hidden UI in addition to windows positions.
+        * Status widget displays server time now in addition to previous information.
+        * Cupboards support in auto study.
+
+
+Version 1.18.1
+    New:
+        * Option to completely hide crops.
+        * Ctrl+Up/Right/Down/Left snaps the ortho camera to N, E, S, W respectively.
+        * Option to automatically select the 'Harvest' action.
+
+    Fixed:
+        * Average quality calculation.
+        * Growth stages for bushes not showing.
+
+
+Version 1.18.0
+    New:
+        * Option to show remaining study time for curios.
+        * Shift+Ctrl+LMB on an item in inventory/container opens relevant wiki page.
+        * Auto study.
+        * Icons for dead rabbits and chicken.
+        * Additional quality option: lowest of E/S/V.
+        * Tree growth stages.
+
+    Fixed:
+        * Do not allow dropping over existing curios when study is locked.
+        * Fixed map tiles not rendering under certain conditions when minimap window was maximized.
+        * Don't save map tiles for houses and cellars.
+        * When mass transferring to a full stockpile last item would hang on the cursor.
+
+    Misc:
+        * Command line argument '-c' for forcing hardware cursor.
+        * Value set with :bghz is now remembered across restarts.
+
+
+Version 1.17.2
+    Fixed:
+        * Alt+1/2 hotkeys for quickslots changed to Alt+Z/X.
+        * Issue with status widget attempting to connect with null username.
+
+
+Version 1.17.1
+    Fixed:
+        * Fixed crash in equipment window drawing routine.
+
+
+Version 1.17.0
+    New:
+        * Show overall armor class in the equipment window.
+        * Simulate left mouse click on quick slots with alt+1/2.
+        * Option to automatically select Pick action.
+        * Player and animal paths.
+        * Status widget.
+        * Option for alternative controls for minimap using MMB for dragging and L/RMB for moving.
+
+    Fixed:
+        * Gob radius not showing when loading new area. 
+        * Mine support radius expanding below ground level.
+        * Mass transfer from inventory to kiln/smelter instead of stockpile if both windows are open.
+        * Timers re-initializing multiple times during re-logging.
+        * Minimap not rendering under certain conditions when the window is set to minimal width.
+        * Potential hang when entering or leaving houses/cellars.
+
+    Misc:
+        * Slightly reduced the duration of player alarm sound. 
+        * Optimization related to quick slots rendering.
+        * Render player dots on top of all other icons.
+        * Save Quiver window position.
+
+
+Version 1.16.0
+    New:
+        * Horizontally resizable chat.
+        * Transfer all items to and from a stockpile with shift+atl/ctrl+rmb and shift+rmb.
+        * Auto hearth.
+        * Show boats on minimap.
+        * Option to show quality as average of substance and vitality.
+        * Print server time to System log.
+        * Beehive radius.
+
+    Fixed:
+        * Click on an icon didn't work if object with a hidden icon was overlapping it.
+        * Show grid button erroneously modified map dragging lock when clicked.
+        * Map was partially hidden when window is resized to minimal size.
+
+    Misc:
+        * Optimizations related to map rendering.
+        * Optimizations related to percentage text rendering.
+
+
+Version 1.15.1
+    Fixed:
+        * Crash when right clicking instruments.
+
+
+Version 1.15.0
+    New:
+        * Simplified crops.
+        * Icons for battering rams and toads.
+        * Add message to system log when curio finishes studying.
+
+    Fixed:
+        * Radius for stone supports not showing.
+        * Different types of meat were considered as same item when mass transferring/dropping.
+
+
+Version 1.14.0
+    New:
+        * Show mine support radius with ctrl+d.
+        * Change between bad and ortho camera with shift+c.
+        * Option for hiding flavor objects but keeping the ambient sounds.
+        * Option for hiding weather.
+
+    Fixed:
+        * 'alarm on unknown' volume slider not being preserved between restarts.
+        * 'save map tiles to disk' option not disabling tile dumps when unchecked.
+        * Prevent clicking on hidden icons.
+        * Don't log attribute changes with 0 change.
+        * Render item percentage on top so it won't be hidden behind quality.
+
+
+Version 1.13.3
+    Fixed:
+        * Crash when partying characters located in different worlds.
+
+
+Version 1.13.2
+    New:
+        * Notify when kin comes online
+        * Log changes to base attributes.
+        * Shift+Alt+LMB for mass transferring. Old combination Alt + RMB still works too.
+
+    Misc:
+        * All-around optimizations.
+
+
+Version 1.13.1
+    Fixed:
+        * Shift+Q/W/E/R not working on non english keyboard layouts.
+        * LP gain multiplier for curios is now optional.
+        * Issue with crop stage routine taking into account trellis objects.
+        * Significant performance hit when show crop stage option is turned on.
+        * Changed crop stage display to be togglable using Ctrl+P.
+
+
+Version 1.13.0
+    New:
+        * Show plants growth stage.
+        * Change speed using Shift+Q/W/E/R.
+        * Option to show all three elements substance/essence/vitality as quality.
+        * Quality for curiosities is shown now as LP gain multiplier.
+
+    Fixed:
+        * Mirkwood map highlighting.
+
+
+Version 1.12.0
+    New:
+        * Slider for reducing volume of stone chipping and boat squeaking sounds.
+        * Custom resurces override support.
+        * Show attribute/ability values in craft window. 
+        * Show object health.
+
+    Misc:
+        * Write dates in chat logs.
+        * Preserve show pclaims/vclaims selection between restarts.
+
+
+Version 1.11.1
+    Fixed:
+        * Crash on log out.
+        * Java 7 compatibility.
+        * Chat logs encoding for non Lating letters.
+
+    Misc:
+        * Preserve Stockpile, Tub, and Cauldron window positions.
+
+
+Version 1.11.0
+    New:
+        * Option to display view distance box and minimap grid.
+        * Sound alarm when curiosity finishes studying.
+        * Option to show average quality without rounding to a whole number.
+        * List for hiding some of the default minimap icons.
+
+
+    Fixed:
+        * Quick slots widget dragging.
+        * Daylight cycle.
+        * Draw 'x' instead of a circle for party members when 'show players' option is enabled.
+        * Slightly more visible xfor party memebers.
+
+
+Version 1.10.0
+    New:
+        * Quick hand equipment slots.
+        * Optional sound notification on new private chats.
+        * Preserve window positions.
+        * Slider for adjusting timer alarm volume.
+
+    Fixed:
+        * Persist timers across client restarts.
+
+
+Version 1.9.0
+    New:
+        * Grid overlay.
+
+    Fixed:
+        * Issue with map tile dumps being saved to new folder each time.
+
+
+Version 1.8.0
+    New:
+        * Timers.
+        * Configurable chat font size.
+        * Option to show hourglass percentage. 
+        * Option to display item completion as percentage.
+        * Camera zoom using numpad +/-.
+        * Updated boulders/bushes/trees lists.
+
+    Fixed:
+        * Issue with map tiles inside the minimap window not being drawn sometimes when dragging.
+        * Map tiles compatibility with TP mapping tool.
+        * Calculate average quality using root mean square instead of arithmetic mean.
+
+
+Version 1.7.1
+    New:
+        * Updated boulders and trees list.
+
+
+Version 1.7.0
+    New:
+        * Option to show boulder/bushes/trees on minimap.
+        * Show Gob resource name when pointing at it and holding Shift.
+        * Option to display item completion progress as bar.
+        * Option to choose between the type of quality to show - highest or average.
+
+    Fixed:
+        * Fixed item quality text position for items taking more than one slot.
+        * Changed mass transfer key combination to use Alt.
+
+
+Version 1.6.3
+    New:
+        * Cleaner minimap window.
+        * Button for disabling map dragging.
+        * Option to disable biome edge transitions. 
+
+    Fixed:
+        * Map size not being preserved between restarts.
+        * Crash when Shift+right clicking items in the character screen.
+
+
+Version 1.6.2
+    New:
+        * Nightvision can be toggled now using Ctrl+N.
+        * Option to set "bad" camera scrolling sensitivity.
+
+    Fixed:
+        * Restored minimap clicking.
+
+
+Version 1.6.1
+    Fixed:
+        * Alarm on unknown player setting not being preserved.
+        * Crash in item quality retrieval.
+
+
+Version 1.6.0
+    New:
+        * Persistent, resizable, and movable map.
+        * Account management.
+        * Option to show item quality.
+
+
+Version 1.5.0
+    New:
+        * Alarm sounds on unknown and red players.
+        * Save chat logs to disk and optionally show timestamps.
+
+    Fixed:
+        * Fixed possible rare crash when logging out.
+
+
+Version 1.4.0
+    New:
+        * Automatic check for updates. 
+        * Study box locking.
+        * Free camera rotation.
+
+
+Version 1.3.0
+    New:
+        * Option to always show kin names.
+        * Option to show players on minimap.
+
+    Fixed:
+        * Another hotfix for ArrayIndexOutOfBoundsException in the vanilla code.
+
+
+>>>>>>> refs/remotes/romovs/master
 Version 1.2.0
 	New:
 	Added button to limit background fps to 1 -> Lowers CPU usage when window is not focused
