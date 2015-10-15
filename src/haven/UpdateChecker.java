@@ -19,6 +19,8 @@ public class UpdateChecker extends Thread {
                 updwnd.show();
                 updwnd.raise();
             }
+            else 
+            	System.out.println("Client is up to date, current client version: " + Config.version);
         } catch (Exception e) {
             System.err.println("WARNING: error checking for updates");
             e.printStackTrace();
