@@ -14,13 +14,14 @@ public class UpdateChecker extends Thread {
             String latestver = json.getString("tag_name");
             String latesturl = json.getJSONArray("assets").getJSONObject(0).getString("browser_download_url");
             if (isnewer(Config.version, latestver) && HavenPanel.lui != null && HavenPanel.lui.root != null) {
+            	System.out.println("Client is not up to date, current client version: " + Config.version + " Newest client version: " + latestver);
                 Window updwnd = new UpdateWnd(latesturl, latestver);
                 HavenPanel.lui.root.add(updwnd);
                 updwnd.show();
                 updwnd.raise();
             }
-            else 
-            	System.out.println("Client is up to date, current client version: " + Config.version);
+            else
+            	System.out.println("Client is up to date, current client version: " + Config.version + " Newest client version: " + latestver);
         } catch (Exception e) {
             System.err.println("WARNING: error checking for updates");
             e.printStackTrace();
