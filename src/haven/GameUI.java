@@ -71,7 +71,6 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     public TimersWnd timerswnd;
     public QuickSlotsWdg quickslots;
     public StatusWdg statuswindow;
-    private boolean firstdraw = true;
 
     public abstract class Belt extends Widget {
         public Belt(Coord sz) {
@@ -521,7 +520,11 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             zerg.ntab(polity = (Polity) child, zerg.pol);
             zerg.pol.tooltip = Text.render(polity.cap);
         } else if (place == "chat") {
+            ChatUI.Channel prevchannel = chat.sel;
             chat.addchild(child);
+            if (Config.selectsyslogonlogin && prevchannel != null && chat.sel.cb == null) {
+                 chat.select(prevchannel);
+            }
         } else if (place == "party") {
             add(child, 10, 95);
         } else if (place == "meter") {
@@ -587,11 +590,6 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     }
 
     public void draw(GOut g) {
-        if (Config.selectsyslogonlogin && firstdraw) {
-            chat.select(syslog);
-        }
-        firstdraw = false;
-
         beltwdg.c = new Coord(chat.c.x, Math.min(chat.c.y - beltwdg.sz.y + 4, sz.y - beltwdg.sz.y));
         super.draw(g);
         if (prog >= 0)

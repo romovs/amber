@@ -161,7 +161,7 @@ public class ChatUI extends Widget {
     public static abstract class Channel extends Widget {
         public final List<Message> msgs = new LinkedList<Message>();
         private final Scrollbar sb;
-        private final IButton cb;
+        public final IButton cb;
         public int urgency = 0;
 
         public static abstract class Message {
