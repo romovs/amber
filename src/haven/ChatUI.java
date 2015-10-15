@@ -101,15 +101,20 @@ public class ChatUI extends Widget {
             return res;
         }
 
-        String translatedmsg = Translator.translate(
-            msg,
-            Config.translatelanguage == 0 ? Translator.Language.ENGLISH.toString() : Translator.Language.RUSSIAN.toString()
-        );
-        if (translatedmsg.isEmpty()) {
-            res += " (unable to translate)";
+        if (Config.yandextranslateapikey.isEmpty()) {
+            res += " (unable to translate - no Yandex API key provided, please visit https://goo.gl/9PO75M to get it for free)";
         } else {
-            if (!msg.equals(translatedmsg)) {
-                res = translatedmsg + " (original message: \"" + msg + "\")";
+            Translator.Response yandexresponse = Translator.translate(
+                Config.yandextranslateapikey,
+                msg,
+                Config.translatelanguage == 0 ? Translator.Language.ENGLISH.toString() : Translator.Language.RUSSIAN.toString()
+            );
+            if (yandexresponse.translatedtext.isEmpty()) {
+                res += String.format(" (unable to translate - \"%s\")", yandexresponse.message);
+            } else {
+                if (!msg.equals(yandexresponse.translatedtext)) {
+                    res = yandexresponse.translatedtext + " (original message: \"" + msg + "\")";
+                }
             }
         }
 

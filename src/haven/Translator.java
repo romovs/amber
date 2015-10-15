@@ -26,9 +26,13 @@ public class Translator {
         }
     }
 
-    private static String apikey = "trnsl.1.1.20151011T100257Z.56e6087f23957f5d.309d4ea2aae34ee07f33dde22949c8c3cff5c34a";
+    public static class Response {
+        public String translatedtext = "";
+        public int code = -1;
+        public String message = "Unknown reason";
+    }
 
-    private static String makepostrequest(String url, Map<String, Object> params) {
+    private static String makepostrequest(String url, Map<String, Object> params) throws IOException {
         StringBuilder responsebody = new StringBuilder();
         InputStream is = null;
 
@@ -55,11 +59,14 @@ public class Translator {
             wr.flush();
             wr.close();
 
-            int responsecode = conn.getResponseCode();
-            if (responsecode != HttpsURLConnection.HTTP_OK)
-                return "";
+            // Hack to force HttpsURLConnection to run the request
+            // Otherwise getErrorStream always returns null
+            conn.getResponseCode();
+            is = conn.getErrorStream();
+            if (is == null) {
+                is = conn.getInputStream();
+            }
 
-            is = conn.getInputStream();
             BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 
             String line;
@@ -68,7 +75,6 @@ public class Translator {
             }
 
             return responsebody.toString();
-        } catch (Exception ex) {
         } finally {
             try {
                 if (is != null)
@@ -76,32 +82,33 @@ public class Translator {
             } catch (IOException ioe) {
             }
         }
-
-        return "";
     }
 
-    public static String translate(String text, String destinationlanguage) {
-        Map<String,Object> params = new LinkedHashMap<>();
-        params.put("key", apikey);
-        params.put("lang", destinationlanguage);
-        params.put("text", text);
-        params.put("options", 1);
-        String response = makepostrequest("https://translate.yandex.net/api/v1.5/tr.json/translate", params);
-        if (response.isEmpty()) {
-            return "";
-        }
+    public static Response translate(String apikey, String text, String destinationlanguage) {
+        Response yandexresponse = new Response();
 
         try {
-            JSONObject responsejson = new JSONObject(response);
-            int code = responsejson.getInt("code");
-            if (code != 200) {
-                return "";
+            Map<String,Object> params = new LinkedHashMap<>();
+            params.put("key", apikey);
+            params.put("lang", destinationlanguage);
+            params.put("text", text);
+            params.put("options", 1);
+            String response = makepostrequest("https://translate.yandex.net/api/v1.5/tr.json/translate", params);
+            if (response.isEmpty()) {
+                return yandexresponse;
             }
 
-            return responsejson.getJSONArray("text").getString(0);
+            JSONObject responsejson = new JSONObject(response);
+            yandexresponse.code = responsejson.getInt("code");
+            if (yandexresponse.code == 200) {
+                yandexresponse.translatedtext = responsejson.getJSONArray("text").getString(0);
+            } else {
+                yandexresponse.message = responsejson.getString("message");
+            }
         } catch (Exception ex) {
+            yandexresponse.message = ex.getMessage();
         }
 
-        return "";
+        return yandexresponse;
     }
 }

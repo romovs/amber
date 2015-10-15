@@ -26,6 +26,8 @@
 
 package haven;
 
+import java.net.URL;
+
 public class OptWnd extends Window {
     public final Panel main, video, audio, display, map, general;
     public Panel current;
@@ -978,6 +980,35 @@ public class OptWnd extends Window {
                 Utils.setprefi("translatelanguage", val);
             }
         }, new Coord(0, y));
+        y += 20;
+        general.add(new Label("Yandex Translate API key"), new Coord(0, y));
+        y += 15;
+        final TextEntry yandextranslateapikeytextentry = general.add(
+            new TextEntry(200, Config.yandextranslateapikey),
+            new Coord(0, y)
+        );
+        y += 25;
+        general.add(new Button(45, "Get") {
+            public void click() {
+                try {
+                    WebBrowser.self.show(new URL("https://tech.yandex.com/keys/get/?service=trnsl"));
+                } catch (Exception ex) {
+                }
+            }
+        }, new Coord(0, y));
+        general.add(new Button(45, "Set") {
+            public void click() {
+                Utils.setpref("yandextranslateapikey", yandextranslateapikeytextentry.text);
+                Config.yandextranslateapikey = yandextranslateapikeytextentry.text;
+            }
+        }, new Coord(55, y));
+        general.add(new Button(60, "Clear") {
+            public void click() {
+                yandextranslateapikeytextentry.settext("");
+                Utils.setpref("yandextranslateapikey", "");
+                Config.yandextranslateapikey = "";
+            }
+        }, new Coord(110, y));
 
         general.add(new PButton(200, "Back", 27, main), new Coord(270, 360));
         general.pack();
