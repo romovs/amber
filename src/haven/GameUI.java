@@ -829,6 +829,9 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             quickslots.drop(QuickSlotsWdg.rc, Coord.z);
             quickslots.mousedown(QuickSlotsWdg.rc, 1);
             return true;
+        } else if (ev.isAltDown() && ev.getKeyCode() == KeyEvent.VK_S) {
+            HavenPanel.needtotakescreenshot = true;
+            return true;
         }
         return (super.globtype(key, ev));
     }

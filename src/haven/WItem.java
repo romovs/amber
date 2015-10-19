@@ -40,7 +40,7 @@ public class WItem extends Widget implements DTarget {
     public final GItem item;
     private Resource cspr = null;
     private Message csdt = Message.nil;
-    private static final Color famountclr = new Color(24, 116, 205);
+    public static final Color famountclr = new Color(24, 116, 205);
 
     public WItem(GItem item) {
         super(sqsz);

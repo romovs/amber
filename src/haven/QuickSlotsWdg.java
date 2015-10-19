@@ -18,11 +18,17 @@ public class QuickSlotsWdg extends Widget implements DTarget {
         if (e != null) {
             g.image(sbg, Coord.z);
             WItem left = e.quickslots[6];
-            if (left != null)
+            if (left != null) {
                 drawitem(g.reclipl(lc, g.sz), left);
+                if (Config.showcontentsbars)
+                    drawamountbar(g, left.item, 44 + 6);
+            }
             WItem right = e.quickslots[7];
-            if (right != null)
+            if (right != null) {
                 drawitem(g.reclipl(rc, g.sz), right);
+                if (Config.showcontentsbars)
+                    drawamountbar(g, right.item, 0);
+            }
         }
     }
 
@@ -35,6 +41,32 @@ public class QuickSlotsWdg extends Widget implements DTarget {
             g.defstate();
         } else {
             g.image(WItem.missing.layer(Resource.imgc).tex(), Coord.z, ssz);
+        }
+    }
+
+    public void drawamountbar(GOut g, GItem item, int offset) {
+        if (item.spr() != null) {
+            try {
+                for (ItemInfo info : item.info()) {
+                    if (info instanceof ItemInfo.Contents) {
+                        if (((ItemInfo.Contents) info).content > 0) {
+                            double capacity;
+                            if (item.getname().equals("Bucket"))
+                                capacity = 10.0D;
+                            else
+                                return;
+                            double content = ((ItemInfo.Contents) info).content;
+                            int height = sz.y - 2;
+                            int h = (int) (content / capacity * height);
+                            g.chcolor(WItem.famountclr);
+                            g.frect(new Coord(sz.x - 4 - offset, height - h + 1), new Coord(3, h));
+                            g.chcolor();
+                            return;
+                        }
+                    }
+                }
+            } catch (Exception ex) { // fail silently if info is not ready
+            }
         }
     }
 

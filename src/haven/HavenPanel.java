@@ -26,11 +26,15 @@
 
 package haven;
 
+import com.jogamp.opengl.util.awt.Screenshot;
 import java.awt.GraphicsConfiguration;
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.awt.event.*;
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.media.opengl.*;
 import javax.media.opengl.awt.*;
@@ -57,6 +61,7 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
     private GLState gstate, rtstate, ostate;
     private GLState.Applier state = null;
     private GLConfig glconf = null;
+    public static boolean needtotakescreenshot;
 
     private static GLCapabilities stdcaps() {
         GLProfile prof = GLProfile.getDefault();
@@ -91,7 +96,24 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
         addGLEventListener(new GLEventListener() {
             Debug.DumpGL dump = null;
 
+            public void takescreenshot(int width, int height) {
+                try {
+                    String curtimestamp = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss.SSS").format(new Date());
+                    File outputfile = new File(String.format("screenshots/%s.jpg", curtimestamp));
+                    outputfile.getParentFile().mkdirs();
+                    Screenshot.writeToFile(outputfile, width, height);
+                    ui.root.findchild(GameUI.class).info(String.format("Screenshot has been saved as \"%s\"", outputfile.getName()), Color.WHITE);
+                } catch (Exception ex) {
+                    System.out.println("Unable to take screenshot: " + ex.getMessage());
+                }
+            }
+
             public void display(GLAutoDrawable d) {
+                if (HavenPanel.needtotakescreenshot) {
+                    takescreenshot(d.getWidth(), d.getHeight());
+                    HavenPanel.needtotakescreenshot = false;
+                }
+
                 GL2 gl = d.getGL().getGL2();
             /*
             if((dump == null) || (dump.getDownstreamGL() != gl))
