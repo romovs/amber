@@ -257,8 +257,9 @@ public class WItem extends Widget implements DTarget {
                 try {
                     for (ItemInfo info : item.info()) {
                         if (info instanceof ItemInfo.Contents) {
-                            if (((ItemInfo.Contents) info).content > 0)
-                                drawamountbar(g, ((ItemInfo.Contents) info).content);
+                            ItemInfo.Contents imtcnt = (ItemInfo.Contents) info;
+                            if (imtcnt.content > 0)
+                                drawamountbar(g, imtcnt.content, imtcnt.isseeds);
                         }
                     }
                 } catch (Exception e) { // fail silently if info is not ready
@@ -269,13 +270,13 @@ public class WItem extends Widget implements DTarget {
         }
     }
 
-    private void drawamountbar(GOut g, double content) {
+    private void drawamountbar(GOut g, double content, boolean isseeds) {
         double capacity;
         String name = item.getname();
         if (name.equals("Waterskin"))
             capacity = 3.0D;
         else if (name.equals("Bucket"))
-            capacity = 10.0D;
+            capacity = isseeds ? 1000D : 10.0D;
         else if (name.equals("Waterflask"))
             capacity = 2.0D;
         else

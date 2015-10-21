@@ -174,6 +174,7 @@ public abstract class ItemInfo {
         public final List<ItemInfo> sub;
         private static final Text.Line ch = Text.render("Contents:");
         public double content = 0;
+        public boolean isseeds;
 
         public Contents(Owner owner, List<ItemInfo> sub) {
             super(owner);
@@ -183,6 +184,7 @@ public abstract class ItemInfo {
                 if (info instanceof ItemInfo.Name) {
                     ItemInfo.Name name = (ItemInfo.Name)info;
                     if (name.str != null) {
+                        isseeds = name.str.text.contains(" seed");
                         int amountend = name.str.text.indexOf(' ');
                         if (amountend > 0) {
                             try {

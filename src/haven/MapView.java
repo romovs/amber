@@ -1409,7 +1409,19 @@ public class MapView extends PView implements DTarget, Console.Directory {
                             tooltip = res.name;
                             return;
                         }
+                    } else {
+                        MCache map = ui.sess.glob.map;
+                        int t = map.gettile(mc.div(tilesz));
+                        Resource res = map.tilesetr(t);
+                        if (res != null) {
+                            tooltip = res.name;
+                            return;
+                        }
                     }
+                    tooltip = null;
+                }
+
+                public void nohit(Coord pc) {
                     tooltip = null;
                 }
             });

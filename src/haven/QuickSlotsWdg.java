@@ -49,13 +49,14 @@ public class QuickSlotsWdg extends Widget implements DTarget {
             try {
                 for (ItemInfo info : item.info()) {
                     if (info instanceof ItemInfo.Contents) {
-                        if (((ItemInfo.Contents) info).content > 0) {
+                        ItemInfo.Contents imtcnt = (ItemInfo.Contents) info;
+                        if (imtcnt.content > 0) {
                             double capacity;
                             if (item.getname().equals("Bucket"))
-                                capacity = 10.0D;
+                                capacity = imtcnt.isseeds ? 1000D : 10.0D;
                             else
                                 return;
-                            double content = ((ItemInfo.Contents) info).content;
+                            double content = imtcnt.content;
                             int height = sz.y - 2;
                             int h = (int) (content / capacity * height);
                             g.chcolor(WItem.famountclr);
