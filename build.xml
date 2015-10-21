@@ -100,6 +100,7 @@
     	<fileset dir="etc">
     		<include name="run.bat" />
     		<include name="run_debug.bat" />
+    		<include name="custom_wav/*" />
     	</fileset>
     </copy>
   </target>
