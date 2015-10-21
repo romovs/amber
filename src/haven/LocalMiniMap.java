@@ -45,7 +45,6 @@ public class LocalMiniMap extends Widget {
     private UI.Grab dragging;
     private Coord doff = Coord.z;
     private Coord delta = Coord.z;
-	private static final Resource whitealertsfx = Resource.local().loadwait("sfx/whitealert");
 	private static final Resource alarmramsfx = Resource.local().loadwait("sfx/alarmram");
 	private final HashSet<Long> sgobs = new HashSet<Long>();
     private final HashMap<Coord, BufferedImage> maptiles = new HashMap<Coord, BufferedImage>(28, 0.75f);
@@ -285,7 +284,7 @@ public class LocalMiniMap extends Widget {
                                     } else if (Config.alarmred && kininfo != null && kininfo.group == 2) {
                                         if (!sgobs.contains(gob.id)) {
                                             sgobs.add(gob.id);
-                                            Audio.play(whitealertsfx, Config.alarmredvol);
+                                            PlayWav.Play("custom_wav/whiteFound.wav");
                                     }
                                   }
                                 }
