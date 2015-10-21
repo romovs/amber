@@ -44,7 +44,7 @@ public class LocalMiniMap extends Widget {
     private UI.Grab dragging;
     private Coord doff = Coord.z;
     private Coord delta = Coord.z;
-	private static final Resource alarmplayersfx = Resource.local().loadwait("sfx/alarmplayer");
+	private static final Resource alarmplayersfx = Resource.local().loadwait("sfx/whitealert");
 	private static final Resource alarmramsfx = Resource.local().loadwait("sfx/alarmram");
 	private final HashSet<Long> sgobs = new HashSet<Long>();
     private final HashMap<Coord, BufferedImage> maptiles = new HashMap<Coord, BufferedImage>(28, 0.75f);
