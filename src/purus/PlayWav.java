@@ -1,20 +1,22 @@
 package purus;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.File;
 
-import sun.audio.AudioPlayer;
-import sun.audio.AudioStream;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 public class PlayWav {
 
 	 public static void Play(String soundPath){
 		 try {
-		 InputStream in = new FileInputStream(soundPath);
-		 AudioStream audioStream = new AudioStream(in);
-		 AudioPlayer.player.start(audioStream); 
-		 } catch (IOException e1) {
+			 AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundPath).getAbsoluteFile());
+		        Clip clip = AudioSystem.getClip();
+		        clip.open(audioInputStream);
+		        clip.start();
+		    } catch(Exception ex) {
+		        System.out.println("Error with playing sound.");
+		        ex.printStackTrace();
 		 }
 	}
 }
