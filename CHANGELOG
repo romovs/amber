@@ -1,7 +1,8 @@
-Version 1.4.0
+Version 2.0.0
 	New: 
 	Added function to play .wav
 	Changed alerts to use .wav
+	Version changes to avoid conflicts
 Version 1.3.0
 	New:
 	Automatic update checker now works
