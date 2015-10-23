@@ -72,7 +72,7 @@
       <fileset dir="build/classes-lib" />
       <manifest>
 	<attribute name="Main-Class" value="haven.MainFrame" />
-	<attribute name="Class-Path" value="jogl.jar gluegen-rt.jar builtin-res.jar hafen-res.jar amber-res.jar" />
+	<attribute name="Class-Path" value="lib/jogl.jar lib/gluegen-rt.jar lib/builtin-res.jar lib/hafen-res.jar lib/amber-res.jar" />
       </manifest>
     </jar>
     <chmod file="build/hafen.jar" perm="a+x" />
@@ -86,7 +86,7 @@
   </target>
   
   <target name="jars" depends="build-env, jar, res-jar">
-    <copy todir="build">
+    <copy todir="build/lib">
       <fileset dir="lib">
 	<include name="jogl.jar" />
 	<include name="gluegen-rt.jar" />
@@ -96,19 +96,21 @@
       </fileset>
       <fileset dir="lib/jogl-natives" includes="*.jar">
       </fileset>
-    	<fileset dir="etc">
-    		<include name="run.bat" />
-    		<include name="run_debug.bat" />
-    		<include name="custom_wav/*" />
-    	</fileset>
     </copy>
+  	<copy todir="build">
+  	<fileset dir="etc">
+  	    		<include name="run.bat" />
+  	    		<include name="run_debug.bat" />
+  	    		<include name="custom_wav/*" />
+  	    	</fileset>
+  		</copy>
   </target>
 
  <target name="dist" depends="rebuild">
     <zip destfile="${basedir}/${name}-${version}.zip" update="false">
-        <fileset dir="build" includes="*.jar" excludes="*natives*.jar"/>
         <fileset dir="${basedir}" includes="README"/>
-        <fileset dir="lib/jogl-natives" includes="*.jar"/>
+    	<fileset dir="build" includes="hafen.jar"/>
+    	<fileset dir="build" includes="lib/*.jar"/>
         <fileset dir="etc" includes="*.bat"/>
     </zip>
   </target>
