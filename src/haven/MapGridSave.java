@@ -16,6 +16,7 @@ import java.util.Date;
 public class MapGridSave {
     private MCache map;
     private MCache.Grid g;
+    public static Coord gul;
     public static Coord mgs;
     private static Coord mglp;
     private static String session;
@@ -38,10 +39,9 @@ public class MapGridSave {
                 abort = true;
             }
             mgs = g.gc;
-            mglp = g.gc;
-        } else {
-            mglp  = g.gc;
+            gul = g.ul;
         }
+        mglp = g.gc;
 
         if (!abort && img != null)
             save(img);

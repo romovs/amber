@@ -215,11 +215,18 @@ public class Fightview extends Widget {
             rel.ip = (Integer) args[2];
             rel.oip = (Integer) args[3];
             lsrel.addFirst(rel);
+            ui.sess.glob.oc.isfight = true;
             return;
         } else if (msg == "del") {
             Relation rel = getrel((Integer) args[0]);
+            OCache oc = ui.sess.glob.oc;
+            oc.removedmgoverlay(rel.gobid);
             rel.remove();
             lsrel.remove(rel);
+            if (lsrel.size() == 0) {
+                oc.removedmgoverlay(MapView.plgob);
+                oc.isfight = false;
+            }
             if (rel == current)
                 setcur(null);
             return;

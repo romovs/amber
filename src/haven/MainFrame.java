@@ -378,12 +378,18 @@ public class MainFrame extends java.awt.Frame implements Runnable, Console.Direc
     }
 
     private static void main2(String[] args) {
-        new Thread(new Runnable() {
-            public void run() {
-                StudyTimes.updatestudytimes();
-            }
-        }).start();
+        if (Config.showstudylefttime)
+            new Thread(new Runnable() {
+                public void run() {
+                    StudyTimes.updatestudytimes();
+                }
+            }).start();
+
         Config.cmdline(args);
+
+        if (Config.playerposfile != null)
+            new Thread(new PlayerPosStreamer(), "Player position thread").start();
+
         try {
             javabughack();
         } catch (InterruptedException e) {

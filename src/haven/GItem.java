@@ -88,8 +88,8 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
                 colormin = vitalityclr;
             }
 
-            double avg = Math.sqrt((double) (e * e + s * s + v * v) / 3.0);
-            double avgsv = Math.sqrt((double) (s * s + v * v) / 2.0);
+            double avg = Config.arithavg ? (double) (e + s + v) / 3.0 : Math.sqrt((double) (e * e + s * s + v * v) / 3.0);
+            double avgsv = Config.arithavg ? (double) (s + v) / 2.0 : Math.sqrt((double) (s * s + v * v) / 2.0);
             if (curio) {
                 double lpgain = Math.sqrt(Math.sqrt((double) (e * e + s * s + v * v) / 300.0));
                 lpgaintex = Text.renderstroked(longfmt.format(lpgain), Color.WHITE, Color.BLACK).tex();
@@ -242,6 +242,8 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
             }
         } else if (name == "tt") {
             info = null;
+            if (rawinfo != null)
+                quality = null;
             rawinfo = args;
         } else if (name == "meter") {
             meter = (Integer) args[0];

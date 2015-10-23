@@ -26,7 +26,6 @@
 
 package haven;
 
-import java.text.DecimalFormat;
 import java.util.*;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
@@ -72,6 +71,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     public TimersWnd timerswnd;
     public QuickSlotsWdg quickslots;
     public StatusWdg statuswindow;
+    private boolean updhanddestroyed = false;
 
     public abstract class Belt extends Widget {
         public Belt(Coord sz) {
@@ -449,10 +449,16 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         if ((hand.isEmpty() && (vhand != null)) || ((vhand != null) && !hand.contains(vhand.item))) {
             ui.destroy(vhand);
             vhand = null;
+            if (ui.modctrl && ui.modshift && map.lastinterpc != null)
+                updhanddestroyed = true;
         }
         if (!hand.isEmpty() && (vhand == null)) {
             DraggedItem fi = hand.iterator().next();
             vhand = add(new ItemDrag(fi.dc, fi.item));
+            if (ui.modctrl && ui.modshift && updhanddestroyed) {
+                map.iteminteractreplay();
+                updhanddestroyed = false;
+            }
         }
     }
 
@@ -815,7 +821,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             if (map != null)
                 map.togglegrid();
             return true;
-        } else if (ev.isControlDown() && ev.getKeyCode() == KeyEvent.VK_H) {
+        } else if (ev.isControlDown() && ev.getKeyCode() == KeyEvent.VK_M) {
             boolean curstatus = statuswindow.visible;
             statuswindow.show(!curstatus);
             Utils.setprefb("statuswdgvisible", !curstatus);
@@ -831,6 +837,15 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             return true;
         } else if (ev.isAltDown() && ev.getKeyCode() == KeyEvent.VK_S) {
             HavenPanel.needtotakescreenshot = true;
+            return true;
+        } else if (ev.isControlDown() && ev.getKeyCode() == KeyEvent.VK_H) {
+            Config.hidegobs = !Config.hidegobs;
+            Utils.setprefb("hidegobs", Config.hidegobs);
+            return true;
+        } else if (ev.isShiftDown() && ev.getKeyCode() == KeyEvent.VK_D) {
+            Config.dropseeds = !Config.dropseeds;
+            Utils.setprefb("dropseeds", Config.dropseeds);
+            info("Seeds auto dropping is " + (Config.dropseeds ? "ON" : "OFF"), Color.WHITE);
             return true;
         }
         return (super.globtype(key, ev));

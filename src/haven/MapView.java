@@ -66,6 +66,8 @@ public class MapView extends PView implements DTarget, Console.Directory {
         put("gfx/kritter/boar/boar", new Gob.Overlay(new BPRadSprite(125.0F, -10.0F)));
         put("gfx/terobjs/vehicle/bram", new Gob.Overlay(new BPRadSprite(125.0F, -10.0F)));
     }};
+    private long lastmmhittest = System.currentTimeMillis();
+    private Coord lasthittestc = Coord.z;
 
     public interface Delayed {
         public void run(GOut g);
@@ -1401,30 +1403,36 @@ public class MapView extends PView implements DTarget, Console.Directory {
                 delay(placing.new Adjust(c, ui.modflags()));
             }
         } else if (ui.modshift) {
-            delay(new Hittest(c) {
-                public void hit(Coord pc, Coord mc, ClickInfo inf) {
-                    if (inf != null && inf.gob != null) {
-                        Resource res = inf.gob.getres();
-                        if (res != null) {
-                            tooltip = res.name;
-                            return;
+            long now = System.currentTimeMillis();
+            if (now - lastmmhittest > 500 || lasthittestc.dist(c) > tilesz.x) {
+                lastmmhittest = now;
+                lasthittestc = c;
+                delay(new Hittest(c) {
+                    public void hit(Coord pc, Coord mc, ClickInfo inf) {
+                        if (inf != null && inf.gob != null) {
+                            Resource res = inf.gob.getres();
+                            if (res != null) {
+                                tooltip = res.name;
+                                return;
+                            }
+                        } else {
+                            MCache map = ui.sess.glob.map;
+                            int t = map.gettile(mc.div(tilesz));
+                            Resource res = map.tilesetr(t);
+                            if (res != null) {
+                                tooltip = res.name;
+                                return;
+                            }
                         }
-                    } else {
-                        MCache map = ui.sess.glob.map;
-                        int t = map.gettile(mc.div(tilesz));
-                        Resource res = map.tilesetr(t);
-                        if (res != null) {
-                            tooltip = res.name;
-                            return;
-                        }
-                    }
-                    tooltip = null;
-                }
+                        tooltip = null;
 
-                public void nohit(Coord pc) {
-                    tooltip = null;
-                }
-            });
+                    }
+
+                    public void nohit(Coord pc) {
+                        tooltip = null;
+                    }
+                });
+            }
         }
     }
 
@@ -1458,20 +1466,37 @@ public class MapView extends PView implements DTarget, Console.Directory {
         return (true);
     }
 
+    public Coord lastinterpc;
+    private Coord lastintermc;
+    private int lastintergobid;
+    private Coord lastintergobrc;
+    private int lastintermid;
+
     public boolean iteminteract(Coord cc, Coord ul) {
         delay(new Hittest(cc) {
             public void hit(Coord pc, Coord mc, ClickInfo inf) {
                 if (inf == null) {
                     wdgmsg("itemact", pc, mc, ui.modflags());
                 } else {
-                    if (inf.ol == null)
-                        wdgmsg("itemact", pc, mc, ui.modflags(), 0, (int) inf.gob.id, inf.gob.rc, 0, getid(inf.r));
-                    else
+                    if (inf.ol == null) {
+                        lastinterpc = pc;
+                        lastintermc = mc;
+                        lastintergobid = (int) inf.gob.id;
+                        lastintergobrc = inf.gob.rc;
+                        lastintermid = getid(inf.r);
+                        wdgmsg("itemact", pc, mc, ui.modflags(), 0, lastintergobid, lastintergobrc, 0, lastintermid);
+                    }
+                    else {
                         wdgmsg("itemact", pc, mc, ui.modflags(), 1, (int) inf.gob.id, inf.gob.rc, inf.ol.id, getid(inf.r));
+                    }
                 }
             }
         });
         return (true);
+    }
+
+    public void iteminteractreplay() {
+        wdgmsg("itemact", lastinterpc, lastintermc, ui.modflags(), 0, lastintergobid, lastintergobrc, 0, lastintermid);
     }
 
     public boolean keydown(KeyEvent ev) {

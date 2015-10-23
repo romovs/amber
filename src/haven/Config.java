@@ -73,6 +73,7 @@ public class Config {
     public static double alarmredvol = Utils.getprefd("alarmredvol", 0.32);
     public static boolean showquality = Utils.getprefb("showquality", false);
     public static int showqualitymode = Utils.getprefi("showqualitymode", 0);
+    public static boolean arithavg = Utils.getprefb("arithavg", false);
     public static boolean qualitywhole = Utils.getprefb("qualitywhole", true);
     public static boolean showlpgainmult = Utils.getprefb("showlpgainmult", false);
     public static int badcamsensitivity = Utils.getprefi("badcamsensitivity", 5);
@@ -127,7 +128,11 @@ public class Config {
     public static boolean showfillamount = Utils.getprefb("showfillamount", false);
     public static boolean showcontentsbars = Utils.getprefb("showcontentsbars", false);
     public static boolean dropseeds = Utils.getprefb("dropseeds", false);
+    public static boolean showdmgop = Utils.getprefb("showdmgop", false);
+    public static boolean showdmgmy = Utils.getprefb("showdmgmy", false);
+    public static boolean hidegobs = Utils.getprefb("hidegobs", false);
     public static boolean hwcursor = false;
+    public static String playerposfile;
     public static byte[] authck = null;
     public static String prefspec = "hafen";
     public static String version;
@@ -250,6 +255,7 @@ public class Config {
         out.println("  -P                 Enable profiling");
         out.println("  -G                 Enable GPU profiling");
         out.println("  -c                 Force hardware cursor");
+        out.println("  -p FILE            Write player position to a memory mapped file");
         out.println("  -U URL             Use specified external resource URL");
         out.println("  -r DIR             Use specified resource directory (or HAVEN_RESDIR)");
         out.println("  -A AUTHSERV[:PORT] Use specified authentication server");
@@ -258,7 +264,7 @@ public class Config {
     }
 
     public static void cmdline(String[] args) {
-        PosixArgs opt = PosixArgs.getopt(args, "hdPGcU:r:A:u:C:");
+        PosixArgs opt = PosixArgs.getopt(args, "hdPGcp:U:r:A:u:C:");
         if (opt == null) {
             usage(System.err);
             System.exit(1);
@@ -306,6 +312,9 @@ public class Config {
                     break;
                 case 'c':
                     hwcursor = true;
+                    break;
+                case 'p':
+                    playerposfile = opt.arg;
                     break;
             }
         }

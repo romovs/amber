@@ -56,6 +56,7 @@ public class LocalMiniMap extends Widget {
     private final static Tex treeicn = Text.renderstroked("\u25B2", Color.CYAN, Color.BLACK, bushf).tex();
     private Coord plgprev;
     private Map<Color, Tex> xmap = new HashMap<Color, Tex>(6);
+    public static Coord plcrel = null;
 
     private BufferedImage tileimg(int t, BufferedImage[] texes) {
         BufferedImage img = texes[t];
@@ -350,6 +351,14 @@ public class LocalMiniMap extends Widget {
             return;
         }
         this.cc = pl.rc.div(tilesz);
+
+        if (Config.playerposfile != null && MapGridSave.gul != null) {
+            try {
+                // instead of synchronizing MapGridSave.gul we just handle NPE
+                plcrel = pl.rc.sub((MapGridSave.gul.x + 50) * tilesz.x, (MapGridSave.gul.y + 50) * tilesz.y);
+            } catch (NullPointerException npe) {
+            }
+        }
     }
 
     public void draw(GOut g) {
