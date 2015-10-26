@@ -98,7 +98,6 @@ public class Config {
     public static double sfxchipvol = Utils.getprefd("sfxchipvol", 1.0);
     public static double sfxsqueakvol = Utils.getprefd("sfxsqueakvol", 1.0);
     public static double sfxquernvol = Utils.getprefd("sfxquernvol", 1.0);
-    public static double sfxcellarwatervol = Utils.getprefd("sfxcellarwatervol", 1.0);
     public static boolean showcraftcap = Utils.getprefb("showcraftcap", false);
     public static boolean showgobhp = Utils.getprefb("showgobhp", false);
     public static boolean showplantgrowstage = Utils.getprefb("showplantgrowstage", false);

@@ -554,21 +554,6 @@ public class OptWnd extends Window {
                 Utils.setprefd("sfxquernvol", vol);
             }
         }, new Coord(250, y));
-        y += 20;
-        audio.add(new Label("Cellar water sound volume"), new Coord(250, y));
-        y += 15;
-        audio.add(new HSlider(200, 0, 1000, 0) {
-            protected void attach(UI ui) {
-                super.attach(ui);
-                val = (int) (Config.sfxcellarwatervol * 1000);
-            }
-
-            public void changed() {
-                double vol = val / 1000.0;
-                Config.sfxcellarwatervol = vol;
-                Utils.setprefd("sfxcellarwatervol", vol);
-            }
-        }, new Coord(250, y));
 
         audio.add(new PButton(200, "Back", 27, main), new Coord(270, 360));
         audio.pack();

@@ -76,8 +76,6 @@ public class AudioSprite {
                 stream = new Audio.VolAdjust(stream, Config.sfxsqueakvol);
             else if (Config.sfxquernvol != 1.0 && "sfx/terobjs/quern".equals(res.name))
                 stream = new Audio.VolAdjust(stream, Config.sfxquernvol);
-            else if (Config.sfxcellarwatervol != 1.0 && "sfx/ambient/water".equals(res.name))
-                stream = new Audio.VolAdjust(stream, Config.sfxcellarwatervol);
             
 
             this.clip = new ActAudio.PosClip(new Audio.Monitor(stream) {
