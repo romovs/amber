@@ -72,7 +72,7 @@
       <fileset dir="build/classes-lib" />
       <manifest>
 	<attribute name="Main-Class" value="haven.MainFrame" />
-	<attribute name="Class-Path" value="lib/jogl.jar lib/gluegen-rt.jar lib/builtin-res.jar lib/hafen-res.jar lib/amber-res.jar" />
+	<attribute name="Class-Path" value="lib/jogl.jar lib/gluegen-rt.jar lib/builtin-res.jar lib/hafen-res.jar lib/amber-res.jar lib/pasta-res.jar" />
       </manifest>
     </jar>
     <chmod file="build/hafen.jar" perm="a+x" />
@@ -93,6 +93,8 @@
 	<include name="hafen-res.jar" />
 	<include name="builtin-res.jar" />
 	<include name="amber-res.jar" />
+    <include name="pasta-res.jar" />
+      	
       </fileset>
       <fileset dir="lib/jogl-natives" includes="*.jar">
       </fileset>

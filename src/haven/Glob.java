@@ -29,6 +29,8 @@ package haven;
 import java.awt.*;
 import java.util.*;
 
+import haven.util.ObservableCollection;
+
 public class Glob {
     public static final int GMSG_TIME = 0;
     public static final int GMSG_ASTRO = 1;
@@ -41,7 +43,7 @@ public class Glob {
     public MCache map;
     public Session sess;
     public Party party;
-    public Set<Pagina> paginae = new HashSet<Pagina>();
+    public ObservableCollection<Pagina> paginae = new ObservableCollection<Pagina>(new HashSet<Pagina>());
     public int pagseq = 0;
     public Map<Resource.Named, Pagina> pmap = new WeakHashMap<Resource.Named, Pagina>();
     public Map<String, CAttr> cattr = new HashMap<String, CAttr>();

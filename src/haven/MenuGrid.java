@@ -31,6 +31,7 @@ import java.awt.event.KeyEvent;
 import java.awt.font.TextAttribute;
 
 import haven.Resource.AButton;
+import haven.util.ObservableCollection;
 import haven.Glob.Pagina;
 
 import java.util.*;
@@ -48,6 +49,7 @@ public class MenuGrid extends Widget {
     private int pagseq = 0;
     private boolean loading = true;
     private Map<Character, Pagina> hotmap = new TreeMap<Character, Pagina>();
+    public GameUI gameui;
 
     @RName("scm")
     public static class $_ implements Factory {
@@ -113,7 +115,14 @@ public class MenuGrid extends Widget {
     public MenuGrid() {
         super(bgsz.mul(gsz).add(1, 1));
     }
-
+    
+    @Override
+    protected void attach(UI ui) {
+    	super.attach(ui);
+    	Glob glob = ui.sess.glob;
+    	ObservableCollection<Pagina> p = glob.paginae;
+    	p.add(glob.paginafor(Resource.local().load("paginae/custom/timer")));
+    }
     private static Comparator<Pagina> sorter = new Comparator<Pagina>() {
         public int compare(Pagina a, Pagina b) {
             AButton aa = a.act(), ab = b.act();
@@ -303,12 +312,31 @@ public class MenuGrid extends Widget {
                 curoff += 14;
         } else {
             r.newp = 0;
-            wdgmsg("act", (Object[]) r.act().ad);
+            use(r);
             if (reset)
                 this.cur = null;
             curoff = 0;
         }
         updlayout();
+    }
+    
+    public boolean use(Pagina r) {
+        String [] ad = r.act().ad;
+        if((ad == null) || (ad.length < 1)){
+            return false;
+        }
+        if(ad[0].equals("@")) {
+            usecustom(ad);
+        } else {
+            wdgmsg("act", (Object[])ad);
+        }
+        return true;
+    }
+
+    public void usecustom(String[] ad) {
+        if(ad[1].equals("timer")) {
+        	gameui.AvaaTimer();
+        }
     }
 
     public void tick(double dt) {

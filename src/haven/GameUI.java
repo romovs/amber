@@ -68,7 +68,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     public String polowner;
     public Bufflist buffs;
     public MinimapWnd minimapWnd;
-    public TimersWnd timerswnd;
+    public static TimersWnd timerswnd;
     public QuickSlotsWdg quickslots;
     public StatusWdg statuswindow;
     private boolean updhanddestroyed = false;
@@ -780,6 +780,11 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             g.image(menubg, Coord.z);
             super.draw(g);
         }
+    }
+    public static void AvaaTimer () {
+    	
+    	timerswnd.show(!timerswnd.visible);
+        timerswnd.raise();
     }
 
     public boolean globtype(char key, KeyEvent ev) {
