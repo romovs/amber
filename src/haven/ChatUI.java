@@ -229,6 +229,15 @@ public class ChatUI extends Widget {
             append(new SimpleMessage(line, col, iw()));
         }
 
+        public void clear() {
+            synchronized (msgs) {
+                msgs.clear();
+                sb.min = 0;
+                sb.max = 0;
+                sb.val = 0;
+            }
+        }
+
         public int iw() {
             return (sz.x - sb.sz.x);
         }
