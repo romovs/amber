@@ -1345,12 +1345,16 @@ public class MapView extends PView implements DTarget, Console.Directory {
                 wdgmsg("click", pc, mc, clickb, ui.modflags());
             } else {
                 if (ui.modmeta && clickb == 1) {
-                    for (Widget w = gameui().chat.lchild; w != null; w = w.prev) {
-                        if (w instanceof ChatUI.MultiChat) {
-                            ChatUI.MultiChat chat = (ChatUI.MultiChat) w;
-                            if (chat.name().equals("Area Chat")) {
-                                chat.send(ChatUI.CMD_PREFIX_HLIGHT + inf.gob.id);
-                                break;
+                    if (ui.modshift) {
+                        parent.add(new ObjNameEditWnd(pc, inf.gob.id));
+                    } else {
+                        for (Widget w = gameui().chat.lchild; w != null; w = w.prev) {
+                            if (w instanceof ChatUI.MultiChat) {
+                                ChatUI.MultiChat chat = (ChatUI.MultiChat) w;
+                                if (chat.name().equals("Area Chat")) {
+                                    chat.send(ChatUI.CMD_PREFIX_HLIGHT + inf.gob.id);
+                                    break;
+                                }
                             }
                         }
                     }
