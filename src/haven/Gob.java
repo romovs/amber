@@ -56,6 +56,8 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
     private PView.Draw2D[] cropstgd = new PView.Draw2D[4];
     private Overlay gobpath = null;
     private static final Tex[] treestg = new Tex[90];
+    private String name;
+    private PView.Draw2D named;
 
     public static class Overlay implements Rendered {
         public Indir<Resource> res;
@@ -131,10 +133,30 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                 }
             };
         }
+
+        this.name = getname();
+        if (!this.name.isEmpty()) {
+            updatenametex();
+        }
     }
 
     public Gob(Glob glob, Coord c) {
         this(glob, c, -1, 0);
+    }
+
+    private String getname() {
+        return Utils.getpref(String.format("gobname.%s", id), "");
+    }
+
+    private void updatenametex() {
+        final Tex gobnametex = Text.renderstroked(this.name, Color.WHITE, Color.BLACK, gobhpf).tex();
+        this.named = new PView.Draw2D() {
+            public void draw2d(GOut g) {
+                if (sc != null) {
+                    g.image(gobnametex, new Coord(sc.x - gobnametex.sz().x / 2, sc.y));
+                }
+            }
+        };
     }
 
     public static interface ANotif<T extends GAttrib> {
@@ -297,6 +319,16 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
 
             if (!hide)
                 d.setup(rl);
+
+            String gobname = getname();
+            if (!gobname.isEmpty()) {
+                if (!name.equals(gobname)) {
+                    name = gobname;
+                    updatenametex();
+                }
+
+                rl.add(named, null);
+            }
 
             if (Config.showplantgrowstage) {
                 try {
