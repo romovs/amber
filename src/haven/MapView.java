@@ -66,6 +66,7 @@ public class MapView extends PView implements DTarget, Console.Directory {
     private long lastmmhittest = System.currentTimeMillis();
     private Coord lasthittestc = Coord.z;
     public AreaMine areamine;
+    public AreaClayDig areaDig;
 
     public interface Delayed {
         public void run(GOut g);
@@ -1394,7 +1395,7 @@ public class MapView extends PView implements DTarget, Console.Directory {
                     areamine = null;
                 }
                 Resource curs = ui.root.getcurs(c);
-                if (curs != null && curs.name.equals("gfx/hud/curs/mine")) {
+                if (curs != null && (curs.name.equals("gfx/hud/curs/mine")) || curs.name.equals("gfx/hud/curs/dig")) {
                     if (ui.modshift && selection == null) {
                         selection = new Selector(this);
                     } else if (selection != null) {
@@ -1686,8 +1687,14 @@ public class MapView extends PView implements DTarget, Console.Directory {
                     ol.destroy();
                     mgrab.remove();
                     if (mv != null) {
-                        areamine = new AreaMine(ol.getc1(), ol.getc2(), mv);
-                        new Thread(areamine, "areamine").start();
+                        Resource curs = ui.root.getcurs(c);
+                        if (curs != null && curs.name.equals("gfx/hud/curs/mine")) {
+                            areamine = new AreaMine(ol.getc1(), ol.getc2(), mv);
+                            new Thread(areamine, "areamine").start();
+                        } else if (curs != null && curs.name.equals("gfx/hud/curs/dig")) {
+                            areaDig = new AreaClayDig(ol.getc1(), ol.getc2(), mv);
+                            new Thread(areaDig, "areaDig").start();
+                        }
                         if (selection != null) {
                             selection.destroy();
                             selection = null;

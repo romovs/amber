@@ -51,6 +51,15 @@ public class Inventory extends Widget implements DTarget {
         super.draw(g);
     }
 
+    public int spaceLeft(){
+        int invUsed = 0;
+        for (Widget widget = this.child; widget != null; widget = widget.next) {
+            Coord size = widget.area().ul.sub(widget.area().br).div(Inventory.sqsz);
+            invUsed += size.x*size.y;
+        }
+        return isz.x*isz.y - invUsed;
+    }
+
     public Inventory(Coord sz) {
         super(invsq.sz().add(new Coord(-1, -1)).mul(sz).add(new Coord(1, 1)));
         isz = sz;
