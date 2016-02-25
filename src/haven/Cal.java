@@ -59,5 +59,7 @@ public class Cal extends Widget {
 	g.image(sun, sc);
 	g.image(a.night?nlnd:dlnd, Coord.z);
 	g.image(bg, Coord.z);
+	String tt = String.format("Day %d,   %02d:%02d\nMoon: %s", a.day, a.hh, a.mm, Astronomy.phase[mp]);
+	tooltip = RichText.render(tt, 200);
     }
 }
