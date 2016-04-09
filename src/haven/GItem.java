@@ -26,6 +26,8 @@
 
 package haven;
 
+import haven.res.ui.tt.q.qbuff.QBuff;
+
 import java.awt.Color;
 import java.text.DecimalFormat;
 import java.util.*;
@@ -282,18 +284,16 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
         double e = 0, s = 0, v = 0;
         boolean curio = false;
         for (ItemInfo info : infolist) {
-            if (info.getClass().getSimpleName().equals("QBuff")) {
-                try {
-                    String name = (String) info.getClass().getDeclaredField("name").get(info);
-                    double val = (Double) info.getClass().getDeclaredField("q").get(info);
-                    if ("Essence".equals(name))
-                        e = val;
-                    else if ("Substance".equals(name))
-                        s = val;
-                    else if ("Vitality".equals(name))
-                        v = val;
-                } catch (Exception ex) {
-                }
+            if (info instanceof QBuff) {
+                QBuff qb = (QBuff)info;
+                String name = qb.origName;
+                double val = qb.q;
+                if ("Essence".equals(name))
+                    e = val;
+                else if ("Substance".equals(name))
+                    s = val;
+                else if ("Vitality".equals(name))
+                    v = val;
             } else if (info.getClass() == Curiosity.class) {
                 curio = true;
             }

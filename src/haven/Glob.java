@@ -249,9 +249,9 @@ public class Glob {
         long secintoday = secs % secinday;
         long hours = secintoday / 3600;
         long mins = (secintoday % 3600) / 60;
-        servertime = String.format("Day %d, %02d:%02d", day, hours, mins);
+        servertime = String.format(Resource.getLocString(Resource.l10nLabel, "Day %d, %02d:%02d"), day, hours, mins);
         if (secintoday >= dewyladysmantletimemin && secintoday <= dewyladysmantletimemax)
-            servertime += " (Dewy Lady's Mantle)";
+            servertime += Resource.getLocString(Resource.l10nLabel, " (Dewy Lady's Mantle)");
     }
 
     public void blob(Message msg) {

@@ -35,7 +35,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class OptWnd extends Window {
-    public final Panel main, video, audio, display, map, general, combat, hide, control, uis;
+    public final Panel main, video, audio, display, map, general, combat, hide, control, uis, quality;
     public Panel current;
 
     public void chpanel(Panel p) {
@@ -300,6 +300,7 @@ public class OptWnd extends Window {
         hide = add(new Panel());
         control = add(new Panel());
         uis = add(new Panel());
+        quality = add(new Panel());
         
         int y;
 
@@ -312,7 +313,8 @@ public class OptWnd extends Window {
         main.add(new PButton(200, "Hide settings", 'h', hide), new Coord(0, 120));
         main.add(new PButton(200, "Control settings", 'k', control), new Coord(210, 60));
         main.add(new PButton(200, "UI settings", 'u', uis), new Coord(210, 90));
-
+        main.add(new PButton(200, "Quality settings", 'q', quality), new Coord(420, 0));
+        
         if (gopts) {
             main.add(new Button(200, "Switch character") {
                 public void click() {
@@ -713,6 +715,31 @@ public class OptWnd extends Window {
                 Utils.setprefd("alarmtrollvol", vol);
             }
         }, new Coord(250, y));
+        y += 20;
+        audio.add(new CheckBox("Alarm on mammoths") {
+            {
+                a = Config.alarmmammoth;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("alarmmammoth", val);
+                Config.alarmmammoth = val;
+                a = val;
+            }
+        }, new Coord(250, y));
+        y += 15;
+        audio.add(new HSlider(200, 0, 1000, 0) {
+            protected void attach(UI ui) {
+                super.attach(ui);
+                val = (int) (Config.alarmmammothvol * 1000);
+            }
+
+            public void changed() {
+                double vol = val / 1000.0;
+                Config.alarmmammothvol = vol;
+                Utils.setprefd("alarmmammothvol", vol);
+            }
+        }, new Coord(250, y));
         audio.add(new PButton(200, "Back", 27, main), new Coord(270, 360));
         audio.pack();
 
@@ -726,83 +753,6 @@ public class OptWnd extends Window {
             public void set(boolean val) {
                 Utils.setprefb("showkinnames", val);
                 Config.showkinnames = val;
-                a = val;
-            }
-        }, new Coord(0, y));
-        y += 35;
-        display.add(new CheckBox("Show item quality") {
-            {
-                a = Config.showquality;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("showquality", val);
-                Config.showquality = val;
-                a = val;
-            }
-        }, new Coord(0, y));
-        y += 20;
-        display.add(new Label("High"), new Coord(0, y));
-        display.add(new Label("Avg E/S/V"), new Coord(35, y));
-        display.add(new Label("All"), new Coord(100, y));
-        display.add(new Label("Avg S/V"), new Coord(135, y));
-        display.add(new Label("Low"), new Coord(190, y));
-        y += 10;
-        display.add(new HSlider(210, 0, 4, 0) {
-            protected void attach(UI ui) {
-                super.attach(ui);
-                val = Config.showqualitymode;
-            }
-            public void changed() {
-                Config.showqualitymode = val;
-                Utils.setprefi("showqualitymode", val);
-            }
-        }, new Coord(0, y));
-        y += 25;
-        display.add(new CheckBox("Show LP gain multiplier for curios") {
-            {
-                a = Config.showlpgainmult;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("showlpgainmult", val);
-                Config.showlpgainmult = val;
-                a = val;
-            }
-        }, new Coord(0, y));
-        y += 35;
-        display.add(new CheckBox("Use arithmetic average") {
-            {
-                a = Config.arithavg;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("arithavg", val);
-                Config.arithavg = val;
-                a = val;
-            }
-        }, new Coord(0, y));
-        y += 35;
-        display.add(new CheckBox("Round item quality to a whole number") {
-            {
-                a = Config.qualitywhole;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("qualitywhole", val);
-                Config.qualitywhole = val;
-                a = val;
-            }
-        }, new Coord(0, y));
-        y += 35;
-        display.add(new CheckBox("Draw background for quality values") {
-            {
-                a = Config.qualitybg;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("qualitybg", val);
-                Config.qualitybg = val;
                 a = val;
             }
         }, new Coord(0, y));
@@ -842,9 +792,7 @@ public class OptWnd extends Window {
                 a = val;
             }
         }, new Coord(0, y));
-
-        // -------------------------------------------- display 2nd column
-        y = 0;
+        y += 35;
         display.add(new CheckBox("Show attributes & softcap values in craft window") {
             {
                 a = Config.showcraftcap;
@@ -855,7 +803,7 @@ public class OptWnd extends Window {
                 Config.showcraftcap = val;
                 a = val;
             }
-        }, new Coord(260, y));
+        }, new Coord(0, y));
         y += 35;
         display.add(new CheckBox("Show objects health") {
             {
@@ -867,7 +815,7 @@ public class OptWnd extends Window {
                 Config.showgobhp = val;
                 a = val;
             }
-        }, new Coord(260, y));
+        }, new Coord(0, y));
         y += 35;
         display.add(new CheckBox("Show player paths") {
             {
@@ -879,7 +827,7 @@ public class OptWnd extends Window {
                 Config.showplayerpaths = val;
                 a = val;
             }
-        }, new Coord(260, y));
+        }, new Coord(0, y));
         y += 35;
         display.add(new CheckBox("Show animal paths") {
             {
@@ -891,7 +839,7 @@ public class OptWnd extends Window {
                 Config.showanimalpaths = val;
                 a = val;
             }
-        }, new Coord(260, y));
+        }, new Coord(0, y));
         y += 35;
         display.add(new CheckBox("Show study remaining time") {
             {
@@ -903,7 +851,7 @@ public class OptWnd extends Window {
                 Config.showstudylefttime = val;
                 a = val;
             }
-        }, new Coord(260, y));
+        }, new Coord(0, y));
         y += 35;
         display.add(new CheckBox("Show contents bars for buckets/flasks") {
             {
@@ -915,7 +863,8 @@ public class OptWnd extends Window {
                 Config.showcontentsbars = val;
                 a = val;
             }
-        }, new Coord(260, y));
+        }, new Coord(0, y));
+        // -------------------------------------------- display 2nd column
         y = 0;
         display.add(new CheckBox("Remove toggle ui via space") {
             {
@@ -1024,7 +973,6 @@ public class OptWnd extends Window {
                 a = val;
             }
         }, new Coord(520, y));
-        // -------------------------------------------- display 3rd column
         y += 35;
         display.add(new CheckBox("Show F-key toolbar") {
             {
@@ -1629,7 +1577,7 @@ public class OptWnd extends Window {
                 Config.badcamsensitivity = val;
                 Utils.setprefi("badcamsensitivity", val);
             }
-        }, new Coord(160, y));
+        }, new Coord(180, y));
         y += 35;
         control.add(new CheckBox("Minimap: use MMB to drag & L/RMB to move") {
             {
@@ -1733,7 +1681,7 @@ public class OptWnd extends Window {
         // -------------------------------------------- uis
 
         y = 0;
-        uis.add(new Label("Language (req. restart): "), new Coord(0, y));
+        uis.add(new Label("Language (req. restart):"), new Coord(0, y));
         uis.add(langDropdown(), new Coord(120, y));
 
         y += 35;
@@ -1769,12 +1717,15 @@ public class OptWnd extends Window {
                 Utils.setprefb("fbelt", val);
                 Config.fbelt = val;
                 a = val;
-                FBelt fbelt = gameui().fbelt;
-                if (fbelt != null) {
-                    if (val)
-                        fbelt.show();
-                    else
-                        fbelt.hide();
+                GameUI gui = gameui();
+                if (gui != null) {
+                    FBelt fbelt = gui.fbelt;
+                    if (fbelt != null) {
+                        if (val)
+                            fbelt.show();
+                        else
+                            fbelt.hide();
+                    }
                 }
             }
         }, new Coord(0, y));
@@ -1804,7 +1755,7 @@ public class OptWnd extends Window {
         }, new Coord(0, y));
         y += 35;
         uis.add(new Label("Chat font size (req. restart):"), new Coord(0, y + 1));
-        uis.add(chatFntSzDropdown(), new Coord(155, y));
+        uis.add(chatFntSzDropdown(), new Coord(180, y));
         y += 35;
         uis.add(new CheckBox("Hide quests panel") {
             {
@@ -1849,6 +1800,89 @@ public class OptWnd extends Window {
         uis.add(new PButton(200, "Back", 27, main), new Coord(270, 360));
         uis.pack();
 
+        // -------------------------------------------- quality
+
+        y = 0;
+        quality.add(new CheckBox("Show item quality") {
+            {
+                a = Config.showquality;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("showquality", val);
+                Config.showquality = val;
+                a = val;
+            }
+        }, new Coord(0, y));
+        y += 20;
+        quality.add(new Label("Highest"), new Coord(0, y));
+        quality.add(new Label("Avg E/S/V"), new Coord(65, y));
+        quality.add(new Label("All"), new Coord(150, y));
+        quality.add(new Label("Avg S/V"), new Coord(205, y));
+        quality.add(new Label("Lowest"), new Coord(275, y));
+        y += 10;
+        quality.add(new HSlider(310, 0, 4, 0) {
+            protected void attach(UI ui) {
+                super.attach(ui);
+                val = Config.showqualitymode;
+            }
+            public void changed() {
+                Config.showqualitymode = val;
+                Utils.setprefi("showqualitymode", val);
+            }
+        }, new Coord(0, y));
+        y += 25;
+        quality.add(new CheckBox("Show LP gain multiplier for curios") {
+            {
+                a = Config.showlpgainmult;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("showlpgainmult", val);
+                Config.showlpgainmult = val;
+                a = val;
+            }
+        }, new Coord(0, y));
+        y += 35;
+        quality.add(new CheckBox("Use arithmetic average") {
+            {
+                a = Config.arithavg;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("arithavg", val);
+                Config.arithavg = val;
+                a = val;
+            }
+        }, new Coord(0, y));
+        y += 35;
+        quality.add(new CheckBox("Round item quality to a whole number") {
+            {
+                a = Config.qualitywhole;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("qualitywhole", val);
+                Config.qualitywhole = val;
+                a = val;
+            }
+        }, new Coord(0, y));
+        y += 35;
+        quality.add(new CheckBox("Draw background for quality values") {
+            {
+                a = Config.qualitybg;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("qualitybg", val);
+                Config.qualitybg = val;
+                a = val;
+            }
+        }, new Coord(0, y));
+
+        quality.add(new PButton(200, "Back", 27, main), new Coord(270, 360));
+        quality.pack();
+
         chpanel(main);
     }
 
@@ -1890,7 +1924,7 @@ public class OptWnd extends Window {
 
     @SuppressWarnings("unchecked")
     private Dropbox<Pair<String, Integer>> chatFntSzDropdown() {
-        Dropbox<Pair<String, Integer>> sizes = new Dropbox<Pair<String, Integer>>(80, 4, 16) {
+        Dropbox<Pair<String, Integer>> sizes = new Dropbox<Pair<String, Integer>>(55, 4, 16) {
             @Override
             protected Pair<String, Integer> listitem(int i) {
                 return chatFntSz[i];

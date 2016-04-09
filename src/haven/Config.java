@@ -53,7 +53,6 @@ public class Config {
     public static URL resurl = geturl("haven.resurl", "");
     public static URL mapurl = geturl("haven.mapurl", "");
     public static boolean dbtext = getprop("haven.dbtext", "off").equals("on");
-    public static boolean bounddb = getprop("haven.bounddb", "off").equals("on");
     public static boolean profile = getprop("haven.profile", "off").equals("on");
     public static boolean profilegpu = getprop("haven.profilegpu", "off").equals("on");
     public static boolean fscache = getprop("haven.fscache", "on").equals("on");
@@ -63,7 +62,7 @@ public class Config {
     public static String allused = getprop("haven.allused", null);
     public static int mainport = getint("haven.mainport", 1870);
     public static int authport = getint("haven.authport", 1871);
-    public static boolean softres = getprop("haven.softres", "on").equals("on");
+
     public static boolean hideflocomplete = Utils.getprefb("hideflocomplete", false);
     public static boolean hideflovisual = Utils.getprefb("hideflovisual", false);
     public static boolean daylight = Utils.getprefb("daylight", false);
@@ -90,7 +89,6 @@ public class Config {
     public static int badcamsensitivity = Utils.getprefi("badcamsensitivity", 5);
     public static List<LoginData> logins = new ArrayList<LoginData>();
     public static boolean maplocked = Utils.getprefb("maplocked", false);
-    public static boolean mapwndlocked = Utils.getprefb("mapwndlocked", false);
     public static boolean mapshowgrid = Utils.getprefb("mapshowgrid", false);
     public static boolean mapshowviewdist = Utils.getprefb("mapshowviewdist", false);
     public static boolean disabletiletrans = Utils.getprefb("disabletiletrans", false);
@@ -195,6 +193,8 @@ public class Config {
     public static double alarmbearsvol = Utils.getprefd("alarmbearsvol", 0.8);
     public static boolean alarmtroll = Utils.getprefb("alarmtroll", false);
     public static double alarmtrollvol = Utils.getprefd("alarmtrollvol", 0.8);
+    public static boolean alarmmammoth = Utils.getprefb("alarmmammoth", false);
+    public static double alarmmammothvol = Utils.getprefd("alarmmammothvol", 0.8);
     public static boolean showcooldown = Utils.getprefb("showcooldown", false);
     public static boolean nodropping = Utils.getprefb("nodropping", false);
     public static boolean fbelt = Utils.getprefb("fbelt", false);
@@ -234,11 +234,11 @@ public class Config {
 
     public final static String[] icons = new String[]{"dandelion", "chantrelle", "blueberry", "rat", "chicken", "chick",
             "spindlytaproot", "stingingnettle", "dragonfly", "toad", "bram", "rowboat", "arrow", "boarspear", "frog",
-            "wagon"};
+            "wagon", "wheelbarrow"};
     public static String[] iconssel = null;
 
     @SuppressWarnings("serial")
-    public final static Map<String, Tex> additonalicons = new HashMap<String, Tex>(10) {{
+    public final static Map<String, Tex> additonalicons = new HashMap<String, Tex>(11) {{
         put("gfx/terobjs/vehicle/bram", Resource.loadtex("gfx/icons/bram"));
         put("gfx/kritter/toad/toad", Resource.loadtex("gfx/icons/toad"));
         put("gfx/terobjs/vehicle/rowboat", Resource.loadtex("gfx/icons/rowboat"));
@@ -249,6 +249,7 @@ public class Config {
         put("gfx/terobjs/items/boarspear", Resource.loadtex("gfx/icons/arrow"));
         put("gfx/kritter/frog/frog", Resource.loadtex("gfx/icons/frog"));
         put("gfx/terobjs/vehicle/wagon", Resource.loadtex("gfx/icons/wagon"));
+        put("gfx/terobjs/vehicle/wheelbarrow", Resource.loadtex("gfx/icons/wheelbarrow"));
     }};
 
     public final static Set<String> dangerousgobres = new HashSet<String>(Arrays.asList(

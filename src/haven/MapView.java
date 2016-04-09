@@ -283,6 +283,8 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         }
 
         public void drag(Coord c) {
+            if (c == null || dragorig == null)
+                return;
             if (Config.reversebadcamx)
                 c = new Coord(c.x + (dragorig.x - c.x) * 2, c.y);
             if (Config.reversebadcamy)
@@ -429,6 +431,8 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         }
 
         public void drag(Coord c) {
+            if (c == null || dragorig == null)
+                return;
             tangl = anglorig + ((float) (c.x - dragorig.x) / 100.0f);
         }
 
@@ -670,8 +674,23 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
 
             if (res != null && dangerousanimalrad.contains(res.name)) {
                 if (Config.showanimalrad) {
-                    if (!gob.ols.contains(animalradius))
-                        gob.ols.add(animalradius);
+                    if (!gob.ols.contains(animalradius)) {
+                        GAttrib drw = gob.getattr(Drawable.class);
+                        if (drw != null && drw instanceof Composite) {
+                            Composite cpst = (Composite) drw;
+                            if (cpst.nposes != null && cpst.nposes.size() > 0) {
+                                for (ResData resdata : cpst.nposes) {
+                                    Resource posres = resdata.res.get();
+                                    if (posres != null && !posres.name.endsWith("/knock") || posres == null) {
+                                        gob.ols.add(animalradius);
+                                        break;
+                                    }
+                                }
+                            } else if (!cpst.nposesold){
+                                gob.ols.add(animalradius);
+                            }
+                        }
+                    }
                 } else {
                     gob.ols.remove(animalradius);
                 }
@@ -1142,8 +1161,13 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
             undelay(delayed2, g);
             poldraw(g);
             partydraw(g);
-            glob.map.reqarea(cc.div(tilesz).sub(MCache.cutsz.mul(view + 1)),
-                    cc.div(tilesz).add(MCache.cutsz.mul(view + 1)));
+            try {
+                glob.map.reqarea(cc.div(tilesz).sub(MCache.cutsz.mul(view + 1)),
+                        cc.div(tilesz).add(MCache.cutsz.mul(view + 1)));
+            } catch (Defer.DeferredException e) {
+                // there seems to be a rare problem with fetching gridcuts when teleporting, not sure why...
+                // we ignore Defer.DeferredException to prevent the client for crashing
+            }
             // change grid overlay position when player moves by 20 tiles
             if (showgrid) {
                 Coord tc = cc.div(MCache.tilesz);

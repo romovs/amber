@@ -65,7 +65,7 @@ public class Resource implements Serializable {
     public static final String BUNDLE_MSG = "msg";
     public static final String BUNDLE_LABEL = "label";
     public static final String BUNDLE_ACTION = "action";
-    public static boolean L10N_DEBUG = false;
+    public static final boolean L10N_DEBUG = false;
 
     private Collection<Layer> layers = new LinkedList<Layer>();
     public final String name;
@@ -781,7 +781,7 @@ public class Resource implements Serializable {
     }
 
     static {
-        if (!language.equals("en") || (Resource.L10N_DEBUG && language.equals("en"))) {
+        if (!language.equals("en") || Resource.L10N_DEBUG) {
             l10nTooltip = l10n(BUNDLE_TOOLTIP, language);
             l10nPagina = l10n(BUNDLE_PAGINA, language);
             l10nWindow = l10n(BUNDLE_WINDOW, language);
@@ -790,8 +790,6 @@ public class Resource implements Serializable {
             l10nMsg = l10n(BUNDLE_MSG, language);
             l10nLabel = l10n(BUNDLE_LABEL, language);
             l10nAction = l10n(BUNDLE_ACTION, language);
-            if (!language.equals("en"))
-                L10N_DEBUG = false;
         }
 
         for (Class<?> cl : dolda.jglob.Loader.get(LayerName.class).classes()) {
@@ -942,7 +940,9 @@ public class Resource implements Serializable {
                     if (locText.equals(text) || !res.name.startsWith("gfx/invobjs") ||
                             // exclude meat "conditions" since the tooltip is dynamically generated and it won't be in right order
                             text.contains("Raw ") || text.contains("Filet of ") || text.contains("Sizzling") ||
-                            text.contains("Roast") || text.contains("Meat") || text.contains("Spitroast")) {
+                            text.contains("Roast") || text.contains("Meat") || text.contains("Spitroast") ||
+                            // exclude food conditions
+                            res.name.startsWith("gfx/invobjs/food/")) {
                         this.t = locText;
                     } else {
                         this.t = locText + " (" + text + ")";
@@ -1845,6 +1845,33 @@ public class Resource implements Serializable {
         }
     }
 
+    public static String getLocString(Map<String, String> l10nMap, String label) {
+        if (!language.equals("en") && l10nMap != null) {
+            String ll = l10nMap.get(label);
+            if (ll != null)
+                label = ll;
+        }
+        return label;
+    }
+
+    public static String getLocStringOrNull(Map<String, String> l10nMap, String label) {
+        if (!language.equals("en") && l10nMap != null) {
+            String ll = l10nMap.get(label);
+            if (ll != null)
+                return ll;
+        }
+        return null;
+    }
+
+    public static String getLocString(Map<String, String> l10nMap, String key, String def) {
+        if (!language.equals("en") && l10nMap != null) {
+            String ll = l10nMap.get(key);
+            if (ll != null)
+                return ll;
+        }
+        return def;
+    }
+
     public static Map<String, String> saveStrings(String bundle, Map<String, String> map, String key, String val) {
         synchronized (Resource.class) {
             if (key == null || key.equals(""))
@@ -1872,6 +1899,8 @@ public class Resource implements Serializable {
                     key.startsWith("Experience points gained:"))
                 return map;
 
+            new File("l10n").mkdirs();
+
             CharsetEncoder encoder = Charset.forName("UTF-8").newEncoder();
             encoder.onMalformedInput(CodingErrorAction.REPORT);
             encoder.onUnmappableCharacter(CodingErrorAction.REPORT);
@@ -1879,7 +1908,7 @@ public class Resource implements Serializable {
             try {
                 key = key.replace(" ", "\\ ").replace(":", "\\:").replace("=", "\\=");
                 val = val.replace("\\", "\\\\").replace("\n", "\\n").replace("\u0000", "");
-                out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("../l10n/" + bundle + "_new.properties", true), encoder));
+                out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("l10n/" + bundle + "_new.properties", true), encoder));
                 out.write(key + " = " + val);
                 out.newLine();
                 if (map == null)

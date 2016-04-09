@@ -38,25 +38,7 @@ public class FlowerMenu extends Widget {
     public static final int ph = 30, ppl = 8;
     public Petal[] opts;
     private UI.Grab mg, kg;
-
-    public static String flwPick = "Pick";
-    public static String flwHarvest = "Harvest";
-    public static String flwEat = "Eat";
-    public static String flwSplit = "Split";
-
-    static {
-        if (!Resource.language.equals("en")) {
-            if (Resource.l10nFlower.containsKey("Pick"))
-                flwPick = Resource.l10nFlower.get("Pick");
-            if (Resource.l10nFlower.containsKey("Harvest"))
-                flwHarvest = Resource.l10nFlower.get("Harvest");
-            if (Resource.l10nFlower.containsKey("Eat"))
-                flwEat = Resource.l10nFlower.get("Eat");
-            if (Resource.l10nFlower.containsKey("Split"))
-                flwSplit = Resource.l10nFlower.get("Split");
-        }
-    }
-
+    
     @RName("sm")
     public static class $_ implements Factory {
         public Widget create(Widget parent, Object[] args) {
@@ -124,13 +106,13 @@ public class FlowerMenu extends Widget {
             for (Petal p : opts) {
                 p.move(p.ta + ((1 - s) * PI), p.tr * s);
                 p.a = s;
-                if (p.name.equals(flwPick))
+                if (p.name.equals(Resource.getLocString(Resource.l10nFlower, "Pick")))
                     pick = p;
-                else if (p.name.equals(flwHarvest))
+                else if (p.name.equals(Resource.getLocString(Resource.l10nFlower, "Harvest")))
                     harvest = p;
-                else if (p.name.equals(flwEat))
+                else if (p.name.equals(Resource.getLocString(Resource.l10nFlower, "Eat")))
                     eat = p;
-                else if (p.name.equals(flwSplit))
+                else if (p.name.equals(Resource.getLocString(Resource.l10nFlower, "Split")))
                     split = p;
                 else if (p.name.equals("Study"))
                 	study = p;

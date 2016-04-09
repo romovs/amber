@@ -893,7 +893,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     public class MainMenu extends Widget {
         public MainMenu() {
             super(menubg.sz());
-            add(new MenuButton("rbtn-inv", 9, "Inventory ($col[255,255,0]{Tab})") {
+            add(new MenuButton("rbtn-inv", 9, Resource.getLocString(Resource.l10nLabel, "Inventory ($col[255,255,0]{Tab})")) {
                 public void click() {
                     if ((invwnd != null) && invwnd.show(!invwnd.visible)) {
                         invwnd.raise();
@@ -901,7 +901,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                     }
                 }
             }, 0, 0);
-            add(new MenuButton("rbtn-equ", 5, "Equipment ($col[255,255,0]{Ctrl+E})") {
+            add(new MenuButton("rbtn-equ", 5, Resource.getLocString(Resource.l10nLabel, "Equipment ($col[255,255,0]{Ctrl+E})")) {
                 public void click() {
                     if ((equwnd != null) && equwnd.show(!equwnd.visible)) {
                         equwnd.raise();
@@ -909,7 +909,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                     }
                 }
             }, 0, 0);
-            add(new MenuButton("rbtn-chr", 20, "Character Sheet ($col[255,255,0]{Ctrl+T})") {
+            add(new MenuButton("rbtn-chr", 20, Resource.getLocString(Resource.l10nLabel, "Character Sheet ($col[255,255,0]{Ctrl+T})")) {
                 public void click() {
                     if ((chrwdg != null) && chrwdg.show(!chrwdg.visible)) {
                         chrwdg.raise();
@@ -917,7 +917,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                     }
                 }
             }, 0, 0);
-            add(new MenuButton("rbtn-bud", 2, "Kith & Kin ($col[255,255,0]{Ctrl+B})") {
+            add(new MenuButton("rbtn-bud", 2, Resource.getLocString(Resource.l10nLabel, "Kith & Kin ($col[255,255,0]{Ctrl+B})")) {
                 public void click() {
                     if (zerg.show(!zerg.visible)) {
                         zerg.raise();
@@ -926,7 +926,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                     }
                 }
             }, 0, 0);
-            add(new MenuButton("rbtn-opt", 15, "Options ($col[255,255,0]{Ctrl+O})") {
+            add(new MenuButton("rbtn-opt", 15, Resource.getLocString(Resource.l10nLabel, "Options ($col[255,255,0]{Ctrl+O})")) {
                 public void click() {
                     if (opts.show(!opts.visible)) {
                         opts.raise();
@@ -1318,7 +1318,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                 Tex glow;
 
                 {
-                    this.tooltip = RichText.render("Chat ($col[255,255,0]{Ctrl+C})", 0);
+                    this.tooltip = RichText.render(Resource.getLocString(Resource.l10nLabel, "Chat ($col[255,255,0]{Ctrl+C})"), 0);
                     glow = new TexI(PUtils.rasterimg(PUtils.blurmask(up.getRaster(), 2, 2, Color.WHITE)));
                 }
 

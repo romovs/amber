@@ -44,6 +44,12 @@ public class MainFrame extends java.awt.Frame implements Runnable, Console.Direc
     static {
         try {
             javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
+
+            // Since H&H IPs aren't likely to change (at least mid client run), and the client constantly needs to fetch
+            // resources from the server, we enable "cache forever" policy so to overcome sporadic UnknownHostException
+            // due to flaky DNS. Bad practice, but still better than forcing the user to modify hosts file.
+            // NOTE: this needs to be done early as possible before InetAddressCachePolicy is initialized.
+            java.security.Security.setProperty("networkaddress.cache.ttl" , "-1");
         } catch (Exception e) {
         }
     }

@@ -147,7 +147,7 @@ public abstract class ItemInfo {
         }
 
         public Name(Owner owner, String str) {
-            this(owner, Text.render(str));
+            this(owner, Text.render(locContentName(str)));
         }
 
         public BufferedImage tipimg() {
@@ -171,9 +171,23 @@ public abstract class ItemInfo {
         }
     }
 
+    private static String locContentName(String str) {
+        int i = str.indexOf(" l of ");
+        if (i > 0) {
+            String contName = str.substring(i);
+            String locContName = Resource.getLocStringOrNull(Resource.l10nLabel, contName);
+            if (locContName != null)
+                return str.substring(0, i) + locContName + " (" + str.substring(i + " l of ".length()) + ")";
+            return str;
+        }
+        // TODO: handling for seeds. will require updating Contents handling below
+
+        return str;
+    }
+
     public static class Contents extends Tip {
         public final List<ItemInfo> sub;
-        private static final Text.Line ch = Text.render("Contents:");
+        private static final Text.Line ch = Text.render(Resource.getLocString(Resource.l10nLabel, "Contents:"));
         public double content = 0;
         public boolean isseeds;
 

@@ -270,15 +270,15 @@ public class BuddyWnd extends Widget implements Iterable<BuddyWnd.Buddy> {
 
                     public void choose(Petal opt) {
                         if (opt != null) {
-                            if (opt.name.equals("End kinship")) {
+                            if (opt.name.equals(Resource.getLocString(Resource.l10nFlower, "End kinship"))) {
                                 b.endkin();
-                            } else if (opt.name.equals("Chat")) {
+                            } else if (opt.name.equals(Resource.getLocString(Resource.l10nFlower, "Chat"))) {
                                 b.chat();
-                            } else if (opt.name.equals("Invite")) {
+                            } else if (opt.name.equals(Resource.getLocString(Resource.l10nFlower, "Invite"))) {
                                 b.invite();
-                            } else if (opt.name.equals("Forget")) {
+                            } else if (opt.name.equals(Resource.getLocString(Resource.l10nFlower, "Forget"))) {
                                 b.forget();
-                            } else if (opt.name.equals("Describe")) {
+                            } else if (opt.name.equals(Resource.getLocString(Resource.l10nFlower, "Describe"))) {
                                 b.describe();
                             }
                             uimsg("act", opt.num);
@@ -304,7 +304,7 @@ public class BuddyWnd extends Widget implements Iterable<BuddyWnd.Buddy> {
         super(new Coord(200, 380));
         setfocustab(true);
         int y = 0;
-        add(new Img(CharWnd.catf.render("Kin").tex()), new Coord(0, 0));
+        add(new Img(CharWnd.catf.render(Resource.getLocString(Resource.l10nLabel, "Kin")).tex()), new Coord(0, 0));
         y += 35;
 
         bl = add(new BuddyList(200 - Window.wbox.bisz().x, 7), new Coord(Window.wbox.btloff().x, y));

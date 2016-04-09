@@ -14,7 +14,12 @@ public class GobPath extends Sprite {
 
     public boolean setup(RenderList rl) {
         Gob gob = (Gob) owner;
-        Location.goback(rl.state(), "gobx");
+        try {
+            Location.goback(rl.state(), "gobx");
+        } catch (IllegalStateException ise) {
+            // no gobx backlink for sling and catapult projectiles
+            return false;
+        }
         rl.prepo(States.xray);
         Color clr;
         if (gob.isplayer()) {

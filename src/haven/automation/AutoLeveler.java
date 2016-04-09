@@ -14,7 +14,7 @@ public class AutoLeveler extends Window implements GobSelectCallback, ErrorSysMs
     private final Label lbls;
     public boolean terminate = false;
     private Button clearbtn, runbtn, stopbtn;
-    private static final int TIMEOUT = 2000;
+    private static final int TIMEOUT = 6000;
     private static final int DIG_DELAY = 4;
     private static final int HAND_DELAY = 10;
     private static final int INACTIVTY_TIMEOUT = 5 * 60 * 1000;
@@ -38,9 +38,9 @@ public class AutoLeveler extends Window implements GobSelectCallback, ErrorSysMs
         }, new Coord(10, 10).add(wbox.btloff()));
         Frame.around(this, Collections.singletonList(inf));
         inf.add(new RichTextBox(new Coord(245, 55),
-                "Alt + Click to select soil stockpiles for storing or taking the soil from, or leave empty to use all stockpiles in the area.\n\n" +
+                Resource.getLocString(Resource.l10nLabel, "Alt + Click to select soil stockpiles for storing or taking the soil from, or leave empty to use all stockpiles in the area.\n\n" +
                         "Nearest survey flag will be used for leveling.\n\n" +
-                        "Put flasks/waterskins in inventory and hotkey one of them for auto-drinking\n", CharWnd.ifnd));
+                        "Put flasks/waterskins in inventory and hotkey one of them for auto-drinking\n"), CharWnd.ifnd));
 
         Label lblstxt = new Label("Stockpiles Selected:", infof);
         add(lblstxt, new Coord(15, 90));
@@ -133,26 +133,30 @@ public class AutoLeveler extends Window implements GobSelectCallback, ErrorSysMs
             GameUI gui = gameui();
             OCache oc = ui.sess.glob.oc;
             running = true;
+            boolean needsoil = false;
 
             lvl:
             while (!terminate) {
                 gui.maininv.drinkTillFull(90);
 
                 try {
-                    // find closest survey flag
-                    double closest = Double.MAX_VALUE;
-                    synchronized (oc) {
-                        for (Gob gob : oc) {
-                            try {
-                                Resource res = gob.getres();
-                                if (res != null && res.name.contains("gfx/terobjs/survobj")) {
-                                    double dist = gui.map.player().rc.dist(gob.rc);
-                                    if (dist < closest) {
-                                        closest = dist;
-                                        survey = gob;
+                    if (survey == null) {
+                        // find closest survey flag
+                        double closest = Double.MAX_VALUE;
+
+                        synchronized (oc) {
+                            for (Gob gob : oc) {
+                                try {
+                                    Resource res = gob.getres();
+                                    if (res != null && res.name.contains("gfx/terobjs/survobj")) {
+                                        double dist = gui.map.player().rc.dist(gob.rc);
+                                        if (dist < closest) {
+                                            closest = dist;
+                                            survey = gob;
+                                        }
                                     }
+                                } catch (Loading l) {
                                 }
-                            } catch (Loading l) {
                             }
                         }
                     }
@@ -182,7 +186,6 @@ public class AutoLeveler extends Window implements GobSelectCallback, ErrorSysMs
                     tzf.setAccessible(true);
                     Integer tz = (Integer) tzf.get(survwnd);
 
-                    lasteerrmsg = null;
                     survwnd.wdgmsg("lvl", new Object[]{tz});
 
                     try {
@@ -192,14 +195,15 @@ public class AutoLeveler extends Window implements GobSelectCallback, ErrorSysMs
                     }
 
                     // close survey window
-                    try {
-                        survwnd.cbtn.click();
-                    } catch (UI.UIException uie) { // ignored
-                    }
+                    //try {
+                    //    survwnd.cbtn.click();
+                    //} catch (UI.UIException uie) { // ignored
+                    //} // no need to close the window
 
-                    boolean needsoil = false;
+
                     int timeout = 0;
                     while (!terminate) {
+                        timeout = 0;
                         // break if not enough soil
                         if ("You need soil to fill this up.".equals(lasteerrmsg)) {
                             needsoil = true;
@@ -212,8 +216,6 @@ public class AutoLeveler extends Window implements GobSelectCallback, ErrorSysMs
                         for (WItem tuber : tubers)
                             tuber.item.wdgmsg("drop", Coord.z);
 
-                        if (gui.maininv.getFreeSpace() < 5)
-                            break;
 
                         IMeter.Meter stam = gameui().getmeter("stam", 0);
                         if (stam != null && stam.a < 30)
@@ -226,15 +228,26 @@ public class AutoLeveler extends Window implements GobSelectCallback, ErrorSysMs
                         }
 
                         try {
-                            Thread.sleep(DIG_DELAY);
+                            Thread.sleep(2 * DIG_DELAY);
                         } catch (InterruptedException e) {
                             return;
                         }
-                    }
+                        if (gui.maininv.getFreeSpace() < 5 && needsoil == false) {
+                            if ("You need soil to fill this up.".equals(lasteerrmsg)) {
+                                needsoil = true;
+                            }
 
+                            break;
+                        }
+
+
+                    }
+                    //there was a issue here with needsoil = null when it shouldn't be
+                    //as a result once you use the survey to put soil down the script 
+                    //must be restarted to use other functionality.
                     if (needsoil)
                         getsoil();
-                    else
+                    if (!needsoil)
                         storesoil();
                 } catch (Exception e) {
                     if (terminate)
