@@ -466,16 +466,24 @@ public class GOut {
     }
 
     public void rect(Coord ul, Coord sz) {
-        st.set(cur2d);
-        apply();
-        gl.glLineWidth(1);
-        gl.glBegin(GL.GL_LINE_LOOP);
-        vertex(ul.x + 0.5f, ul.y + 0.5f);
-        vertex(ul.x + sz.x - 0.5f, ul.y + 0.5f);
-        vertex(ul.x + sz.x - 0.5f, ul.y + sz.y - 0.5f);
-        vertex(ul.x + 0.5f, ul.y + sz.y - 0.5f);
-        gl.glEnd();
-        checkerr();
+    	ul = tx.add(ul);
+    	Coord br = ul.add(sz);
+    	if(ul.x < this.ul.x) ul.x = this.ul.x;
+    	if(ul.y < this.ul.y) ul.y = this.ul.y;
+    	if(br.x > this.ul.x + this.sz.x) br.x = this.ul.x + this.sz.x;
+    	if(br.y > this.ul.y + this.sz.y) br.y = this.ul.y + this.sz.y;
+    	if((ul.x >= br.x) || (ul.y >= br.y))
+    		return;
+    	st.set(cur2d);
+    	apply();
+    	gl.glLineWidth(1);
+    	gl.glBegin(GL.GL_LINE_LOOP);
+    	gl.glVertex2i(ul.x, ul.y);
+    	gl.glVertex2i(br.x, ul.y);
+    	gl.glVertex2i(br.x, br.y);
+    	gl.glVertex2i(ul.x, br.y);
+    	gl.glEnd();
+    	checkerr();
     }
 
     public void prect(Coord c, Coord ul, Coord br, double a) {
