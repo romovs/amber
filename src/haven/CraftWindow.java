@@ -59,6 +59,7 @@ public class CraftWindow extends Window {
     public void cdestroy(Widget w) {
     	if (makeWidget == w) {
     		makeWidget = null;
+    		if (visible)
     		hide();
     		}
     	}
@@ -84,6 +85,14 @@ public class CraftWindow extends Window {
         }
         return super.globtype(ch, ev);
     }
+    
+    @Override
+    public void hide() {
+        super.hide();
+        if (makeWidget != null)
+            makeWidget.wdgmsg("close");
+    }
+
 
     private void addTab(Glob.Pagina pagina) {
         if (tabs.containsKey(pagina)) {
