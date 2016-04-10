@@ -1,3 +1,18 @@
+Version 1.31.0
+    New:
+        * Task for lighting kilns/smelters/ovens/steelbxoes using a torch.
+
+    Fixed:
+        * Animal radiuses being shown for dead animals.
+        * Crash when dragging and switching camera at the same time.
+        * Possible fix for UnknownHostException when fetching resources using flaky DNS.
+        * Other smaller fixes and adjustments...
+
+    Misc:
+        * Actions from extended menu can be used from F-key hotbar now.
+        * Updates to localization support and Russian translation (on behalf of InGodWeTrust).
+
+
 Version 1.30.3
     Fixed:
         * Crash when using catapult.

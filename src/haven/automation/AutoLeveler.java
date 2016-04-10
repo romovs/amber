@@ -139,6 +139,12 @@ public class AutoLeveler extends Window implements GobSelectCallback, ErrorSysMs
             while (!terminate) {
                 gui.maininv.drinkTillFull(90);
 
+                IMeter.Meter stam = gameui().getmeter("stam", 0);
+                if (stam != null && stam.a < 30) {
+                    terminate();
+                    return;
+                }
+
                 try {
                     if (survey == null) {
                         // find closest survey flag
@@ -217,7 +223,7 @@ public class AutoLeveler extends Window implements GobSelectCallback, ErrorSysMs
                             tuber.item.wdgmsg("drop", Coord.z);
 
 
-                        IMeter.Meter stam = gameui().getmeter("stam", 0);
+                        stam = gameui().getmeter("stam", 0);
                         if (stam != null && stam.a < 30)
                             continue lvl;
 

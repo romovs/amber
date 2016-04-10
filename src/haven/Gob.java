@@ -47,16 +47,16 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
     public final Glob glob;
     Map<Class<? extends GAttrib>, GAttrib> attr = new HashMap<Class<? extends GAttrib>, GAttrib>();
     public Collection<Overlay> ols = new LinkedList<Overlay>();
-    private static final Text.Foundry gobhpf = new Text.Foundry(Text.sansb, 14).aa(true);
+    private static final Text.Foundry gobhpf = new Text.Foundry(Text.sansb, 12).aa(true);
     private static final Text.Foundry stagemax = new Text.Foundry(Text.sansb, 20).aa(true);
     private final Collection<ResAttr.Cell<?>> rdata = new LinkedList<ResAttr.Cell<?>>();
     private final Collection<ResAttr.Load> lrdata = new LinkedList<ResAttr.Load>();
+    private static final Color stagecolor = new Color(255, 227, 168);
     private static final Tex[] gobhp = new Tex[]{
-            Text.renderstroked("25%", Color.WHITE, Color.BLACK, gobhpf).tex(),
-            Text.renderstroked("50%", Color.WHITE, Color.BLACK, gobhpf).tex(),
-            Text.renderstroked("75%", Color.WHITE, Color.BLACK, gobhpf).tex()
+            Text.renderstroked("25%", stagecolor, Color.BLACK, gobhpf).tex(),
+            Text.renderstroked("50%", stagecolor, Color.BLACK, gobhpf).tex(),
+            Text.renderstroked("75%", stagecolor, Color.BLACK, gobhpf).tex()
     };
-    private static final Color stagecolor = new Color(235, 235, 235);
     private static final Color stagemaxcolor = new Color(254, 100, 100);
     private static final Tex[] cropstg = new Tex[]{
             Text.renderstroked("2", stagecolor, Color.BLACK, gobhpf).tex(),
