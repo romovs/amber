@@ -73,6 +73,17 @@ public class CraftWindow extends Window {
     public void resize(Coord sz) {
         super.resize(sz.add(5, 5));
     }
+    
+    public boolean globtype(char ch, java.awt.event.KeyEvent ev) {
+        if (visible && ch == 9) {
+            int nextIndex = tabStrip.getSelectedButtonIndex() + 1;
+            if (nextIndex >= tabStrip.getButtonCount())
+                nextIndex = 0;
+            tabStrip.select(nextIndex);
+            return true;
+        }
+        return super.globtype(ch, ev);
+    }
 
     private void addTab(Glob.Pagina pagina) {
         if (tabs.containsKey(pagina)) {
