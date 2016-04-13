@@ -1,5 +1,11 @@
 ## Changelog
 
+### 2.14.0
+	- Added tooltip for calender widget
+	- Fix for crafting window highlighting recipes after closing
+	- Fix for view radius on minimap
+	- Default client merges
+	- Amber client merges
 ### 2.13.0
 	- Fixed crash due to latest patch
 	- Added option to hide Hearth Fires, Drying Frames and Dreamcatchers
