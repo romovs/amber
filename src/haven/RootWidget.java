@@ -55,17 +55,6 @@ public class RootWidget extends ConsoleHost {
                 if (Config.profilegpu) {
                     add(new Profwnd(ggprof, "GPU profile"), new Coord(450, 250));
                 }
-            } else if (ev.isControlDown() && ev.getKeyCode() == KeyEvent.VK_N) {
-                Config.daylight = !Config.daylight;
-                Utils.setprefb("daylight", Config.daylight);
-            } else if (ev.isControlDown() && ev.getKeyCode() == KeyEvent.VK_P) {
-                Config.showplantgrowstage = !Config.showplantgrowstage;
-                Utils.setprefb("showplantgrowstage", Config.showplantgrowstage);
-            } else if (ev.isControlDown() && ev.getKeyCode() == KeyEvent.VK_X) {
-                Config.tilecenter = !Config.tilecenter;
-                Utils.setprefb("tilecenter", Config.tilecenter);
-                GameUI gi = findchild(GameUI.class);
-                gi.msg("Tile centering is now turned " + (Config.tilecenter ? "on." : "off."), Color.WHITE);
             } else if (key == ':') {
                 entercmd();
             } else if (key != 0) {
