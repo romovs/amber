@@ -1,3 +1,13 @@
+Version 1.31.1
+    New:
+        * Battering ram and catapult alarm.
+
+    Misc:
+        * Terminate auto-leveler when out of water.
+        * Merged vanilla changes.
+        * Misc smaller fixes.
+
+
 Version 1.31.0
     New:
         * Task for lighting kilns/smelters/ovens/steelbxoes using a torch.

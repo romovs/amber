@@ -39,6 +39,7 @@ import static haven.glsl.Type.*;
 public class OverTex extends GLState {
     public static final Slot<OverTex> slot = new Slot<OverTex>(Slot.Type.DRAW, OverTex.class);
     public static final Attribute otexc = new Attribute(VEC2);
+    public static boolean otexdb = false;
     private static final Uniform ctex = new Uniform(SAMPLER2D);
     private static final Map<Function, ShaderMacro[]> shcache = new HashMap<Function, ShaderMacro[]>();
     private final ShaderMacro[] shaders;
@@ -108,7 +109,8 @@ public class OverTex extends GLState {
     }
 
     public void prep(Buffer buf) {
-        buf.put(slot, this);
+        if (!(otexdb && Debug.kf3))
+            buf.put(slot, this);
     }
 
     @Material.ResName("otex")
@@ -154,12 +156,15 @@ public class OverTex extends GLState {
 
     @VertexBuf.ResName("otex")
     public static class OTexC extends VertexBuf.Vec2Array {
-        public OTexC(FloatBuffer data) {
-            super(data, otexc);
-        }
+        public OTexC(FloatBuffer data) {super(data, otexc);}
+        public OTexC(Resource res, Message buf, int nv) {this(VertexBuf.loadbuf(Utils.wfbuf(nv * 2), buf));}
+    }
 
-        public OTexC(Resource res, Message buf, int nv) {
-            this(VertexBuf.loadbuf(Utils.wfbuf(nv * 2), buf));
-        }
+    static {
+        Console.setscmd("otexdb", new Console.Command() {
+            public void run(Console cons, String[] args) {
+                otexdb = Utils.parsebool(args[1], false);
+            }
+        });
     }
 }

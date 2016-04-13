@@ -173,7 +173,7 @@ public class CharWnd extends Window {
                     Collections.sort(etr, dcmp);
                     GameUI gui = getparent(GameUI.class);
                     if (gui != null)
-			        gui.msg(String.format(Resource.getLocString(Resource.l10nLabel, "You gained ") + Loading.waitfor(trev).layer(Event.class).nm), Color.WHITE);
+                        gui.msg(String.format(Resource.getLocString(Resource.l10nLabel, "You gained ") + Loading.waitfor(trev).layer(Event.class).nm), Color.WHITE);
                     trol = new TexI(mktrol(etr, trev));
                     trtm = System.currentTimeMillis();
                     trev = null;
@@ -319,7 +319,7 @@ public class CharWnd extends Window {
         public static final Color hilit = new Color(255, 255, 0, 48);
         public static final Text.Foundry elf = attrf;
         public static final Convolution tflt = new Hanning(1);
-        public static final Color full = new Color(250, 230, 64), none = new Color(250, 19, 43);
+        public static final Color buffed = new Color(160, 255, 160), full = new Color(250, 230, 64), none = new Color(250, 19, 43);
         public final List<El> els = new ArrayList<El>();
         private Integer[] order = {};
 
@@ -356,8 +356,10 @@ public class CharWnd extends Window {
             }
 
             public Tex at() {
-                if (at == null)
-                    at = elf.render(String.format("%d%%", (int) Math.floor(a * 100)), Utils.blendcol(none, full, a)).tex();
+                if (at == null) {
+                    Color c = (a > 1.0) ? buffed : Utils.blendcol(none, full, a);
+                    at = elf.render(String.format("%d%%", (int) Math.floor(a * 100)), c).tex();
+                }
                 return (at);
             }
         }
@@ -990,7 +992,7 @@ public class CharWnd extends Window {
                             title = catf.render(res.get().layer(Resource.tooltip).t).tex();
                             img = res.get().layer(Resource.imgc).tex();
                 /*
-				resize(new Coord(Math.max(img.sz().x + 25 + title.sz().x, qcmp.sz().x),
+                resize(new Coord(Math.max(img.sz().x + 25 + title.sz().x, qcmp.sz().x),
 						 Math.max(img.sz().y, title.sz().y) + 25 + qcmp.sz().y));
 				*/
                             resize(new Coord(Math.max(Math.max(img.sz().x, title.sz().x), qcmp.sz().x),
@@ -1912,15 +1914,15 @@ public class CharWnd extends Window {
             prev = add(new TB("battr", battr), new Coord(tabs.c.x + 5, tabs.c.y + tabs.sz.y + 10));
             prev.settip(Resource.getLocString(Resource.l10nLabel, "Base Attributes"));
             prev = add(new TB("sattr", sattr), new Coord(prev.c.x + prev.sz.x + 5, prev.c.y));
-            prev.settip(Resource.getLocString(Resource.l10nLabel,"Abilities"));
+            prev.settip(Resource.getLocString(Resource.l10nLabel, "Abilities"));
             prev = add(new TB("skill", skills), new Coord(prev.c.x + prev.sz.x + 5, prev.c.y));
-            prev.settip(Resource.getLocString(Resource.l10nLabel,"Lore & Skills"));
+            prev.settip(Resource.getLocString(Resource.l10nLabel, "Lore & Skills"));
             prev = add(new TB("fgt", fgt), new Coord(prev.c.x + prev.sz.x + 5, prev.c.y));
-            prev.settip(Resource.getLocString(Resource.l10nLabel,"Martial Arts & Combat Schools"));
+            prev.settip(Resource.getLocString(Resource.l10nLabel, "Martial Arts & Combat Schools"));
             prev = add(new TB("wound", wounds), new Coord(prev.c.x + prev.sz.x + 5, prev.c.y));
-            prev.settip(Resource.getLocString(Resource.l10nLabel,"Health & Wounds"));
+            prev.settip(Resource.getLocString(Resource.l10nLabel, "Health & Wounds"));
             prev = add(new TB("quest", quests), new Coord(prev.c.x + prev.sz.x + 5, prev.c.y));
-            prev.settip(Resource.getLocString(Resource.l10nLabel,"Quest Log"));
+            prev.settip(Resource.getLocString(Resource.l10nLabel, "Quest Log"));
         }
 
         resize(contentsz().add(15, 10));

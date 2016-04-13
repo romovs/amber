@@ -27,13 +27,17 @@
 package haven;
 
 import java.awt.Color;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
+import haven.resutil.BPRadSprite;
 import purus.CustomHitbox;
 
 public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
@@ -73,7 +77,9 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
     private static final Tex[] treestg = new Tex[90];
     private static final Material.Colors dframeEmpty = new Material.Colors(new Color(0, 255, 0, 255));
     private static final Material.Colors dframeDone = new Material.Colors(new Color(255, 0, 0, 255));
-
+    private static final Gob.Overlay animalradius = new Gob.Overlay(new BPRadSprite(100.0F, -10.0F));
+    private static final Set<String> dangerousanimalrad = new HashSet<String>(Arrays.asList(
+            "gfx/kritter/bear/bear", "gfx/kritter/boar/boar", "gfx/kritter/lynx/lynx", "gfx/kritter/badger/badger"));
 
     public static class Overlay implements Rendered {
         public Indir<Resource> res;
@@ -640,6 +646,30 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                         } catch (ArrayIndexOutOfBoundsException e) { // ignored
                         }  
                     }
+                }
+            }
+
+            if (res != null && dangerousanimalrad.contains(res.name)) {
+                if (Config.showanimalrad) {
+                    if (!ols.contains(animalradius)) {
+                        GAttrib drw = getattr(Drawable.class);
+                        if (drw != null && drw instanceof Composite) {
+                            Composite cpst = (Composite) drw;
+                            if (cpst.nposes != null && cpst.nposes.size() > 0) {
+                                for (ResData resdata : cpst.nposes) {
+                                    Resource posres = resdata.res.get();
+                                    if (posres != null && !posres.name.endsWith("/knock") || posres == null) {
+                                        ols.add(animalradius);
+                                        break;
+                                    }
+                                }
+                            } else if (!cpst.nposesold){
+                                ols.add(animalradius);
+                            }
+                        }
+                    }
+                } else {
+                    ols.remove(animalradius);
                 }
             }
         }

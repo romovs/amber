@@ -54,6 +54,7 @@ public class LocalMiniMap extends Widget {
     private static final Resource bearsfx = Resource.local().loadwait("sfx/bear");
     private static final Resource trollsfx = Resource.local().loadwait("sfx/troll");
     private static final Resource mammothsfx = Resource.local().loadwait("sfx/mammoth");
+    private static final Resource doomedsfx = Resource.local().loadwait("sfx/doomed");
 	private final HashSet<Long> sgobs = new HashSet<Long>();
     private final HashMap<Coord, BufferedImage> maptiles = new HashMap<Coord, BufferedImage>(28, 0.75f);
     @SuppressWarnings("serial")
@@ -388,6 +389,11 @@ public class LocalMiniMap extends Widget {
                                     Audio.play(mammothsfx, Config.alarmmammothvol);
                                 }
                             }
+                        }
+                    } else if (res.name.equals("gfx/terobjs/vehicle/bram") || res.name.equals("gfx/terobjs/vehicle/catapult")) {
+                        if (Config.alarmbram && !sgobs.contains(gob.id)) {
+                            sgobs.add(gob.id);
+                            Audio.play(doomedsfx, Config.alarmbramvol);
                         }
                     }
                     if (Config.alarmram) {
