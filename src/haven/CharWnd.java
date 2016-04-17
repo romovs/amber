@@ -306,13 +306,14 @@ public class CharWnd extends Window {
         private Tex rtip = null;
 
 
+
         public Object tooltip(Coord c, Widget prev) {
-            if (rtip == null) {
-                rtip = RichText.render(String.format(
-                        Resource.getLocString(Resource.l10nLabel, "%s: %d%%\nFood efficacy: %d%%"), lbl, Math.round((lglut) * 100), Math.round(gmod * 100)), -1).tex();
-            }
-            return (rtip);
+            String add = "";
+		if (finishedTime>System.currentTimeMillis())
+			add = "\nNext level: " + Utils.timeLeft(finishedTime);
+		return RichText.render(String.format("%s: %.3f%%\nFood efficacy: %d%%"+add, lbl, lglut * 100, Math.round(gmod * 100)), -1).tex();
         }
+
     }
 
     public static class Constipations extends Listbox<Constipations.El> {
