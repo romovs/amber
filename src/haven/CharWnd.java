@@ -711,7 +711,8 @@ public class CharWnd extends Window {
             this.study = study;
             add(new Label("Attention:"), 2, 2);
             add(new Label("Experience cost:"), 2, 32);
-            add(new Label("LP/hour"), 2, sz.y - 64);
+            // Use LPH instead
+            //add(new Label("LP/hour"), 2, sz.y - 64);
             add(new Label("Learning points:"), 2, sz.y - 32);
             add(new Label("LPH:"), 2, 72);
         }
@@ -725,17 +726,7 @@ public class CharWnd extends Window {
                         texp += ci.exp;
                         tw += ci.mw;
                         tenc += ci.enc;
-
-                        try {
-                            Resource res = item.getres();
-                            if (res != null) {
-                                Double t = CurioStudyTimes.curios.get(res.basename());
-                                if (t != null) {
-                                    tlph += Math.round(ci.exp / t);
-                                }
-                            }
-                        } catch (Loading l) {
-                        }
+                        tlph += ci.LPH(ci.exp);
                     }
                 } catch (Loading l) {
                 }
