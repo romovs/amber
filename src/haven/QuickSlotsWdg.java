@@ -112,6 +112,15 @@ public class QuickSlotsWdg extends Widget implements DTarget {
         return false;
     }
 
+    public void simulateclick(Coord c) {
+        Equipory e = gameui().getequipory();
+        if (e != null) {
+            WItem w = e.quickslots[c.x <= 47 ? 6 : 7];
+            if (w != null)
+                w.item.wdgmsg("take", new Coord(w.sz.x / 2, w.sz.y / 2));
+        }
+    }
+
     @Override
     public boolean mouseup(Coord c, int button) {
         if (dragging != null) {

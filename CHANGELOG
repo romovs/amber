@@ -1,3 +1,35 @@
+Version 1.32.2
+    New:
+        * Instant flower menus option.
+
+    Fixed:
+        * Possible crash in F-belt.
+        * Crash in History belt.
+
+
+Version 1.32.1
+    Fixed:
+        * Crash when studying curios with less than 1 hour study time.
+        * alt+z/x not working.
+        * Re-enabled shift+alt+lmb.
+
+
+Version 1.32.0
+    New:
+        * Craft/build history hotbelt.
+        * LP/hour in character sheet.
+        * Option to disable animations.
+
+    Fixed:
+        * Wikipedia hotkey not working for non English localizations.
+
+    Misc:
+        * alt+lmb to transfer identical items in descending order, alt+rmb for ascending.
+          alt+shift+lmb was removed together with the old ordering option in settings window.
+        * shift+d to toggle beehive/trough radius. Old setting in the settings window was removed.
+        * Updates to localization support and Russian translation.
+
+
 Version 1.31.1
     New:
         * Battering ram and catapult alarm.

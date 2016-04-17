@@ -34,6 +34,7 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -198,15 +199,16 @@ public class Config {
     public static boolean showcooldown = Utils.getprefb("showcooldown", false);
     public static boolean nodropping = Utils.getprefb("nodropping", false);
     public static boolean fbelt = Utils.getprefb("fbelt", false);
+    public static boolean histbelt = Utils.getprefb("histbelt", false);
     public static boolean dropore = Utils.getprefb("dropore", true);
     public static boolean showdframestatus = Utils.getprefb("showdframestatus", false);
     public static boolean enableorthofullzoom = Utils.getprefb("enableorthofullzoom", false);
     public static boolean hidexmenu = Utils.getprefb("hidexmenu", true);
-    public static boolean sortascending = Utils.getprefb("sortascending", false);
     public static boolean partycircles =  Utils.getprefb("partycircles", false);
     public static boolean noquests =  Utils.getprefb("noquests", false);
     public static boolean alarmbram =  Utils.getprefb("alarmbram", false);
     public static double alarmbramvol = Utils.getprefd("alarmbramvol", 1.0);
+    public static boolean instantflowermenu =  Utils.getprefb("instantflowermenu", false);
     public static boolean pf = false;
     public static String playerposfile;
     public static byte[] authck = null;
@@ -262,11 +264,34 @@ public class Config {
             "gfx/terobjs/herbs/flotsam", "gfx/terobjs/herbs/chimingbluebell", "gfx/terobjs/herbs/edelweiss",
             "gfx/terobjs/herbs/bloatedbolete", "gfx/terobjs/herbs/glimmermoss"));
 
+    public final static ArrayList<Pair<String, String>> disableanim = new ArrayList<Pair<String, String>>() {{
+        add(new Pair<String, String>("Beehives", "gfx/terobjs/beehive"));
+        add(new Pair<String, String>("Fires", "gfx/terobjs/pow"));
+        add(new Pair<String, String>("Full trash stockpiles", "gfx/terobjs/stockpile-trash"));
+        add(new Pair<String, String>("Idle animals", "/idle"));
+        add(new Pair<String, String>("Dream catchers", "gfx/terobjs/dreca"));
+    }};
+    public final static Set<String> disableanimSet = new HashSet<String>(disableanim.size());
+
+
     static {
         Arrays.sort(Config.boulders);
         Arrays.sort(Config.bushes);
         Arrays.sort(Config.trees);
         Arrays.sort(Config.icons);
+        Collections.sort(disableanim, (o1, o2) -> o1.a.compareTo(o2.a));
+
+        String[] disableanimsel = Utils.getprefsa("disableanim", null);
+        if (disableanimsel != null) {
+            for (String selname : disableanimsel) {
+                for (Pair<String, String> selpair : Config.disableanim) {
+                    if (selpair.a.equals(selname)) {
+                        Config.disableanimSet.add(selpair.b);
+                        break;
+                    }
+                }
+            }
+        }
 
         String p;
         if ((p = getprop("haven.authck", null)) != null)

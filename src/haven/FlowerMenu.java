@@ -94,7 +94,7 @@ public class FlowerMenu extends Widget {
     
     public class Opening extends NormAnim {
         Opening() {
-            super(0.15);
+            super(Config.instantflowermenu ? 0 : 0.15);
         }
 
         public void ntick(double s) {
@@ -176,7 +176,7 @@ public class FlowerMenu extends Widget {
 
     public class Cancel extends NormAnim {
         Cancel() {
-            super(0.20);
+            super(Config.instantflowermenu ? 0 : 0.20);
         }
 
         public void ntick(double s) {

@@ -96,7 +96,7 @@ public class Window extends Widget implements DTarget {
             Arrays.asList("Timers", "Inventory", "Equipment", "Crafting", "Character Sheet", "Kith & Kin", "Crate",
                     "Cupboard", "Barrel", "Table", "Cauldron", "Stockpile", "Tub", "Ore Smelter", "Land survey",
                     "Quiver", "Stone Casket", "Chicken Coop", "Extraction Press", "Oven", "Large Chest",
-                    "Herbalist Table", "Kiln"));
+                    "Herbalist Table", "Kiln", "Finery Forge", "Stone Column", "Steelbox", "Wooden Chest"));
 
     @RName("wnd")
     public static class $_ implements Factory {

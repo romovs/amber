@@ -5,9 +5,9 @@ import java.util.Map;
 
 public class CurioStudyTimes {
     public final static Map<String, Double> curios = new HashMap<String, Double>(68) {{
-        put("ants-empress", 3.3);
-        put("ants-queen", 1.3);
-        put("ants-soldiers", 0.67);
+        put("ants-empress", 3 + 20.0 / 60.0);
+        put("ants-queen", 1 + 20.0 / 60.0);
+        put("ants-soldiers", 40.0 / 60.0);
         put("aurochshair", 48.0);
         put("barkboat", 4.0);
         put("beartooth", 30.0);
@@ -15,8 +15,8 @@ public class CurioStudyTimes {
         put("boartusk", 12.0);
         put("catgold", 20.0);
         put("chimingbluebell", 18.0);
-        put("conecow", 0.33);
-        put("dandelion", 0.67);
+        put("conecow", 20.0 / 60.0);
+        put("dandelion", 40.0 / 60.0);
         put("darkheart", 96.0);
         put("ladysmantledew", 5.0);
         put("batwings", 4.0);
@@ -49,7 +49,7 @@ public class CurioStudyTimes {
         put("rattletattle", 36.0);
         put("antlers-reddeer", 50.0);
         put("riverpearl", 1.0);
-        put("bouquet", 16.0);
+        put("bouquet", 16.0 + 40.0 / 60.0);
         put("royaltoadstool", 6.0);
         put("dragonfly-ruby", 4.0);
         put("volvawand", 10.0);

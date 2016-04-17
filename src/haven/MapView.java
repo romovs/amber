@@ -1753,10 +1753,6 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                 Utils.setprefb("camargs", Utils.serialize(args));
             }
             return true;
-        } else if (ev.isControlDown() && code == KeyEvent.VK_D) {
-            Config.showminerad = !Config.showminerad;
-            Utils.setprefb("showminerad", Config.showminerad);
-            return true;
         }
         return (false);
     }

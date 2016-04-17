@@ -107,7 +107,7 @@ public class Inventory extends Widget implements DTarget {
         if(msg.equals("drop-identical")) {
             for (WItem item : getIdenticalItems((GItem) args[0]))
                 item.item.wdgmsg("drop", Coord.z);
-        } else if(msg.equals("transfer-identical")) {
+        } else if(msg.startsWith("transfer-identical")) {
             Window stockpile = gameui().getwnd("Stockpile");
             Window smelter = gameui().getwnd("Ore Smelter");
             Window kiln = gameui().getwnd("Kiln");
@@ -122,9 +122,9 @@ public class Inventory extends Widget implements DTarget {
                         else if (aq.avg == bq.avg)
                             return 0;
                         else if (aq.avg > bq.avg)
-                            return Config.sortascending ? 1 : -1;
+                            return msg.endsWith("asc") ? 1 : -1;
                         else
-                            return Config.sortascending ? -1 : 1;
+                            return msg.endsWith("asc") ? -1 : 1;
                     }
                 });
                 for (WItem item : items)

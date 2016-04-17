@@ -397,6 +397,8 @@ public class MenuGrid extends Widget {
             if(ad[0].equals("@")) {
                 use(ad);
             } else {
+                if (ad.length > 0 && (ad[0].equals("craft") || ad[0].equals("bp")))
+                    gameui().histbelt.push(r);
                 wdgmsg("act", (Object[]) ad);
             }
             if (reset)

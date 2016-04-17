@@ -368,22 +368,28 @@ public class WItem extends Widget implements DTarget {
         if (btn == 1) {
             if (ui.modctrl && ui.modmeta)
                 wdgmsg("drop-identical", this.item);
-            else if (ui.modshift && ui.modmeta) {
-                wdgmsg("transfer-identical", this.item);
-            } else if (ui.modctrl && ui.modshift && Resource.language.equals("en")) {
+            else if (ui.modctrl && ui.modshift) {
                 String name = ItemInfo.find(ItemInfo.Name.class, item.info()).str.text;
-                String url = String.format("http://ringofbrodgar.com/wiki/%s", name.replace(' ', '_'));
+                name = name.replace(' ', '_');
+                if (!Resource.language.equals("en")) {
+                    int i = name.indexOf('(');
+                    if (i > 0)
+                        name = name.substring(i + 1, name.length() - 1);
+                }
+                String url = String.format("http://ringofbrodgar.com/wiki/%s", name);
                 openwebpage(url);
-            } else if (ui.modshift)
+            } else if (ui.modshift && !ui.modmeta)
                 item.wdgmsg("transfer", c);
             else if (ui.modctrl)
                 item.wdgmsg("drop", c);
+            else if (ui.modmeta)
+                wdgmsg("transfer-identical", this.item);
             else
                 item.wdgmsg("take", c);
             return (true);
         } else if (btn == 3) {
             if (ui.modmeta)
-                wdgmsg("transfer-identical", this.item);
+                wdgmsg("transfer-identical-asc", this.item);
             else
                 item.wdgmsg("iact", c, ui.modflags());
             return (true);

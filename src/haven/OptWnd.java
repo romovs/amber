@@ -78,7 +78,7 @@ public class OptWnd extends Window {
         public VideoPanel(Panel back) {
             super();
             add(new PButton(200, "Back", 27, back), new Coord(270, 360));
-            pack();
+            resize(new Coord(740, 400));
         }
 
         public class CPanel extends Widget {
@@ -272,6 +272,35 @@ public class OptWnd extends Window {
                         a = val;
                     }
                 }, new Coord(250, y));
+
+                add(new Label("Disable animations (req. restart):"), new Coord(550, 0));
+                CheckListbox animlist = new CheckListbox(180, 18) {
+                    protected void itemclick(CheckListboxItem itm, int button) {
+                        super.itemclick(itm, button);
+
+                        String[] selected = getselected();
+                        Utils.setprefsa("disableanim", selected);
+
+                        Config.disableanimSet.clear();
+                        for (String selname : selected) {
+                            for (Pair<String, String> selpair : Config.disableanim) {
+                                if (selpair.a.equals(selname)) {
+                                    Config.disableanimSet.add(selpair.b);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                };
+
+                for (Pair<String, String> obj : Config.disableanim) {
+                    boolean selected = false;
+                    if (Config.disableanimSet.contains(obj.b))
+                        selected = true;
+                    animlist.items.add(new CheckListboxItem(obj.a, selected));
+                }
+                add(animlist, new Coord(550, 15));
+
                 pack();
             }
         }
@@ -1687,18 +1716,6 @@ public class OptWnd extends Window {
                 a = val;
             }
         }, new Coord(0, y));
-        y = 0;
-        control.add(new CheckBox("Transfer items in ascending order instead of descending") {
-            {
-                a = Config.sortascending;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("sortascending", val);
-                Config.sortascending = val;
-                a = val;
-            }
-        }, new Coord(320, y));
 
         control.add(new PButton(200, "Back", 27, main), new Coord(270, 360));
         control.pack();
@@ -1797,6 +1814,40 @@ public class OptWnd extends Window {
                         gameui().questpanel.show();
                 } catch (NullPointerException npe) { // ignored
                 }
+                a = val;
+            }
+        }, new Coord(0, y));
+        y += 35;
+        uis.add(new CheckBox("Show Craft/Build history toolbar") {
+            {
+                a = Config.histbelt;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("histbelt", val);
+                Config.histbelt = val;
+                a = val;
+                GameUI gui = gameui();
+                if (gui != null) {
+                    CraftHistoryBelt histbelt = gui.histbelt;
+                    if (histbelt != null) {
+                        if (val)
+                            histbelt.show();
+                        else
+                            histbelt.hide();
+                    }
+                }
+            }
+        }, new Coord(0, y));
+        y += 35;
+        uis.add(new CheckBox("Instant flower menus") {
+            {
+                a = Config.instantflowermenu;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("instantflowermenu", val);
+                Config.instantflowermenu = val;
                 a = val;
             }
         }, new Coord(0, y));

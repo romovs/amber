@@ -85,6 +85,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     private boolean crimeautotgld = false;
     private boolean trackautotgld = false;
     public FBelt fbelt;
+    public CraftHistoryBelt histbelt;
     private ErrorSysMsgCallback errmsgcb;
 
     public abstract class Belt extends Widget {
@@ -212,6 +213,11 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         add(fbelt, Utils.getprefc("fbelt_c", new Coord(20, 200)));
         if (!Config.fbelt)
             fbelt.hide();
+
+        histbelt = new CraftHistoryBelt(Utils.getprefb("histbelt_vertical", true));
+        add(histbelt, Utils.getprefc("histbelt_c", new Coord(70, 200)));
+        if (!Config.histbelt)
+            histbelt.hide();
     }
 
     @Override
@@ -995,11 +1001,11 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             return true;
         } else if (ev.isAltDown() && ev.getKeyCode() == KeyEvent.VK_Z) {
             quickslots.drop(QuickSlotsWdg.lc, Coord.z);
-            quickslots.mousedown(QuickSlotsWdg.lc, 1);
+            quickslots.simulateclick(QuickSlotsWdg.lc);
             return true;
         } else if (ev.isAltDown() && ev.getKeyCode() == KeyEvent.VK_X) {
             quickslots.drop(QuickSlotsWdg.rc, Coord.z);
-            quickslots.mousedown(QuickSlotsWdg.rc, 1);
+            quickslots.simulateclick(QuickSlotsWdg.rc);
             return true;
         } else if (ev.isAltDown() && ev.getKeyCode() == KeyEvent.VK_S) {
             HavenPanel.needtotakescreenshot = true;
@@ -1035,7 +1041,16 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             Config.tilecenter = !Config.tilecenter;
             Utils.setprefb("tilecenter", Config.tilecenter);
             msg("Tile centering is now turned " + (Config.tilecenter ? "on." : "off."), Color.WHITE);
+        } else if (ev.isControlDown() && ev.getKeyCode() == KeyEvent.VK_D) {
+            Config.showminerad = !Config.showminerad;
+            Utils.setprefb("showminerad", Config.showminerad);
+            return true;
+        } else if (ev.isShiftDown() && ev.getKeyCode() == KeyEvent.VK_D) {
+            Config.showfarmrad = !Config.showfarmrad;
+            Utils.setprefb("showfarmrad", Config.showfarmrad);
+            return true;
         }
+
         return (super.globtype(key, ev));
     }
 

@@ -27,12 +27,15 @@
 package haven;
 
 import java.awt.Color;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Label extends Widget {
     Text.Foundry f;
     Text text;
     String texts;
     Color col = Color.WHITE;
+    private static final Pattern contPattern = Pattern.compile("([0-9]+\\.?[0-9]*)", Pattern.CASE_INSENSITIVE);
 
     @RName("lbl")
     public static class $_ implements Factory {
@@ -90,7 +93,21 @@ public class Label extends Widget {
     }
 
     public void settext(String text) {
-        this.text = f.render(texts = text, col);
+        String t = text;
+        if (!Resource.language.equals("en")) {
+            if (text.startsWith("Contents:")) {
+                Matcher matcher = contPattern.matcher(text);
+                if (matcher.find()) {
+                    String num = matcher.group(1);
+                    String locText = Resource.getLocStringOrNull(Resource.l10nLabel, text.replace(num, "%s"));
+                    if (locText != null)
+                        t = String.format(locText, num);
+                } else {
+                    t = Resource.getLocString(Resource.l10nLabel, text);
+                }
+            }
+        }
+        this.text = f.render(texts = t, col);
         sz = this.text.sz();
     }
 
