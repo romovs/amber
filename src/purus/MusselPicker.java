@@ -36,12 +36,9 @@ public static boolean MusselsNearby;
 	}
 	Thread t = new Thread(new Runnable() {
 	public void run()  {
-		Gob gob = BotUtils.findObjectByNames(500, "gfx/terobjs/herbs/mussels");
-		if(gob != null)
-			MusselsNearby = true;
-		else
-			MusselsNearby = false;
-		while(MusselsNearby = true) {
+		window = BotUtils.gui().add(new StatusWindow(), 300, 200);
+		while(BotUtils.findObjectByNames(1000, "gfx/terobjs/herbs/mussels") != null) {
+			Gob gob = BotUtils.findObjectByNames(1000, "gfx/terobjs/herbs/mussels");
 			BotUtils.doClick(gob, 3, 0);
 			sleep(250);
 			@SuppressWarnings("deprecation")
@@ -51,25 +48,15 @@ public static boolean MusselsNearby;
 	                    if (opt.name.equals("Pick")) {
 	                        menu.choose(opt);
 	                        menu.destroy();
-	            			boolean onolemassa = true;
-	            			while(onolemassa) {
-		            			Gob onko = BotUtils.findObjectById(gob.id);
-		            			if (onko != null) 
-		            			onolemassa = true;
-		            			else
-		            			onolemassa = false;
+	            			while(BotUtils.findObjectById(gob.id) != null) {
+	            				sleep(500);
 	            			}
 	                    }
 	                }
 	            }
          //   BotUtils.Choose(opts[1])
-			gob = BotUtils.findObjectByNames(500, "gfx/terobjs/herbs/mussels");
-			if(gob != null) 
-			MusselsNearby = true;
-			else
-				break;
 		}
-		BotUtils.sysMsg("Mussel Picker Finished", Color.WHITE);
+		BotUtils.sysMsg("No mussels found, mussel picker finished.", Color.WHITE);
         window.destroy();
 				return;
 	}
