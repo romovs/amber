@@ -53,8 +53,6 @@ import haven.automation.SteelRefueler;
 import haven.util.ObservableCollection;
 import purus.CarrotFarmer;
 import purus.DragonflyCollector;
-import purus.FillOven;
-import purus.FillSmelter;
 import purus.MusselPicker;
 
 
