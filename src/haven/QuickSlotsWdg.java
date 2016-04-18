@@ -95,6 +95,9 @@ public class QuickSlotsWdg extends Widget implements DTarget {
 
     @Override
     public boolean mousedown(Coord c, int button) {
+       if (ui.modmeta)
+            return true;
+
         if (button == 1 && c.x > 44 && c.x < 50) {
             dragging = ui.grabmouse(this);
             dc = c;
