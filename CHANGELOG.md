@@ -1,5 +1,11 @@
 ## Changelog
 
+### 2.14.1
+	- Changed error popup not to completely block client
+	- Fix mussel picker NPE
+	- Fix hunger bar not updating
+	- Some other minor fixes
+	- Amber client merges
 ### 2.14.0
 	- Added tooltip for calender widget
 	- Fix for crafting window highlighting recipes after closing
