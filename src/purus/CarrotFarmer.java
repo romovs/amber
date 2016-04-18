@@ -49,12 +49,8 @@ public class CarrotFarmer {
 		public void run()  {
 			BotUtils.sysMsg("Carrot Farmer Started", Color.WHITE);
 			window = BotUtils.gui().add(new StatusWindow(), 300, 200);
-			Gob gob = BotUtils.findNearestStageCrop(500, Stage, Plant);
-			if(gob != null)
-				CarrotsNearby = true;
-			else
-				CarrotsNearby = false;
-			while(CarrotsNearby = true) {
+			while(BotUtils.findNearestStageCrop(500, Stage, Plant) != null) {
+				Gob gob = BotUtils.findNearestStageCrop(500, Stage, Plant);
 				GameUI gui = HavenPanel.lui.root.findchild(GameUI.class);
 				 IMeter.Meter stam = gui.getmeter("stam", 0);
 				 if (stam.a <= 30) {
@@ -104,11 +100,6 @@ public class CarrotFarmer {
 			BotUtils.mapInteractClick(1); 
 			//  TODO Droppaa kaikki siemenet tms. invistä + kädestä = saa toimimaan kaikkiin siemeniin joku hieno
 			//	juttu jolla saa valittua mitä kasvia farmaa jne. 
-			gob = BotUtils.findNearestStageCrop(500, Stage, Plant);
-			if(gob != null) 
-			CarrotsNearby = true;
-			else
-				break;
 		}
             window.destroy();
             if(t != null) {
