@@ -431,12 +431,8 @@ public class MenuGrid extends Widget {
         	new MusselPicker(ui, w, i).Run(); 
         } else if (ad[1].equals("carrotfarmer")) {
         	new CarrotFarmer(ui, w, i).Run();
-        } else if (ad[1].equals("oven-fill")) {
-        	new FillOven(ui, w, i).Run();
         } else if (ad[1].equals("flycollect")) {
         	new DragonflyCollector(ui, w, i).Run();
-        } else if (ad[1].equals("smelter-fill")) {
-        	new FillSmelter(ui, w, i).Run();
         }
     }
 
