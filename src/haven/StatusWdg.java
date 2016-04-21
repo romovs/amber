@@ -221,11 +221,11 @@ public class StatusWdg extends Widget {
             public void run() {
                 CookieHandler.setDefault(new CookieManager());
 
-                if (visible) {
+                /*if (visible) {
                     mklogin();
                     if (Thread.interrupted())
                         return;
-                }
+                }*/
 
                 while (true) {
                     if (visible) {

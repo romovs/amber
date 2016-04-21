@@ -93,6 +93,11 @@ public class Utils {
     }
 
     public static void drinkTillFull(GameUI gui, int threshold, int stoplevel) throws InterruptedException {
+        synchronized (gui.ui.fmAutoSelName) {
+            gui.ui.fmAutoSelName = "Drink";
+            gui.ui.fmAutoTime = System.currentTimeMillis();
+        }
+
         while (gui.maininv.drink(threshold)) {
             Thread.sleep(490);
             do {
@@ -101,6 +106,15 @@ public class Utils {
                 if (stam.a >= stoplevel)
                     break;
             } while (gui.prog >= 0);
+            synchronized (gui.ui.fmAutoSelName) {
+                gui.ui.fmAutoSelName = "Drink";
+                gui.ui.fmAutoTime = System.currentTimeMillis();
+            }
+        }
+
+        synchronized (gui.ui.fmAutoSelName) {
+            gui.ui.fmAutoSelName = "";
+            gui.ui.fmAutoTime = 0;
         }
     }
 }
