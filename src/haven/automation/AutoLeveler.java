@@ -40,7 +40,7 @@ public class AutoLeveler extends Window implements GobSelectCallback, ErrorSysMs
         inf.add(new RichTextBox(new Coord(245, 55),
                 Resource.getLocString(Resource.l10nLabel, "Alt + Click to select soil stockpiles for storing or taking the soil from, or leave empty to use all stockpiles in the area.\n\n" +
                         "Nearest survey flag will be used for leveling.\n\n" +
-                        "Put flasks/waterskins in inventory and hotkey one of them for auto-drinking\n"), CharWnd.ifnd));
+                        "Put flasks/waterskins in inventory for auto-drinking\n"), CharWnd.ifnd));
 
         Label lblstxt = new Label("Stockpiles Selected:", infof);
         add(lblstxt, new Coord(15, 90));
@@ -137,15 +137,15 @@ public class AutoLeveler extends Window implements GobSelectCallback, ErrorSysMs
 
             lvl:
             while (!terminate) {
-                gui.maininv.drinkTillFull(90);
-
-                IMeter.Meter stam = gameui().getmeter("stam", 0);
-                if (stam != null && stam.a < 30) {
-                    terminate();
-                    return;
-                }
-
                 try {
+                    Utils.drinkTillFull(gui, 90, 90);
+
+                    IMeter.Meter stam = gameui().getmeter("stam", 0);
+                    if (stam != null && stam.a < 30) {
+                        terminate();
+                        return;
+                    }
+
                     if (survey == null) {
                         // find closest survey flag
                         double closest = Double.MAX_VALUE;

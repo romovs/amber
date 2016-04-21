@@ -1,3 +1,11 @@
+Version 1.32.3
+    New:
+        * Drink water from any container in the inventory on W key.
+
+    Misc:
+        * Updated resources jar.
+
+
 Version 1.32.2
     New:
         * Instant flower menus option.

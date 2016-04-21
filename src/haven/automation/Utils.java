@@ -2,6 +2,7 @@ package haven.automation;
 
 import haven.Equipory;
 import haven.GameUI;
+import haven.IMeter;
 import haven.WItem;
 
 
@@ -89,5 +90,17 @@ public class Utils {
             }
         }
         return true;
+    }
+
+    public static void drinkTillFull(GameUI gui, int threshold, int stoplevel) throws InterruptedException {
+        while (gui.maininv.drink(threshold)) {
+            Thread.sleep(490);
+            do {
+                Thread.sleep(10);
+                IMeter.Meter stam = gui.getmeter("stam", 0);
+                if (stam.a >= stoplevel)
+                    break;
+            } while (gui.prog >= 0);
+        }
     }
 }

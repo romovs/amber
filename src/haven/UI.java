@@ -37,6 +37,8 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.TreeMap;
 
+import haven.UI.AfterDraw;
+
 public class UI {
     public RootWidget root;
     final private LinkedList<Grab> keygrab = new LinkedList<Grab>(), mousegrab = new LinkedList<Grab>();
@@ -54,6 +56,10 @@ public class UI {
     private Collection<AfterDraw> afterdraws = new LinkedList<AfterDraw>();
     public final ActAudio audio = new ActAudio();
     public GameUI gui = null;
+
+    public static String fmAutoSelName = "";
+    public static long fmAutoTime;
+    private static final int FM_AUTO_TIMEOUT = 2000;
 
     {
         lastevent = lasttick = System.currentTimeMillis();
@@ -159,6 +165,23 @@ public class UI {
             Widget pwdg = widgets.get(parent);
             if (pwdg == null)
                 throw (new UIException("Null parent widget " + parent + " for " + id, type, cargs));
+
+            if (type.equals("sm")) {
+                synchronized (fmAutoSelName) {
+                    if (fmAutoSelName != null && System.currentTimeMillis() - fmAutoTime < FM_AUTO_TIMEOUT) {
+                        bind(new WidgetDummy(), id);
+                        for (int i = 0; i < cargs.length; i++) {
+                            if (cargs[i].equals(fmAutoSelName)) {
+                                rcvr.rcvmsg(id, "cl", new Object[]{i, 0});
+                                fmAutoSelName = "";
+                                return;
+                            }
+                        }
+                        fmAutoSelName = "";
+                    }
+                }
+            }
+
             Widget wdg = pwdg.makechild(f, pargs, cargs);
             bind(wdg, id);
 

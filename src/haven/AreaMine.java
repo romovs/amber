@@ -1,8 +1,6 @@
 package haven;
 
 
-import java.util.*;
-
 public class AreaMine implements Runnable {
     private MapView mv;
     private Coord a, b, c, d;
@@ -101,26 +99,11 @@ public class AreaMine implements Runnable {
             if (terminate)
                 break mine;
 
-            // drink
-            @SuppressWarnings("deprecation")
-			GameUI gui = HavenPanel.lui.root.findchild(GameUI.class);
-            if (gui.maininv != null) {
-                if (gui.maininv.drink(70)) {
-                    try {
-                        Thread.sleep(500);
-                        do {
-                            IMeter.Meter stam = gui.getmeter("stam", 0);
-                            if (stam.a >= 84)
-                                break;
-                            Thread.sleep(10);
-                            stam = gui.getmeter("stam", 0);
-                            if (stam.a >= 84)
-                                break;
-                        } while (gui.prog >= 0);
-                    } catch (InterruptedException e) {
-                        break mine;
-                    }
-                }
+            GameUI gui = HavenPanel.lui.root.findchild(GameUI.class);
+            try {
+                haven.automation.Utils.drinkTillFull(gui, 70, 84);
+            } catch (InterruptedException e) {
+                break mine;
             }
 
             Coord tc = path[i];

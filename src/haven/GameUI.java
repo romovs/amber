@@ -1049,6 +1049,13 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             Config.showfarmrad = !Config.showfarmrad;
             Utils.setprefb("showfarmrad", Config.showfarmrad);
             return true;
+        } else if (!ev.isShiftDown() && ev.getKeyCode() == KeyEvent.VK_W) {
+            synchronized (ui.fmAutoSelName) {
+                ui.fmAutoSelName = "Drink";
+                ui.fmAutoTime = System.currentTimeMillis();
+            }
+            maininv.drink(100);
+            return true;
         }
 
         return (super.globtype(key, ev));
