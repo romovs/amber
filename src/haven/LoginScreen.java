@@ -26,7 +26,7 @@
 
 package haven;
 
-import java.awt.*;
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.font.TextAttribute;
 import java.io.BufferedReader;
@@ -38,6 +38,7 @@ import java.net.CookieManager;
 import java.net.MalformedURLException;
 import java.net.SocketException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -355,7 +356,7 @@ public class LoginScreen extends Widget {
                     boolean ServerStatus;
                     String PlayerCount = "";
 
-                    String mainpagecontent = geturlcontent("https://www.havenandhearth.com/portal/");
+                    String mainpagecontent = geturlcontent("http://www.havenandhearth.com/portal/");
                     if (!mainpagecontent.isEmpty())
                         PlayerCount = getstringbetween(mainpagecontent, "There are", "hearthlings playing").trim();
                     if (PlayerCount.isEmpty())
@@ -391,47 +392,26 @@ public class LoginScreen extends Widget {
     }
 
     private String geturlcontent(String url) {
-        if (sslfactory == null)
-            return "";
-        URL url_;
-        InputStream is = null;
-        BufferedReader br;
-        String urlcontent = "";
-
-        try {
-            url_ = new URL(url);
-            HttpsURLConnection conn = (HttpsURLConnection)url_.openConnection();
-            conn.setSSLSocketFactory(sslfactory);
-            is = conn.getInputStream();
-            br = new BufferedReader(new InputStreamReader(is));
-
-            String line;
-            while ((line = br.readLine()) != null) {
-                urlcontent += line;
-            }
-        } catch (SocketException se) {
-            // don't print socket exceptions when network is unreachable to prevent console spamming on bad connections
-            if (!se.getMessage().equals("Network is unreachable"))
-                se.printStackTrace();
-            return "";
-        } catch (MalformedURLException mue) {
-            mue.printStackTrace();
-            return "";
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-            return "";
-        } finally {
-            try {
-                if (is != null)
-                    is.close();
-            } catch (IOException ioe) {
-                // NOP
-            }
-        }
-
-        return urlcontent;
+    	URL url_;
+    	StringBuilder sb = new StringBuilder();
+    	String outputLine;
+		try {
+			url_ = new URL(url);
+    	URLConnection con = url_.openConnection();
+    	BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+    	while ((outputLine = br.readLine()) != null)  {
+    		sb.append(outputLine + "\n");
+    	}
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+			return "";
+		} catch (IOException e) {
+			e.printStackTrace();
+			return "";
+		}
+    	return sb.toString();
+    	
     }
-    //
     
     public void uimsg(String msg, Object... args) {
         synchronized (ui) {
