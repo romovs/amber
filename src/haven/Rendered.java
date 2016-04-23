@@ -31,29 +31,25 @@ import javax.media.opengl.*;
 
 public interface Rendered extends Drawn {
     public boolean setup(RenderList r);
+    public static final Object CONSTANS = new Object();
+
+    public default Object staticp() {return(null);}
 
     public static interface Instanced extends Rendered {
-        public boolean drawinst(GOut g, List<GLState.Buffer> instances);
+        public Rendered instanced(GLConfig gc, List<GLState.Buffer> instances);
     }
 
     public static interface RComparator<T extends Rendered> {
         public int compare(T a, T b, GLState.Buffer sa, GLState.Buffer sb);
     }
 
-    @SuppressWarnings("rawtypes")
-	public static final GLState.Slot<Order> order = new GLState.Slot<Order>(GLState.Slot.Type.GEOM, Order.class, HavenPanel.global);
-
+    public static final GLState.Slot<Order> order = new GLState.Slot<Order>(GLState.Slot.Type.GEOM, Order.class, HavenPanel.global);
     public static abstract class Order<T extends Rendered> extends GLState {
         public abstract int mainz();
-
         public abstract RComparator<? super T> cmp();
 
-        public void apply(GOut g) {
-        }
-
-        public void unapply(GOut g) {
-        }
-
+        public void apply(GOut g) {}
+        public void unapply(GOut g) {}
         public void prep(GLState.Buffer buf) {
             buf.put(order, this);
         }
@@ -66,17 +62,17 @@ public interface Rendered extends Drawn {
             }
 
             public int mainz() {
-                return (z);
+                return(z);
             }
 
             private final static RComparator<Rendered> cmp = new RComparator<Rendered>() {
                 public int compare(Rendered a, Rendered b, GLState.Buffer sa, GLState.Buffer sb) {
-                    return (0);
+                    return(0);
                 }
             };
 
             public RComparator<Rendered> cmp() {
-                return (cmp);
+                return(cmp);
             }
         }
     }
@@ -88,33 +84,31 @@ public interface Rendered extends Drawn {
     public final static Order<?> postpfx = new Order.Default(5500);
 
     public static class EyeOrder extends Order.Default {
-        public EyeOrder(int z) {
-            super(z);
-        }
+        public EyeOrder(int z) {super(z);}
 
         private static final RComparator<Rendered> cmp = new RComparator<Rendered>() {
             public int compare(Rendered a, Rendered b, GLState.Buffer sa, GLState.Buffer sb) {
-        /* It would be nice to be able to cache these
-         * results somewhere. */
+		/* It would be nice to be able to cache these
+		 * results somewhere. */
                 Camera ca = sa.get(PView.cam);
                 Location.Chain la = sa.get(PView.loc);
                 Matrix4f mva = ca.fin(Matrix4f.id).mul(la.fin(Matrix4f.id));
-                float da = (float) Math.sqrt((mva.m[12] * mva.m[12]) + (mva.m[13] * mva.m[13]) + (mva.m[14] * mva.m[14]));
+                float da = (float)Math.sqrt((mva.m[12] * mva.m[12]) + (mva.m[13] * mva.m[13]) + (mva.m[14] * mva.m[14]));
                 Camera cb = sb.get(PView.cam);
                 Location.Chain lb = sb.get(PView.loc);
                 Matrix4f mvb = cb.fin(Matrix4f.id).mul(lb.fin(Matrix4f.id));
-                float db = (float) Math.sqrt((mvb.m[12] * mvb.m[12]) + (mvb.m[13] * mvb.m[13]) + (mvb.m[14] * mvb.m[14]));
-                if (da < db)
-                    return (1);
-                else if (da > db)
-                    return (-1);
+                float db = (float)Math.sqrt((mvb.m[12] * mvb.m[12]) + (mvb.m[13] * mvb.m[13]) + (mvb.m[14] * mvb.m[14]));
+                if(da < db)
+                    return(1);
+                else if(da > db)
+                    return(-1);
                 else
-                    return (0);
+                    return(0);
             }
         };
 
         public RComparator<Rendered> cmp() {
-            return (cmp);
+            return(cmp);
         }
     }
 
@@ -122,11 +116,8 @@ public interface Rendered extends Drawn {
     public final static Order<?> eeyesort = new EyeOrder(4500);
 
     public final static GLState.StandAlone skip = new GLState.StandAlone(GLState.Slot.Type.GEOM, HavenPanel.global) {
-        public void apply(GOut g) {
-        }
-
-        public void unapply(GOut g) {
-        }
+        public void apply(GOut g) {}
+        public void unapply(GOut g) {}
     };
 
     public static class Dot implements Rendered {
@@ -142,7 +133,7 @@ public interface Rendered extends Drawn {
         }
 
         public boolean setup(RenderList r) {
-            return (true);
+            return(true);
         }
     }
 
@@ -180,7 +171,7 @@ public interface Rendered extends Drawn {
 
         public boolean setup(RenderList r) {
             r.state().put(States.color, null);
-            return (true);
+            return(true);
         }
     }
 
@@ -205,7 +196,7 @@ public interface Rendered extends Drawn {
         public boolean setup(RenderList r) {
             r.state().put(States.color, null);
             r.state().put(Light.lighting, null);
-            return (true);
+            return(true);
         }
     }
 
@@ -264,7 +255,7 @@ public interface Rendered extends Drawn {
 
         public boolean setup(RenderList rls) {
             rls.state().put(States.color, null);
-            return (true);
+            return(true);
         }
     }
 
@@ -342,25 +333,17 @@ public interface Rendered extends Drawn {
             gl.glVertex3f(bn.x, bn.y, bn.z);
             gl.glEnd();
             gl.glBegin(GL2.GL_LINES);
-            gl.glVertex3f(bn.x, bn.y, bn.z);
-            gl.glVertex3f(bn.x, bn.y, bp.z);
-            gl.glVertex3f(bp.x, bn.y, bn.z);
-            gl.glVertex3f(bp.x, bn.y, bp.z);
-            gl.glVertex3f(bp.x, bp.y, bn.z);
-            gl.glVertex3f(bp.x, bp.y, bp.z);
-            gl.glVertex3f(bn.x, bp.y, bn.z);
-            gl.glVertex3f(bn.x, bp.y, bp.z);
+            gl.glVertex3f(bn.x, bn.y, bn.z); gl.glVertex3f(bn.x, bn.y, bp.z);
+            gl.glVertex3f(bp.x, bn.y, bn.z); gl.glVertex3f(bp.x, bn.y, bp.z);
+            gl.glVertex3f(bp.x, bp.y, bn.z); gl.glVertex3f(bp.x, bp.y, bp.z);
+            gl.glVertex3f(bn.x, bp.y, bn.z); gl.glVertex3f(bn.x, bp.y, bp.z);
             gl.glEnd();
             gl.glPointSize(5);
             gl.glBegin(GL2.GL_POINTS);
-            gl.glVertex3f(bn.x, bn.y, bn.z);
-            gl.glVertex3f(bn.x, bn.y, bp.z);
-            gl.glVertex3f(bp.x, bn.y, bn.z);
-            gl.glVertex3f(bp.x, bn.y, bp.z);
-            gl.glVertex3f(bp.x, bp.y, bn.z);
-            gl.glVertex3f(bp.x, bp.y, bp.z);
-            gl.glVertex3f(bn.x, bp.y, bn.z);
-            gl.glVertex3f(bn.x, bp.y, bp.z);
+            gl.glVertex3f(bn.x, bn.y, bn.z); gl.glVertex3f(bn.x, bn.y, bp.z);
+            gl.glVertex3f(bp.x, bn.y, bn.z); gl.glVertex3f(bp.x, bn.y, bp.z);
+            gl.glVertex3f(bp.x, bp.y, bn.z); gl.glVertex3f(bp.x, bp.y, bp.z);
+            gl.glVertex3f(bn.x, bp.y, bn.z); gl.glVertex3f(bn.x, bp.y, bp.z);
             gl.glEnd();
         }
 
@@ -368,19 +351,19 @@ public interface Rendered extends Drawn {
             rls.state().put(States.color, null);
             rls.prepo(eyesort);
             rls.prepo(States.presdepth);
-            return (true);
+            return(true);
         }
     }
 
     public static class ScreenQuad implements Rendered {
         private static final Projection proj = new Projection(Matrix4f.id);
-        private static final VertexBuf.VertexArray pos = new VertexBuf.VertexArray(Utils.bufcp(new float[]{
+        private static final VertexBuf.VertexArray pos = new VertexBuf.VertexArray(Utils.bufcp(new float[] {
                 -1, -1, 0,
                 1, -1, 0,
-                1, 1, 0,
-                -1, 1, 0,
+                1,  1, 0,
+                -1,  1, 0,
         }));
-        private static final VertexBuf.TexelArray tex = new VertexBuf.TexelArray(Utils.bufcp(new float[]{
+        private static final VertexBuf.TexelArray tex = new VertexBuf.TexelArray(Utils.bufcp(new float[] {
                 0, 0,
                 1, 0,
                 1, 1,
@@ -408,7 +391,7 @@ public interface Rendered extends Drawn {
 
         public boolean setup(RenderList rls) {
             rls.prepo(state);
-            return (true);
+            return(true);
         }
     }
 }

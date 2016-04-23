@@ -868,6 +868,12 @@ public class OptWnd extends Window {
                 Utils.setprefb("showgobhp", val);
                 Config.showgobhp = val;
                 a = val;
+
+                if (!val) {
+                    GameUI gui = gameui();
+                    if (gui.map != null)
+                        gui.map.removeCustomSprites(Sprite.GOB_HEALTH_ID);
+                }
             }
         }, new Coord(0, y));
         y += 35;

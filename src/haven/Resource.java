@@ -411,7 +411,10 @@ public class Resource implements Serializable {
                     else
                         error = new LoadException(String.format("Load error in resource %s(v%d), from %s", res.name, res.ver, src), t, null);
                     error.src = src;
-                    error.prev = res.error;
+                    if(res.error != null) {
+                        error.prev = res.error;
+                        error.addSuppressed(res.error);
+                    }
                     res.error = error;
                 }
             }

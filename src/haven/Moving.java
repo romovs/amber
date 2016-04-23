@@ -37,4 +37,8 @@ public abstract class Moving extends GAttrib {
     public abstract Coord3f getc();
 
     public abstract double getv();
+
+    public Object staticp() {
+	return(null);
+    }
 }

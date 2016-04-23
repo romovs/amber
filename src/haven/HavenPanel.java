@@ -335,7 +335,7 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
         }
         
         if (Config.dbtext) {
-            int y = h - 150;
+            int y = h - 165;
             FastText.aprintf(g, new Coord(10, y -= 15), 0, 1, "FPS: %d (%d%%, %d%% idle)", fps, (int) (uidle * 100.0), (int) (ridle * 100.0));
             Runtime rt = Runtime.getRuntime();
             long free = rt.freeMemory(), total = rt.totalMemory();
@@ -345,11 +345,11 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
             GameUI gi = ui.root.findchild(GameUI.class);
             if ((gi != null) && (gi.map != null)) {
                 try {
-                    FastText.aprintf(g, new Coord(10, y -= 15), 0, 1, "MV pos: %s (%s)", gi.map.getcc(), gi.map.camera);
+                    FastText.aprintf(g, new Coord(10, y -= 15), 0, 1, "Mapview: %s", gi.map);
                 } catch (Loading e) {
                 }
                 if (gi.map.rls != null)
-                    FastText.aprintf(g, new Coord(10, y -= 15), 0, 1, "Rendered: %,d+%,d(%,d)", gi.map.rls.drawn, gi.map.rls.instanced, gi.map.rls.instancified);
+                    FastText.aprintf(g, new Coord(10, y -= 15), 0, 1, "Rendered: %,d+%,d(%,d), cached %,d/%,d+%,d(%,d)", gi.map.rls.drawn, gi.map.rls.instanced, gi.map.rls.instancified, gi.map.rls.cacheroots, gi.map.rls.cached, gi.map.rls.cacheinst, gi.map.rls.cacheinstn);
             }
             if (Resource.remote().qdepth() > 0)
                 FastText.aprintf(g, new Coord(10, y -= 15), 0, 1, "RQ depth: %d (%d)", Resource.remote().qdepth(), Resource.remote().numloaded());

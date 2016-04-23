@@ -8,6 +8,16 @@ public class WidgetDummy extends Widget {
     }
 
     @Override
+    public void uimsg(String msg, Object... args) {
+        if (msg == "cancel") {
+            ui.destroy(WidgetDummy.this);
+            return;
+        }
+        super.uimsg(msg, args);
+    }
+
+
+    @Override
     public boolean mousedown(Coord c, int button) {
         return false;
     }

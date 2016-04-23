@@ -1,3 +1,16 @@
+Version 1.32.5
+    Fixed:
+        * Fixed crash when auto-mining.
+
+    Misc:
+        * Merge optimization related changes from upstream.
+
+
+Version 1.32.4
+    Misc:
+        * Moved W hotkey to use back-quote key and fixed everything related to auto-drinking.
+
+
 Version 1.32.3
     New:
         * Drink water from any container in the inventory on W key.

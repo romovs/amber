@@ -40,9 +40,25 @@ public class OCache implements Iterable<Gob> {
     private Map<Long, DamageSprite> gobdmgs = new HashMap<Long, DamageSprite>();
     public boolean isfight = false;
     private Pathfinder pf;
+    private final Collection<ChangeCallback> cbs = new WeakList<ChangeCallback>();
+
+    public interface ChangeCallback {
+        public void changed(Gob ob);
+        public void removed(Gob ob);
+    }
 
     public OCache(Glob glob) {
         this.glob = glob;
+    }
+
+    public synchronized void callback(ChangeCallback cb) {
+        cbs.add(cb);
+    }
+
+    void changed(Gob ob) {
+        ob.changed();
+        for(ChangeCallback cb : cbs)
+            cb.changed(ob);
     }
 
     public synchronized void remove(long id, int frame) {
@@ -51,12 +67,18 @@ public class OCache implements Iterable<Gob> {
                 Gob old = objs.remove(id);
                 deleted.put(id, frame);
                 old.dispose();
+                for(ChangeCallback cb : cbs)
+                    cb.removed(old);
             }
         }
     }
 
     public synchronized void remove(long id) {
-        objs.remove(id);
+        Gob old = objs.remove(id);
+        if(old != null) {
+            for(ChangeCallback cb : cbs)
+                cb.removed(old);
+        }
     }
 
     public synchronized void tick() {
@@ -144,12 +166,14 @@ public class OCache implements Iterable<Gob> {
             virtual = true;
             synchronized (OCache.this) {
                 objs.put(id, this);
+                OCache.this.changed(this);
             }
         }
     }
 
     public synchronized void move(Gob g, Coord c, double a) {
         g.move(c, a);
+        changed(g);
     }
 
     public synchronized void cres(Gob g, Indir<Resource> res, Message dat) {
@@ -162,6 +186,7 @@ public class OCache implements Iterable<Gob> {
         } else if ((d == null) || (d.res != res) || !d.sdt.equals(sdt)) {
             g.setattr(new ResDrawable(g, res, sdt));
         }
+        changed(g);
     }
 
     public synchronized void linbeg(Gob g, Coord s, Coord t, int c) {
@@ -169,6 +194,7 @@ public class OCache implements Iterable<Gob> {
         g.setattr(lm);
         if (pf != null && g.isplayer())
             pf.moveCount(c);
+        changed(g);
     }
 
     public synchronized void linstep(Gob g, int l) {
@@ -185,6 +211,7 @@ public class OCache implements Iterable<Gob> {
             if (pf != null && g.isplayer())
                 pf.moveStep(l);
         }
+        changed(g);
     }
 
     public synchronized void speak(Gob g, float zo, String text) {
@@ -199,6 +226,7 @@ public class OCache implements Iterable<Gob> {
                 m.update(text);
             }
         }
+        changed(g);
     }
 
     public synchronized void composite(Gob g, Indir<Resource> base) {
@@ -208,6 +236,7 @@ public class OCache implements Iterable<Gob> {
             cmp = new Composite(g, base);
             g.setattr(cmp);
         }
+        changed(g);
     }
 
     public synchronized void cmppose(Gob g, int pseq, List<ResData> poses, List<ResData> tposes, boolean interp, float ttime) {
@@ -219,16 +248,19 @@ public class OCache implements Iterable<Gob> {
             if (tposes != null)
                 cmp.tposes(tposes, WrapMode.ONCE, ttime);
         }
+        changed(g);
     }
 
     public synchronized void cmpmod(Gob g, List<Composited.MD> mod) {
         Composite cmp = (Composite) g.getattr(Drawable.class);
         cmp.chmod(mod);
+        changed(g);
     }
 
     public synchronized void cmpequ(Gob g, List<Composited.ED> equ) {
         Composite cmp = (Composite) g.getattr(Drawable.class);
         cmp.chequ(equ);
+        changed(g);
     }
 
     public synchronized void avatar(Gob g, List<Indir<Resource>> layers) {
@@ -238,6 +270,7 @@ public class OCache implements Iterable<Gob> {
             g.setattr(ava);
         }
         ava.setlayers(layers);
+        changed(g);
     }
 
     public synchronized void zoff(Gob g, float off) {
@@ -252,10 +285,12 @@ public class OCache implements Iterable<Gob> {
                 dro.off = new Coord3f(0, 0, off);
             }
         }
+        changed(g);
     }
 
     public synchronized void lumin(Gob g, Coord off, int sz, int str) {
         g.setattr(new Lumin(g, off, sz, str));
+        changed(g);
     }
 
     public synchronized void follow(Gob g, long oid, Indir<Resource> xfres, String xfname) {
@@ -276,14 +311,17 @@ public class OCache implements Iterable<Gob> {
                 }
             }
         }
+        changed(g);
     }
 
     public synchronized void homostop(Gob g) {
         g.delattr(Homing.class);
+        changed(g);
     }
 
     public synchronized void homing(Gob g, long oid, Coord tc, int v) {
         g.setattr(new Homing(g, oid, tc, v));
+        changed(g);
     }
 
     public synchronized void homocoord(Gob g, Coord tc, int v) {
@@ -320,6 +358,7 @@ public class OCache implements Iterable<Gob> {
             else
                 g.ols.remove(ol);
         }
+        changed(g);
     }
 
     private void setdmgoverlay(final Gob g, final Indir<Resource> resid, final MessageBuf sdt) {
@@ -361,6 +400,7 @@ public class OCache implements Iterable<Gob> {
 
     public synchronized void health(Gob g, int hp) {
         g.setattr(new GobHealth(g, hp));
+        changed(g);
     }
 
     public synchronized void buddy(Gob g, String name, int group, int type) {
@@ -374,6 +414,7 @@ public class OCache implements Iterable<Gob> {
                 b.update(name, group, type);
             }
         }
+        changed(g);
     }
 
     public synchronized void icon(Gob g, Indir<Resource> res) {
@@ -381,6 +422,7 @@ public class OCache implements Iterable<Gob> {
             g.delattr(GobIcon.class);
         else
             g.setattr(new GobIcon(g, res));
+        changed(g);
     }
 
     public void setPathfinder(Pathfinder pf) {
@@ -392,5 +434,6 @@ public class OCache implements Iterable<Gob> {
             g.setrattr(resid, dat);
         else
             g.delrattr(resid);
+        changed(g);
     }
 }

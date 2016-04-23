@@ -169,4 +169,8 @@ public class Composite extends Drawable {
     public void chequ(List<ED> equ) {
         nequ = equ;
     }
+
+    public Object staticp() {
+	return(null);
+    }
 }

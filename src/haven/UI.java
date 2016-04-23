@@ -169,7 +169,9 @@ public class UI {
             if (type.equals("sm")) {
                 synchronized (fmAutoSelName) {
                     if (fmAutoSelName != null && System.currentTimeMillis() - fmAutoTime < FM_AUTO_TIMEOUT) {
-                        bind(new WidgetDummy(), id);
+                        Widget w = new WidgetDummy();
+                        pwdg.addchild(w, pargs);
+                        bind(w, id);
                         for (int i = 0; i < cargs.length; i++) {
                             if (cargs[i].equals(fmAutoSelName)) {
                                 rcvr.rcvmsg(id, "cl", new Object[]{i, 0});

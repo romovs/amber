@@ -70,6 +70,21 @@ public class Location extends Transform {
             return (null);
         }
 
+        public int hashCode() {
+            int h = System.identityHashCode(loc);
+            if(p != null)
+                h = (h * 31) + p.hashCode();
+            return(h);
+        }
+
+        public boolean equals(Object o) {
+            if(!(o instanceof Chain))
+                return(false);
+            Chain c = (Chain)o;
+            return((c.loc == loc) && Utils.eq(c.p, p));
+        }
+
+
         public String toString() {
             String ret = loc.toString();
             if (p != null)
