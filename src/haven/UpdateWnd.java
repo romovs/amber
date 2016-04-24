@@ -1,6 +1,6 @@
 package haven;
 
-import java.awt.*;
+import java.awt.Desktop;
 import java.awt.event.KeyEvent;
 import java.net.URI;
 

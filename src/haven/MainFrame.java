@@ -26,11 +26,23 @@
 
 package haven;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.util.*;
-import java.lang.reflect.*;
+import java.awt.Dimension;
+import java.awt.DisplayMode;
+import java.awt.EventQueue;
+import java.awt.GraphicsDevice;
+import java.awt.Image;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintStream;
+import java.io.Writer;
+import java.util.Collection;
+import java.util.Map;
+import java.util.TreeMap;
 
 
 @SuppressWarnings("serial")

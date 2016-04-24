@@ -26,8 +26,8 @@
 
 package haven.glsl;
 
-import static haven.glsl.Cons.*;
-import static haven.glsl.Type.*;
+import static haven.glsl.Cons.mul;
+import static haven.glsl.Type.VEC4;
 
 public class GLColorVary implements ShaderMacro {
     public static final AutoVarying color = new AutoVarying(VEC4) {

@@ -26,8 +26,12 @@
 
 package haven;
 
-import java.util.*;
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 
 public class Makewindow extends Widget {
     Widget obtn, cbtn;

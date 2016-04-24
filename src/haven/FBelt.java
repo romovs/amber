@@ -1,8 +1,8 @@
 package haven;
 
-import java.awt.event.KeyEvent;
-
 import static haven.Inventory.invsq;
+
+import java.awt.event.KeyEvent;
 
 public class FBelt extends Widget implements DTarget, DropTarget {
     private final int beltkeys[] = {KeyEvent.VK_F1, KeyEvent.VK_F2, KeyEvent.VK_F3, KeyEvent.VK_F4,

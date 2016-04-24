@@ -26,7 +26,11 @@
 
 package haven.glsl;
 
-import java.util.*;
+import java.util.AbstractCollection;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 public class OrderList<E> extends AbstractCollection<E> {
     private final List<Element> bk = new ArrayList<Element>();

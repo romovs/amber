@@ -26,9 +26,17 @@
 
 package haven;
 
-import java.io.*;
-import java.awt.image.*;
-import javax.media.opengl.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+
+import javax.media.opengl.GL4bc;
+import javax.media.opengl.TraceGL4bc;
 
 public class Debug {
     public static boolean kf1, kf2, kf3, kf4;

@@ -26,7 +26,7 @@
 
 package com.jcraft.jorbis;
 
-import com.jcraft.jogg.*;
+import com.jcraft.jogg.Buffer;
 
 abstract class FuncTime{
   public static FuncTime[] time_P= {new Time0()};

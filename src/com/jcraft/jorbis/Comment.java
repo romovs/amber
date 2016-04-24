@@ -26,7 +26,8 @@
 
 package com.jcraft.jorbis;
 
-import com.jcraft.jogg.*;
+import com.jcraft.jogg.Buffer;
+import com.jcraft.jogg.Packet;
 
 // the comments are not part of vorbis_info so that vorbis_info can be
 // static storage

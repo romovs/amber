@@ -27,11 +27,23 @@
 package haven.resutil;
 
 import java.awt.Color;
-import java.util.*;
+import java.util.Random;
 
-import haven.*;
+import haven.Coord;
+import haven.Coord3f;
+import haven.GLState;
+import haven.Light;
+import haven.MapMesh;
+import haven.Material;
+import haven.MeshBuf;
+import haven.Resource;
 import haven.Resource.Tile;
+import haven.Surface;
 import haven.Surface.MeshVertex;
+import haven.Tex;
+import haven.TexGL;
+import haven.TexSI;
+import haven.Tiler;
 
 public class GroundTile extends Tiler implements Tiler.MCons, Tiler.CTrans {
     private static final Material.Colors gcol = new Material.Colors(new Color(128, 128, 128), new Color(255, 255, 255), new Color(0, 0, 0), new Color(0, 0, 0));

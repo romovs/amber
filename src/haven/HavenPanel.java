@@ -26,19 +26,39 @@
 
 package haven;
 
-import com.jogamp.opengl.util.awt.Screenshot;
-
-import java.awt.GraphicsConfiguration;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.GraphicsConfiguration;
 import java.awt.Toolkit;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
-import java.awt.event.*;
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.*;
-import javax.media.opengl.*;
-import javax.media.opengl.awt.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
+import java.util.TreeMap;
+
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
+import javax.media.opengl.GL3;
+import javax.media.opengl.GLAutoDrawable;
+import javax.media.opengl.GLCapabilities;
+import javax.media.opengl.GLCapabilitiesChooser;
+import javax.media.opengl.GLEventListener;
+import javax.media.opengl.GLProfile;
+import javax.media.opengl.awt.GLCanvas;
+
+import com.jogamp.opengl.util.awt.Screenshot;
 
 @SuppressWarnings({ "deprecation", "serial" })
 public class HavenPanel extends GLCanvas implements Runnable, Console.Directory {

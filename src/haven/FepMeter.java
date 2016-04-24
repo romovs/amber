@@ -1,6 +1,6 @@
 package haven;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class FepMeter extends Widget {
     private static final Tex bg = Resource.loadtex("hud/meter/fepmeter");

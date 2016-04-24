@@ -26,11 +26,13 @@
 
 package haven;
 
-import haven.res.ui.tt.q.qbuff.QBuff;
-
 import java.awt.Color;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+
+import haven.res.ui.tt.q.qbuff.QBuff;
 
 public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owner {
     public Indir<Resource> res;

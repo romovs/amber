@@ -26,13 +26,14 @@
 
 package haven;
 
+import static haven.PUtils.blurmask2;
+import static haven.PUtils.rasterimg;
+
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-
-import static haven.PUtils.*;
 
 public class Window extends Widget implements DTarget {
     public static final Tex bg = Resource.loadtex("gfx/hud/wnd/lg/bg");

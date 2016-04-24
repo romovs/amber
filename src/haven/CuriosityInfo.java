@@ -1,9 +1,9 @@
 package haven;
 
-import org.apache.commons.io.IOUtils;
-
 import java.util.HashMap;
 import java.util.List;
+
+import org.apache.commons.io.IOUtils;
 
 public class CuriosityInfo {
     public static final CuriosityInfo empty = new CuriosityInfo(-1, -1);

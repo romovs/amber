@@ -1,6 +1,6 @@
 package haven;
 
-import java.awt.*;
+import java.awt.Color;
 
 
 public class GobHealthSprite extends Sprite {

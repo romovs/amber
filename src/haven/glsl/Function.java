@@ -26,7 +26,8 @@
 
 package haven.glsl;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 
 public abstract class Function {
     public final Symbol name;

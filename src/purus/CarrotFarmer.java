@@ -12,7 +12,6 @@ import haven.HavenPanel;
 import haven.IMeter;
 import haven.Inventory;
 import haven.UI;
-import haven.WItem;
 import haven.Widget;
 import haven.Window;
 

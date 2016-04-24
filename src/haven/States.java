@@ -26,9 +26,17 @@
 
 package haven;
 
-import haven.glsl.*;
-import javax.media.opengl.*;
 import java.awt.Color;
+
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
+import javax.media.opengl.GL3;
+
+import haven.glsl.BaseColor;
+import haven.glsl.Expression;
+import haven.glsl.Macro1;
+import haven.glsl.ProgramContext;
+import haven.glsl.ShaderMacro;
 
 public abstract class States extends GLState {
     private States() {}

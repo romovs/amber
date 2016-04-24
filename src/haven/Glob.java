@@ -26,8 +26,16 @@
 
 package haven;
 
-import java.awt.*;
-import java.util.*;
+import java.awt.Color;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Observable;
+import java.util.WeakHashMap;
 
 import haven.util.ObservableCollection;
 

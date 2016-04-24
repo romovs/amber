@@ -26,8 +26,10 @@
 
 package haven;
 
-import java.util.*;
-import javax.media.opengl.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.media.opengl.GL2;
 
 public class TestView extends PView {
     static final FastMesh[] tmesh;

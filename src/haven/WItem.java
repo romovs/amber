@@ -26,13 +26,13 @@
 
 package haven;
 
+import static haven.Inventory.sqsz;
+
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.image.BufferedImage;
 import java.net.URL;
-import java.util.*;
-
-import static haven.Inventory.sqsz;
+import java.util.List;
 
 public class WItem extends Widget implements DTarget {
     public static final Resource missing = Resource.local().loadwait("gfx/invobjs/missing");

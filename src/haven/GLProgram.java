@@ -26,8 +26,13 @@
 
 package haven;
 
-import java.util.*;
-import javax.media.opengl.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.IdentityHashMap;
+import java.util.Map;
+import java.util.NoSuchElementException;
+
+import javax.media.opengl.GL2;
 
 @SuppressWarnings("serial")
 public class GLProgram implements java.io.Serializable {

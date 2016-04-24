@@ -26,19 +26,71 @@
 
 package haven.resutil;
 
-import java.util.*;
+import static haven.glsl.Cons.abs;
+import static haven.glsl.Cons.add;
+import static haven.glsl.Cons.clamp;
+import static haven.glsl.Cons.col3;
+import static haven.glsl.Cons.div;
+import static haven.glsl.Cons.fref;
+import static haven.glsl.Cons.idx;
+import static haven.glsl.Cons.l;
+import static haven.glsl.Cons.min;
+import static haven.glsl.Cons.mix;
+import static haven.glsl.Cons.mul;
+import static haven.glsl.Cons.neg;
+import static haven.glsl.Cons.pick;
+import static haven.glsl.Cons.reflect;
+import static haven.glsl.Cons.sub;
+import static haven.glsl.Cons.texture2D;
+import static haven.glsl.Cons.textureCube;
+import static haven.glsl.Cons.vec2;
+import static haven.glsl.Cons.vec3;
+import static haven.glsl.Cons.vec4;
 
-import haven.*;
-import haven.glsl.*;
-
-import static haven.glsl.Cons.*;
-
-import haven.MapMesh.Scan;
-import haven.Surface.Vertex;
-import haven.Surface.MeshVertex;
-
-import javax.media.opengl.*;
 import java.awt.Color;
+import java.util.Random;
+
+import javax.media.opengl.GL;
+
+import haven.BGL;
+import haven.Coord;
+import haven.Coord3f;
+import haven.GLConfig;
+import haven.GLState;
+import haven.GOut;
+import haven.Glob;
+import haven.HavenPanel;
+import haven.Light;
+import haven.MCache;
+import haven.MapMesh;
+import haven.MapMesh.Scan;
+import haven.MapView;
+import haven.MeshBuf;
+import haven.PView;
+import haven.Rendered;
+import haven.Resource;
+import haven.States;
+import haven.Surface;
+import haven.Surface.MeshVertex;
+import haven.Surface.Vertex;
+import haven.TexCube;
+import haven.TexI;
+import haven.Tiler;
+import haven.glsl.Attribute;
+import haven.glsl.AutoVarying;
+import haven.glsl.Cons;
+import haven.glsl.Expression;
+import haven.glsl.Function;
+import haven.glsl.Function.PDir;
+import haven.glsl.Macro1;
+import haven.glsl.MiscLib;
+import haven.glsl.ProgramContext;
+import haven.glsl.Return;
+import haven.glsl.ShaderMacro;
+import haven.glsl.Type;
+import haven.glsl.Uniform;
+import haven.glsl.ValBlock;
+import haven.glsl.VertexContext;
 
 @SuppressWarnings("deprecation")
 public class WaterTile extends Tiler {

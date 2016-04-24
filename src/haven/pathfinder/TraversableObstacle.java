@@ -1,8 +1,8 @@
 package haven.pathfinder;
 
-import haven.Coord;
-
 import java.util.HashMap;
+
+import haven.Coord;
 
 public class TraversableObstacle {
     public Coord wa, wb, wc, wd;

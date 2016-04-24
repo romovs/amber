@@ -26,8 +26,12 @@
 
 package haven;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.Socket;
 import java.security.MessageDigest;
 
 public class AuthClient {

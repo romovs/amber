@@ -26,16 +26,27 @@
 
 package haven;
 
-import java.io.*;
-import java.util.*;
-import java.text.*;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.awt.Font;
 import java.awt.Color;
-import java.awt.font.*;
-
-import static java.text.AttributedCharacterIterator.Attribute;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.font.FontRenderContext;
+import java.awt.font.LineMetrics;
+import java.awt.font.TextAttribute;
+import java.awt.font.TextHitInfo;
+import java.awt.font.TextLayout;
+import java.awt.font.TextMeasurer;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
+import java.text.AttributedCharacterIterator;
+import java.text.AttributedCharacterIterator.Attribute;
+import java.text.AttributedString;
+import java.text.CharacterIterator;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class RichText extends Text {
     public static final Parser std;

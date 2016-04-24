@@ -26,8 +26,16 @@
 
 package haven;
 
-import java.util.*;
-import java.security.*;
+import java.security.AccessControlContext;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
+import java.util.WeakHashMap;
 
 public class Defer extends ThreadGroup {
     private static final Map<ThreadGroup, Defer> groups = new WeakHashMap<ThreadGroup, Defer>();

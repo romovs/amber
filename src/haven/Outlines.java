@@ -26,11 +26,54 @@
 
 package haven;
 
-import java.awt.Color;
-import haven.glsl.*;
+import static haven.glsl.Cons.aadd;
+import static haven.glsl.Cons.abs;
+import static haven.glsl.Cons.add;
+import static haven.glsl.Cons.ass;
+import static haven.glsl.Cons.col3;
+import static haven.glsl.Cons.cross;
+import static haven.glsl.Cons.div;
+import static haven.glsl.Cons.dot;
+import static haven.glsl.Cons.floor;
+import static haven.glsl.Cons.gt;
+import static haven.glsl.Cons.ivec2;
+import static haven.glsl.Cons.l;
+import static haven.glsl.Cons.linc;
+import static haven.glsl.Cons.lt;
+import static haven.glsl.Cons.max;
+import static haven.glsl.Cons.min;
+import static haven.glsl.Cons.mix;
+import static haven.glsl.Cons.mul;
+import static haven.glsl.Cons.neg;
+import static haven.glsl.Cons.pick;
+import static haven.glsl.Cons.smoothstep;
+import static haven.glsl.Cons.stmt;
+import static haven.glsl.Cons.sub;
+import static haven.glsl.Cons.texelFetch;
+import static haven.glsl.Cons.texture2D;
+import static haven.glsl.Cons.vec2;
+import static haven.glsl.Cons.vec4;
+import static haven.glsl.Type.FLOAT;
+import static haven.glsl.Type.INT;
+import static haven.glsl.Type.SAMPLER2D;
+import static haven.glsl.Type.SAMPLER2DMS;
+import static haven.glsl.Type.VEC3;
 
-import static haven.glsl.Cons.*;
-import static haven.glsl.Type.*;
+import java.awt.Color;
+
+import haven.glsl.Expression;
+import haven.glsl.For;
+import haven.glsl.Function;
+import haven.glsl.Function.PDir;
+import haven.glsl.If;
+import haven.glsl.LValue;
+import haven.glsl.Macro1;
+import haven.glsl.MiscLib;
+import haven.glsl.ProgramContext;
+import haven.glsl.Return;
+import haven.glsl.ShaderMacro;
+import haven.glsl.Tex2D;
+import haven.glsl.Uniform;
 
 public class Outlines implements Rendered {
     private boolean symmetric;

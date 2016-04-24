@@ -26,7 +26,6 @@
 
 package haven;
 
-import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class RootWidget extends ConsoleHost {

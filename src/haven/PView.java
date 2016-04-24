@@ -27,9 +27,10 @@
 package haven;
 
 import java.awt.Color;
-import java.util.*;
+import java.util.Map;
 
-import javax.media.opengl.*;
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 
 public abstract class PView extends Widget {
     public RenderList rls;

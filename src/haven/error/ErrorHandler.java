@@ -26,9 +26,13 @@
 
 package haven.error;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Queue;
 
 public class ErrorHandler extends ThreadGroup {
     private static final String[] sysprops = {

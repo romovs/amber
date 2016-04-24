@@ -26,9 +26,9 @@
 
 package haven.glsl;
 
+import haven.GLProgram.VarID;
 import haven.GLState.Slot;
 import haven.GOut;
-import haven.GLProgram.VarID;
 
 public class Uniform extends Variable.Global {
     public Uniform(Type type, Symbol name) {

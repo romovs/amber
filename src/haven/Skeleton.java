@@ -26,8 +26,17 @@
 
 package haven;
 
-import java.util.*;
-import javax.media.opengl.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.media.opengl.GL2;
 
 public class Skeleton {
     public final Map<String, Bone> bones = new HashMap<String, Bone>();

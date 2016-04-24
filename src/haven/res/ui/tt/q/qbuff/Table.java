@@ -1,10 +1,10 @@
 package haven.res.ui.tt.q.qbuff;
 
+import java.util.Iterator;
+
 import haven.CompImage;
 import haven.Coord;
 import haven.Text;
-
-import java.util.Iterator;
 
 public class Table extends QList {
     public Table() {

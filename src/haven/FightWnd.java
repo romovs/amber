@@ -26,14 +26,18 @@
 
 package haven;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.*;
-import java.awt.Color;
-
 import static haven.CharWnd.attrf;
 import static haven.Window.wbox;
+
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class FightWnd extends Widget {
     public final int nsave;

@@ -27,7 +27,9 @@
 package haven;
 
 import java.util.List;
-import javax.media.opengl.*;
+
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 
 public interface Rendered extends Drawn {
     public boolean setup(RenderList r);

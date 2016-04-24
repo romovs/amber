@@ -26,7 +26,7 @@
 
 package com.jcraft.jorbis;
 
-import com.jcraft.jogg.*;
+import com.jcraft.jogg.Buffer;
 
 abstract class FuncMapping{
   public static FuncMapping[] mapping_P= {new Mapping0()};

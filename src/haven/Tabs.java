@@ -26,7 +26,8 @@
 
 package haven;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedList;
 
 public class Tabs {
     public Widget parent;

@@ -37,8 +37,6 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.TreeMap;
 
-import haven.UI.AfterDraw;
-
 public class UI {
     public RootWidget root;
     final private LinkedList<Grab> keygrab = new LinkedList<Grab>(), mousegrab = new LinkedList<Grab>();

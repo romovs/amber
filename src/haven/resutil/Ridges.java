@@ -26,17 +26,29 @@
 
 package haven.resutil;
 
-import java.util.*;
-
-import haven.*;
-import haven.MapMesh.Scan;
-import haven.MapMesh.Model;
-import haven.Surface.Vertex;
-import haven.Tiler.MPart;
-import haven.Surface.MeshVertex;
-
 import static haven.MCache.tilesz;
 import static haven.Utils.clip;
+
+import java.util.Arrays;
+import java.util.Random;
+
+import haven.Coord;
+import haven.Coord3f;
+import haven.GLState;
+import haven.Light;
+import haven.MCache;
+import haven.MapMesh;
+import haven.MapMesh.Model;
+import haven.MapMesh.Scan;
+import haven.Material;
+import haven.MeshBuf;
+import haven.States;
+import haven.Surface;
+import haven.Surface.MeshVertex;
+import haven.Surface.Vertex;
+import haven.Tiler;
+import haven.Tiler.MPart;
+import haven.Utils;
 
 public class Ridges extends MapMesh.Hooks {
     public static final MapMesh.DataID<Ridges> id = MapMesh.makeid(Ridges.class);

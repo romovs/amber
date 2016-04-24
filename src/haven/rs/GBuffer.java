@@ -26,10 +26,30 @@
 
 package haven.rs;
 
-import haven.*;
-
-import javax.media.opengl.*;
 import java.awt.image.BufferedImage;
+
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
+import javax.media.opengl.GLAutoDrawable;
+import javax.media.opengl.GLCapabilities;
+import javax.media.opengl.GLDrawableFactory;
+import javax.media.opengl.GLEventListener;
+import javax.media.opengl.GLProfile;
+
+import haven.BGL;
+import haven.BufferBGL;
+import haven.Callback;
+import haven.Coord;
+import haven.CurrentGL;
+import haven.Drawn;
+import haven.GLConfig;
+import haven.GLFrameBuffer;
+import haven.GLObject;
+import haven.GLSettings;
+import haven.GLState;
+import haven.GOut;
+import haven.HavenPanel;
+import haven.TexE;
 
 public class GBuffer {
     public final Context ctx;

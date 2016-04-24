@@ -26,14 +26,46 @@
 
 package haven;
 
-import java.util.*;
-import javax.media.opengl.*;
+import static haven.glsl.Cons.aadd;
+import static haven.glsl.Cons.add;
+import static haven.glsl.Cons.amul;
+import static haven.glsl.Cons.ass;
+import static haven.glsl.Cons.div;
+import static haven.glsl.Cons.eq;
+import static haven.glsl.Cons.gt;
+import static haven.glsl.Cons.l;
+import static haven.glsl.Cons.lt;
+import static haven.glsl.Cons.mul;
+import static haven.glsl.Cons.pick;
+import static haven.glsl.Cons.stmt;
+import static haven.glsl.Cons.texture2D;
+import static haven.glsl.Cons.vec2;
+import static haven.glsl.Type.FLOAT;
+import static haven.glsl.Type.INT;
+import static haven.glsl.Type.MAT4;
+import static haven.glsl.Type.SAMPLER2D;
+import static haven.glsl.Type.VEC3;
+import static haven.glsl.Type.VEC4;
 
-import haven.glsl.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
+
 import haven.GLProgram.VarID;
-
-import static haven.glsl.Cons.*;
-import static haven.glsl.Type.*;
+import haven.glsl.AutoVarying;
+import haven.glsl.Expression;
+import haven.glsl.For;
+import haven.glsl.Function;
+import haven.glsl.If;
+import haven.glsl.LValue;
+import haven.glsl.Phong;
+import haven.glsl.ProgramContext;
+import haven.glsl.Return;
+import haven.glsl.ShaderMacro;
+import haven.glsl.Uniform;
+import haven.glsl.VertexContext;
 
 public class ShadowMap extends GLState implements GLState.GlobalState, GLState.Global {
     public final static Slot<ShadowMap> smap = new Slot<ShadowMap>(Slot.Type.DRAW, ShadowMap.class, Light.lighting);

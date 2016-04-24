@@ -26,13 +26,33 @@
 
 package haven;
 
-import javax.media.opengl.*;
+import static haven.glsl.Cons.add;
+import static haven.glsl.Cons.amul;
+import static haven.glsl.Cons.ass;
+import static haven.glsl.Cons.eq;
+import static haven.glsl.Cons.mul;
+import static haven.glsl.Cons.pick;
+import static haven.glsl.Cons.smoothstep;
+import static haven.glsl.Cons.stmt;
+import static haven.glsl.Cons.texture2D;
+import static haven.glsl.Type.FLOAT;
+import static haven.glsl.Type.SAMPLER2D;
+import static haven.glsl.Type.VEC2;
+import static haven.glsl.Type.VEC4;
 
-import haven.glsl.*;
+import javax.media.opengl.GL;
+
 import haven.GLProgram.VarID;
-
-import static haven.glsl.Cons.*;
-import static haven.glsl.Type.*;
+import haven.glsl.Block;
+import haven.glsl.Expression;
+import haven.glsl.If;
+import haven.glsl.MiscLib;
+import haven.glsl.Phong;
+import haven.glsl.ProgramContext;
+import haven.glsl.ShaderMacro;
+import haven.glsl.Uniform;
+import haven.glsl.ValBlock;
+import haven.glsl.Variable;
 
 public class CloudShadow extends GLState {
     public static final Slot<CloudShadow> slot = new Slot<CloudShadow>(Slot.Type.DRAW, CloudShadow.class, Light.lighting);

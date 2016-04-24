@@ -26,7 +26,7 @@
 
 package haven;
 
-import java.util.*;
+import java.util.ArrayList;
 
 public abstract class Message {
     public static final int T_END = 0;

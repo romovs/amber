@@ -28,9 +28,9 @@ package haven.glsl;
 
 import java.util.List;
 
-import haven.GOut;
 import haven.GLBuffer;
 import haven.GLState.Buffer;
+import haven.GOut;
 
 public class Attribute extends Variable.Global {
     public Attribute(Type type, Symbol name) {

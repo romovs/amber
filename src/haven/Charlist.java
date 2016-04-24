@@ -27,7 +27,9 @@
 package haven;
 
 import java.awt.event.KeyEvent;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Charlist extends Widget {
     public static final Tex bg = Resource.loadtex("gfx/hud/avakort");

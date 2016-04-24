@@ -1,6 +1,9 @@
 package haven.util;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 public class ObservableCollection<T> implements Iterable<T> {
     private final Collection<T> base;

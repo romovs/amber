@@ -1,10 +1,10 @@
 package haven.res.ui.tt.q.qbuff;
 
-import haven.ItemInfo;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import haven.ItemInfo;
 
 public abstract class QList extends ItemInfo.Tip {
     final List<QBuff> ql = new ArrayList<>();

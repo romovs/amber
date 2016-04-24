@@ -1,7 +1,8 @@
 package haven;
 
+import java.awt.Color;
+
 import javax.media.opengl.GL2;
-import java.awt.*;
 
 public class GobHitbox extends Sprite {
     private final static float center = 0.5f;

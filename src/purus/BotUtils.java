@@ -18,11 +18,9 @@ import haven.ItemInfo;
 import haven.Loading;
 import haven.Moving;
 import haven.Resource;
-import haven.Speedget;
 import haven.UI;
 import haven.WItem;
 import haven.Widget;
-import haven.Window;
 
 public class BotUtils {
 

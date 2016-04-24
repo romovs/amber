@@ -1,6 +1,6 @@
 package haven;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

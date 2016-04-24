@@ -1,8 +1,9 @@
 package haven;
 
-import javax.media.opengl.GL2;
 import java.nio.BufferOverflowException;
 import java.nio.FloatBuffer;
+
+import javax.media.opengl.GL2;
 
 public class TileOutline implements Rendered {
     private final MCache map;

@@ -26,7 +26,9 @@
 
 package haven;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Fightview extends Widget {
     static Tex bg = Resource.loadtex("gfx/hud/bosq");

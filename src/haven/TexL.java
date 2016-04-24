@@ -26,10 +26,13 @@
 
 package haven;
 
-import java.util.*;
-import java.awt.image.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.nio.ByteBuffer;
-import javax.media.opengl.*;
+import java.util.LinkedList;
+
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 
 import haven.Defer.Future;
 

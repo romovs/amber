@@ -26,9 +26,12 @@
 
 package haven;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.*;
+import java.util.ArrayList;
 
 public class Text {
     public static final Font serif = new Font("Serif", Font.PLAIN, 10);

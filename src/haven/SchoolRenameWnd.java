@@ -1,13 +1,13 @@
 package haven;
 
 
-import org.json.JSONObject;
+import static haven.CharWnd.attrf;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import static haven.CharWnd.attrf;
+import org.json.JSONObject;
 
 public class SchoolRenameWnd extends Window {
 

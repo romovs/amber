@@ -26,15 +26,44 @@
 
 package haven.resutil;
 
-import haven.*;
-import haven.glsl.*;
+import static haven.glsl.Cons.add;
+import static haven.glsl.Cons.l;
+import static haven.glsl.Cons.mul;
+import static haven.glsl.Cons.pick;
+import static haven.glsl.Cons.sub;
+import static haven.glsl.Cons.texture2D;
+import static haven.glsl.Type.SAMPLER2D;
+import static haven.glsl.Type.VEC3;
 
-import static haven.glsl.Cons.*;
-import static haven.glsl.Type.*;
-
-import java.util.*;
 import java.nio.FloatBuffer;
-import javax.media.opengl.*;
+import java.util.Collection;
+
+import javax.media.opengl.GL;
+
+import haven.BGL;
+import haven.GLState;
+import haven.GOut;
+import haven.Indir;
+import haven.Material;
+import haven.MeshBuf;
+import haven.Message;
+import haven.MorphedMesh;
+import haven.Resource;
+import haven.TexGL;
+import haven.TexR;
+import haven.Utils;
+import haven.VertexBuf;
+import haven.glsl.Attribute;
+import haven.glsl.AutoVarying;
+import haven.glsl.Expression;
+import haven.glsl.Macro1;
+import haven.glsl.MiscLib;
+import haven.glsl.ProgramContext;
+import haven.glsl.ShaderMacro;
+import haven.glsl.Tex2D;
+import haven.glsl.Uniform;
+import haven.glsl.ValBlock;
+import haven.glsl.VertexContext;
 
 public class BumpMap extends GLState {
     public static final Slot<BumpMap> slot = new Slot<BumpMap>(Slot.Type.DRAW, BumpMap.class);

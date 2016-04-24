@@ -26,7 +26,8 @@
 
 package com.jcraft.jorbis;
 
-import com.jcraft.jogg.*;
+import com.jcraft.jogg.Buffer;
+import com.jcraft.jogg.Packet;
 
 public class Block{
   ///necessary stream state for linking to the framing abstraction

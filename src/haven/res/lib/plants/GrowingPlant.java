@@ -1,14 +1,18 @@
 package haven.res.lib.plants;
 
-import haven.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Random;
+
+import haven.Config;
 import haven.FastMesh.MeshRes;
+import haven.Message;
+import haven.Resource;
+import haven.Sprite;
 import haven.Sprite.Factory;
 import haven.Sprite.Owner;
 import haven.Sprite.ResourceException;
 import haven.resutil.CSprite;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Random;
 
 public class GrowingPlant implements Factory {
     public final int num;

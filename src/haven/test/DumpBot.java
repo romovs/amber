@@ -26,7 +26,7 @@
 
 package haven.test;
 
-import haven.*;
+import haven.Widget;
 
 public class DumpBot extends Robot {
     public DumpBot(TestClient c) {

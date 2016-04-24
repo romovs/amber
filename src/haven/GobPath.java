@@ -1,7 +1,8 @@
 package haven;
 
+import java.awt.Color;
+
 import javax.media.opengl.GL2;
-import java.awt.*;
 
 public class GobPath extends Sprite {
     private static final Color plclr = new Color(233, 185, 110);

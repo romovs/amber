@@ -1,14 +1,14 @@
+import java.awt.image.BufferedImage;
+
+import haven.CharWnd.Constipations;
 import haven.Coord;
 import haven.Indir;
+import haven.ItemInfo.Tip;
 import haven.PUtils;
 import haven.Resource;
+import haven.Resource.Image;
 import haven.RichText;
 import haven.Text;
-import haven.CharWnd.Constipations;
-import haven.ItemInfo.Tip;
-import haven.Resource.Image;
-
-import java.awt.image.BufferedImage;
 
 class SatiateTip extends Tip {
     Satiate satiate;

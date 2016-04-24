@@ -26,20 +26,36 @@
 
 package haven;
 
-import java.io.*;
-import java.nio.charset.Charset;
-import java.util.*;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.KeyEvent;
 import java.awt.font.TextAttribute;
 import java.awt.font.TextHitInfo;
 import java.awt.image.BufferedImage;
-import java.text.*;
-import java.text.AttributedCharacterIterator.Attribute;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.URL;
-import java.util.regex.*;
-import java.awt.datatransfer.*;
+import java.nio.charset.Charset;
+import java.text.AttributedCharacterIterator;
+import java.text.AttributedCharacterIterator.Attribute;
+import java.text.CharacterIterator;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ChatUI extends Widget {
     private static final Resource alarmsfx = Resource.local().loadwait("sfx/chatalarm");

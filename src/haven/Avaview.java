@@ -27,7 +27,8 @@
 package haven;
 
 import java.awt.Color;
-import java.util.*;
+import java.util.List;
+import java.util.Random;
 
 public class Avaview extends PView {
     public static final Tex missing = Resource.loadtex("gfx/hud/equip/missing");

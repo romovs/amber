@@ -26,9 +26,36 @@
 
 package haven.glsl;
 
-import static haven.glsl.Cons.*;
-import static haven.glsl.Function.PDir.*;
-import static haven.glsl.Type.*;
+import static haven.glsl.Cons.aadd;
+import static haven.glsl.Cons.add;
+import static haven.glsl.Cons.ass;
+import static haven.glsl.Cons.div;
+import static haven.glsl.Cons.dot;
+import static haven.glsl.Cons.eq;
+import static haven.glsl.Cons.fref;
+import static haven.glsl.Cons.gt;
+import static haven.glsl.Cons.idx;
+import static haven.glsl.Cons.inv;
+import static haven.glsl.Cons.l;
+import static haven.glsl.Cons.length;
+import static haven.glsl.Cons.linc;
+import static haven.glsl.Cons.lt;
+import static haven.glsl.Cons.max;
+import static haven.glsl.Cons.mul;
+import static haven.glsl.Cons.neg;
+import static haven.glsl.Cons.normalize;
+import static haven.glsl.Cons.pick;
+import static haven.glsl.Cons.pow;
+import static haven.glsl.Cons.reflect;
+import static haven.glsl.Cons.stmt;
+import static haven.glsl.Cons.sub;
+import static haven.glsl.Cons.vec4;
+import static haven.glsl.Function.PDir.IN;
+import static haven.glsl.Function.PDir.INOUT;
+import static haven.glsl.Type.FLOAT;
+import static haven.glsl.Type.INT;
+import static haven.glsl.Type.VEC3;
+import static haven.glsl.Type.VOID;
 
 import haven.glsl.ValBlock.Value;
 

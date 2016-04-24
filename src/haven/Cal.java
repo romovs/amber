@@ -27,8 +27,6 @@
 package haven;
 
 import static java.lang.Math.PI;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 
 public class Cal extends Widget {
     public static final double hbr = 20;

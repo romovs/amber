@@ -1,10 +1,11 @@
 package haven.pathfinder;
 
-import haven.Coord;
+import java.awt.Color;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
-import java.awt.*;
-import java.util.*;
-import java.util.List;
+import haven.Coord;
 
 
 public class Utils {

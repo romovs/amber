@@ -26,9 +26,10 @@
 
 package haven;
 
-import java.util.*;
 import java.awt.Color;
 import java.awt.font.TextAttribute;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Textlog extends Widget {
     static Tex texpap = Resource.loadtex("gfx/hud/texpap");

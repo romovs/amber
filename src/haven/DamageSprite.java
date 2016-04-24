@@ -1,6 +1,6 @@
 package haven;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class DamageSprite extends Sprite implements PView.Render2D {
     public static final int ID = -1000;

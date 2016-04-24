@@ -29,11 +29,19 @@ package haven;
 import static haven.MCache.cmaps;
 import static haven.MCache.tilesz;
 
-import java.security.*;
-import java.util.*;
-import java.net.*;
-import java.io.*;
 import java.awt.image.BufferedImage;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.WeakHashMap;
+
 import javax.imageio.ImageIO;
 
 public class MiniMap extends Widget {

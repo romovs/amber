@@ -26,11 +26,20 @@
 
 package haven;
 
-import javax.media.opengl.*;
-import java.nio.*;
-import java.util.*;
-import java.io.*;
-import java.lang.reflect.*;
+import java.io.PrintStream;
+import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+import java.nio.Buffer;
+import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.media.opengl.GL2;
+import javax.media.opengl.GL3;
 
 public abstract class BGL {
     protected static abstract class Command {

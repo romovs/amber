@@ -26,9 +26,14 @@
 
 package haven;
 
-import java.util.*;
-import java.awt.image.BufferedImage;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class ItemInfo {
     public final Owner owner;

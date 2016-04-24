@@ -26,11 +26,13 @@
 
 package haven;
 
-import haven.glsl.Attribute;
-
 import java.awt.Color;
-import java.util.*;
-import java.nio.*;
+import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+
+import haven.glsl.Attribute;
 
 public class MeshBuf {
     public final Collection<Vertex> v = new ArrayList<Vertex>();

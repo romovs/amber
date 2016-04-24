@@ -1,9 +1,9 @@
 package haven.res.ui.tt.q.qbuff;
 
+import java.awt.image.BufferedImage;
+
 import haven.ItemInfo;
 import haven.Resource;
-
-import java.awt.image.BufferedImage;
 
 
 public class QBuff extends ItemInfo.Tip {

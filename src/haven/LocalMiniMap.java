@@ -28,10 +28,16 @@ package haven;
 
 import static haven.MCache.cmaps;
 import static haven.MCache.tilesz;
-import java.awt.*;
-import java.awt.image.*;
-import java.util.*;
+
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import haven.resutil.Ridges;
 

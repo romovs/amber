@@ -26,7 +26,9 @@
 
 package haven;
 
-import java.net.*;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 
 public class SessWidget extends AWidget {
     private final Defer.Future<Connection> conn;

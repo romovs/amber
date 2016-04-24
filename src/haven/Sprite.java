@@ -26,8 +26,10 @@
 
 package haven;
 
-import java.util.*;
 import java.lang.reflect.Constructor;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 
 public abstract class Sprite implements Rendered {
     public static final int GOB_HEALTH_ID = -1001;

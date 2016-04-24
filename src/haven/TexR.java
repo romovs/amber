@@ -27,11 +27,16 @@
 package haven;
 
 import java.awt.Graphics;
-import java.awt.image.*;
-import java.io.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.Raster;
+import java.awt.image.WritableRaster;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+
 import javax.imageio.ImageIO;
-import javax.media.opengl.*;
-import java.security.*;
+import javax.media.opengl.GL;
 
 @SuppressWarnings("serial")
 @Resource.LayerName("tex")

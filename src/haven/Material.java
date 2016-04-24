@@ -26,13 +26,24 @@
 
 package haven;
 
-import java.awt.Color;
-import java.util.*;
-import java.lang.annotation.*;
-import java.lang.reflect.*;
-import javax.media.opengl.*;
-
 import static haven.Utils.c2fa;
+
+import java.awt.Color;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.lang.reflect.Constructor;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 
 public class Material extends GLState {
     public final GLState[] states;

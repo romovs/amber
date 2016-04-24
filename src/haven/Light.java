@@ -26,13 +26,17 @@
 
 package haven;
 
-import haven.glsl.*;
-
-import java.util.*;
-import java.awt.Color;
-import javax.media.opengl.*;
-
 import static haven.Utils.c2fa;
+
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.media.opengl.GL2;
+
+import haven.glsl.Phong;
+import haven.glsl.ProgramContext;
+import haven.glsl.ShaderMacro;
 
 public class Light implements Rendered {
     public float[] amb, dif, spc;

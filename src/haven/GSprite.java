@@ -26,9 +26,11 @@
 
 package haven;
 
-import java.lang.reflect.Field;
-import java.util.*;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 public abstract class GSprite implements Drawn {
     public final Owner owner;

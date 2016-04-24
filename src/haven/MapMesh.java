@@ -28,12 +28,18 @@ package haven;
 
 import static haven.MCache.tilesz;
 
-import java.util.*;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
-import haven.Surface.Vertex;
 import haven.Surface.MeshVertex;
+import haven.Surface.Vertex;
 
 public class MapMesh implements Rendered, Disposable {
     public final Coord ul, sz;

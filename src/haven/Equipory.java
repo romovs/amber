@@ -26,11 +26,13 @@
 
 package haven;
 
-import java.awt.*;
-import java.util.*;
-import java.util.List;
-
 import static haven.Inventory.invsq;
+
+import java.awt.Color;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class Equipory extends Widget implements DTarget {
     private static final Tex bg = Resource.loadtex("gfx/hud/equip/bg");
