@@ -1,5 +1,9 @@
 ## Changelog
 
+### 2.15.0
+	- Client optimizations
+	- Latest merges from Amber & default client
+	- Minor fixes
 ### 2.14.1
 	- Changed error popup not to completely block client
 	- Fix mussel picker NPE

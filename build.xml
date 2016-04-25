@@ -3,7 +3,7 @@
 <project name="hafen" default="deftgt">
   <property name="name" value="Purus Pasta"/>
 	<!-- MUISTA PÄIVITTÄÄ VERSIO -->
-  <property name="version" value="2.14.1"/>
+  <property name="version" value="2.15.0"/>
 
   <target name="build-env">
     <mkdir dir="build" />
