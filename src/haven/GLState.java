@@ -250,7 +250,7 @@ public abstract class GLState {
                     dest.states[i] = states[i];
             }
             for(int i = states.length; i < dest.states.length; i++) {
-                if(idlist[i].type != type)
+                if(i < idlist.length && idlist[i].type != type) // NOTE: hotfix for IOOB exception
                     dest.states[i] = null;
             }
         }

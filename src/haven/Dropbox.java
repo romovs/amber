@@ -29,7 +29,7 @@ package haven;
 import java.awt.Color;
 
 public abstract class Dropbox<T> extends ListWidget<T> {
-    public static final Tex drop = Resource.loadtex("gfx/hud/drop");
+    public static final Tex drop = Resource.loadtex("gfx/hud/dropdown");
     public final int listh;
     private final Coord dropc;
     private Droplist dl;

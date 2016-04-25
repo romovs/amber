@@ -8,11 +8,10 @@ public class FBelt extends Widget implements DTarget, DropTarget {
     private final int beltkeys[] = {KeyEvent.VK_F1, KeyEvent.VK_F2, KeyEvent.VK_F3, KeyEvent.VK_F4,
             KeyEvent.VK_F5, KeyEvent.VK_F6, KeyEvent.VK_F7, KeyEvent.VK_F8,
             KeyEvent.VK_F9, KeyEvent.VK_F10, KeyEvent.VK_F11, KeyEvent.VK_F12};
-    @SuppressWarnings("unchecked")
-    private Indir<Resource>[] belt = new Indir[12];
+    private Resource[] belt = new Resource[12];
     private UI.Grab dragging;
     private Coord dc;
-    private static final Indir<Resource> waterskin = Resource.remote().load("gfx/invobjs/small/waterskin");
+    private static final Resource waterskin = Resource.remote().loadwait("gfx/invobjs/small/waterskin");
     private static final Coord vsz = new Coord(34, 450);
     private static final Coord hsz = new Coord(450, 34);
     private boolean vertical;
@@ -31,7 +30,7 @@ public class FBelt extends Widget implements DTarget, DropTarget {
                 for (int i = 0; i < 12; i++) {
                     String resname = resnames[i];
                     if (!resname.equals("null"))
-                        belt[i] = Resource.remote().load(resnames[i]);
+                        belt[i] = Resource.remote().loadwait(resnames[i]);
                 }
             }
         }
@@ -42,9 +41,9 @@ public class FBelt extends Widget implements DTarget, DropTarget {
         if (chrid != "") {
             String[] resnames = new String[12];
             for (int i = 0; i < 12; i++) {
-                Indir<Resource> res = belt[i];
+                Resource res = belt[i];
                 if (res != null)
-                    resnames[i] = res.get().name;
+                    resnames[i] = res.name;
             }
             Utils.setprefsa("fbelt_" + chrid, resnames);
         }
@@ -72,7 +71,7 @@ public class FBelt extends Widget implements DTarget, DropTarget {
             g.image(invsq, c);
             try {
                 if (belt[slot] != null)
-                    g.image(belt[slot].get().layer(Resource.imgc).tex(), c.add(1, 1));
+                    g.image(belt[slot].layer(Resource.imgc).tex(), c.add(1, 1));
             } catch (Loading e) {
             } catch (RuntimeException rte) {
                 if (rte.getCause() instanceof Resource.LoadException) { // possibly a resource from another client
@@ -112,7 +111,7 @@ public class FBelt extends Widget implements DTarget, DropTarget {
             if (button == 1) {
                 use(slot);
             } else if (button == 3) {
-                Resource res = belt[slot].get();
+                Resource res = belt[slot];
                 if (res.name.equals("gfx/invobjs/small/waterskin") || res.name.equals("gfx/invobjs/waterflask"))
                     gameui().wdgmsg("setbelt", getServerSlot(slot), 1);
                 belt[slot] = null;
@@ -160,14 +159,13 @@ public class FBelt extends Widget implements DTarget, DropTarget {
     public boolean drop(Coord c, Coord ul) {
         int slot = beltslot(c);
         if (slot != -1) {
-
             WItem item = gameui().vhand;
             if (item != null && item.item != null) {
                 Resource res = item.item.getres();
                 if (res.name.equals("gfx/invobjs/waterskin"))
                     belt[slot] = waterskin;
                 else if (res.name.equals("gfx/invobjs/waterflask"))
-                    belt[slot] = item.item.getres().indir();
+                    belt[slot] = item.item.getres();
                 else
                     return true;
                 gameui().wdgmsg("setbelt", getServerSlot(slot), 0);
@@ -189,7 +187,7 @@ public class FBelt extends Widget implements DTarget, DropTarget {
             if (thing instanceof Resource) {
                 Resource res = (Resource) thing;
                 if (res.layer(Resource.action) != null) {
-                    belt[slot] = res.indir();
+                    belt[slot] = res;
                     save();
                     return true;
                 }
@@ -199,12 +197,7 @@ public class FBelt extends Widget implements DTarget, DropTarget {
     }
 
     private void use(int slot) {
-        Resource res;
-        try {
-            res = belt[slot].get();
-        } catch (Loading l) {
-            return;
-        }
+        Resource res = belt[slot];
         if (res.name.equals("gfx/invobjs/small/waterskin") || res.name.equals("gfx/invobjs/waterflask")) {
             gameui().wdgmsg("belt", getServerSlot(slot), 1, ui.modflags());
         } else {
@@ -220,7 +213,7 @@ public class FBelt extends Widget implements DTarget, DropTarget {
     }
 
     // can't (?) drink without activating the flower menu unless the container is on the default belt
-    // so we store it server-side in the 11th and 12th slots which are not used anyway
+    // so we store it server-side in the 11*n-th and 12*n-th slots which are not used anyway
     private int getServerSlot(int slot) {
         return slot < 6 ? (slot + 1) * 10 : (slot + 1) * 11;
     }

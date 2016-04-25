@@ -39,4 +39,8 @@ public class TreeStageSprite extends Sprite {
         this.val = val;
         tex = treestg[val - 10];
     }
+
+    public Object staticp() {
+        return CONSTANS;
+    }
 }

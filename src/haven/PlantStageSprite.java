@@ -30,6 +30,7 @@ public class PlantStageSprite extends Sprite {
     }
 
     public void draw(GOut g) {
+        // FIXME: shouldn't calculate screen position in here...
         Matrix4f cam = new Matrix4f(), wxf = new Matrix4f(), mv = new Matrix4f();
         mv.load(cam.load(buf.get(PView.cam).fin(Matrix4f.id))).mul1(wxf.load(buf.get(PView.loc).fin(Matrix4f.id)));
         Coord3f s = buf.get(PView.proj).toscreen(mv.mul4(Coord3f.o), buf.get(PView.wnd).sz());
@@ -49,5 +50,9 @@ public class PlantStageSprite extends Sprite {
 			plantTex.put(str, Text.renderstroked(str, stg >= stgmax ? Color.GREEN : Color.RED, Color.BLACK, gobhpf).tex());
 		}
         tex = plantTex.get(str);
+    }
+
+    public Object staticp() {
+        return CONSTANS;
     }
 }

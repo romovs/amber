@@ -874,9 +874,11 @@ public class OptWnd extends Window {
                 Config.showgobhp = val;
                 a = val;
 
-                if (!val) {
-                    GameUI gui = gameui();
-                    if (gui.map != null)
+                GameUI gui = gameui();
+                if (gui != null && gui.map != null) {
+                    if (val)
+                        gui.map.addHealthSprites();
+                    else
                         gui.map.removeCustomSprites(Sprite.GOB_HEALTH_ID);
                 }
             }

@@ -4,16 +4,14 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 public class MinimapWnd extends Widget {
-    private static final Tex bg = Resource.loadtex("gfx/hud/wnd/lg/bg");
+    private static final Tex bg = Window.bg;
+    private static final Tex hm = Resource.loadtex("gfx/hud/wndmap/lg/hm");
+    private static final Tex vm = Resource.loadtex("gfx/hud/wndmap/lg/vm");
     private static final Tex cl = Resource.loadtex("gfx/hud/wndmap/lg/cl");
-    private static final Tex tm = Resource.loadtex("gfx/hud/wnd/lg/tm");
     private static final Tex tr = Resource.loadtex("gfx/hud/wndmap/lg/tr");
-    private static final Tex lm = Resource.loadtex("gfx/hud/wndmap/lg/lm");
-    private static final Tex rm = Resource.loadtex("gfx/hud/wnd/lg/rm");
     private static final Tex bl = Resource.loadtex("gfx/hud/wndmap/lg/bl");
-    private static final Tex bm = Resource.loadtex("gfx/hud/wnd/lg/bm");
     private static final Tex br = Resource.loadtex("gfx/hud/wndmap/lg/br");
-    private static final Coord tlm = new Coord(18, 30), brm = new Coord(13, 22);
+    private static final Coord tlm = new Coord(3, 3), brm = new Coord(4, 4);
     private final Widget mmap;
     private final MapView map;
     private IButton center, viewdist, grid;
@@ -26,15 +24,11 @@ public class MinimapWnd extends Widget {
     private static final BufferedImage[] cbtni = new BufferedImage[]{
             Resource.loadimg("gfx/hud/wndmap/lg/cbtnu"),
             Resource.loadimg("gfx/hud/wndmap/lg/cbtnh")};
-    private final Coord tlo, rbo, mrgn;
     private final IButton cbtn;
-    private Coord wsz, ctl, csz, atl, asz;
+    private Coord wsz, asz;
     private UI.Grab dm = null;
 
     public MinimapWnd(Coord sz, MapView _map) {
-        this.tlo = Coord.z;
-        this.rbo = Coord.z;
-        this.mrgn = Coord.z;
         cbtn = add(new IButton(cbtni[0], cbtni[1]));
         resize(sz);
         setfocustab(true);
@@ -135,38 +129,38 @@ public class MinimapWnd extends Widget {
     private void drawframe(GOut g) {
         Coord mdo, cbr;
 
-        g.image(cl, tlo);
-        mdo = tlo.add(cl.sz().x, 0);
-        cbr = tlo.add(wsz.add(-tr.sz().x, tm.sz().y));
-        for (; mdo.x < cbr.x; mdo.x += tm.sz().x)
-            g.image(tm, mdo, Coord.z, cbr);
-        g.image(tr, tlo.add(wsz.x - tr.sz().x, 0));
+        g.image(cl, Coord.z);
+        mdo = new Coord(cl.sz().x, 0);
+        cbr = wsz.add(-tr.sz().x, hm.sz().y);
+        for (; mdo.x < cbr.x; mdo.x += hm.sz().x)
+            g.image(hm, mdo, Coord.z, cbr);
+        g.image(tr, new Coord(wsz.x - tr.sz().x, 0));
 
-        mdo = tlo.add(0, cl.sz().y);
-        cbr = tlo.add(lm.sz().x, wsz.y - bl.sz().y);
-        for (; mdo.y < cbr.y; mdo.y += lm.sz().y)
-            g.image(lm, mdo, Coord.z, cbr);
+        mdo = new Coord(0, cl.sz().y);
+        cbr = new Coord(vm.sz().x, wsz.y - bl.sz().y);
+        for (; mdo.y < cbr.y; mdo.y += vm.sz().y)
+            g.image(vm, mdo, Coord.z, cbr);
 
-        mdo = tlo.add(wsz.x - rm.sz().x, tr.sz().y);
-        cbr = tlo.add(wsz.x, wsz.y - br.sz().y);
-        for (; mdo.y < cbr.y; mdo.y += rm.sz().y)
-            g.image(rm, mdo, Coord.z, cbr);
+        mdo = new Coord(wsz.x - vm.sz().x, tr.sz().y);
+        cbr = new Coord(wsz.x, wsz.y - br.sz().y);
+        for (; mdo.y < cbr.y; mdo.y += vm.sz().y)
+            g.image(vm, mdo, Coord.z, cbr);
 
-        g.image(bl, tlo.add(0, wsz.y - bl.sz().y));
+        g.image(bl, new Coord(0, wsz.y - bl.sz().y));
 
-        mdo = tlo.add(bl.sz().x, wsz.y - bm.sz().y);
-        cbr = tlo.add(wsz.x - br.sz().x, wsz.y);
-        for (; mdo.x < cbr.x; mdo.x += bm.sz().x)
-            g.image(bm, mdo, Coord.z, cbr);
-        g.image(br, tlo.add(wsz.sub(br.sz())));
+        mdo = new Coord(bl.sz().x, wsz.y - hm.sz().y);
+        cbr = new Coord(wsz.x - br.sz().x, wsz.y);
+        for (; mdo.x < cbr.x; mdo.x += hm.sz().x)
+            g.image(hm, mdo, Coord.z, cbr);
+        g.image(br, new Coord(wsz.sub(br.sz())));
     }
 
     @Override
     public void draw(GOut g) {
         Coord bgc = new Coord();
-        for (bgc.y = ctl.y; bgc.y < ctl.y + csz.y; bgc.y += bg.sz().y) {
-            for (bgc.x = ctl.x; bgc.x < ctl.x + csz.x; bgc.x += bg.sz().x)
-                g.image(bg, bgc, ctl, csz);
+        for (bgc.y = tlm.y; bgc.y < tlm.y + asz.y; bgc.y += bg.sz().y) {
+            for (bgc.x = tlm.x; bgc.x < tlm.x + asz.x; bgc.x += bg.sz().x)
+                g.image(bg, bgc, tlm, asz);
         }
         drawframe(g);
         super.draw(g);
@@ -192,12 +186,9 @@ public class MinimapWnd extends Widget {
     @Override
     public void resize(Coord sz) {
         asz = sz;
-        csz = asz.add(mrgn.mul(2));
-        wsz = csz.add(tlm).add(brm);
-        this.sz = wsz.add(tlo).add(rbo);
-        ctl = tlo.add(tlm);
-        atl = ctl.add(mrgn);
-        cbtn.c = xlate(tlo.add(wsz.x - cbtn.sz.x, 0), false);
+        wsz = asz.add(tlm).add(brm);
+        this.sz = wsz;
+        cbtn.c = xlate(new Coord(wsz.x - cbtn.sz.x, 0), false);
         for (Widget ch = child; ch != null; ch = ch.next)
             ch.presize();
     }
@@ -218,14 +209,14 @@ public class MinimapWnd extends Widget {
     @Override
     public Coord xlate(Coord c, boolean in) {
         if (in)
-            return (c.add(atl));
+            return (c.add(tlm));
         else
-            return (c.sub(atl));
+            return (c.sub(tlm));
     }
 
     @Override
     public boolean mousedown(Coord c, int button) {
-        if (!minimized && c.x > sz.x - 40 && c.y > sz.y - 30) {
+        if (!minimized && c.x > sz.x - 20 && c.y > sz.y - 15) {
             doff = c;
             dm = ui.grabmouse(this);
             resizing = true;
@@ -243,7 +234,7 @@ public class MinimapWnd extends Widget {
             return true;
         }
 
-        if (c.isect(ctl, csz)) {
+        if (c.isect(tlm, asz)) {
             if (button == 1) {
                 dm = ui.grabmouse(this);
                 doff = c;

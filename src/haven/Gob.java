@@ -55,7 +55,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
 	        /* XXX: Remove me once local code is changed to use addol(). */
             if(glob.oc.getgob(id) != null) {
                 // FIXME: extend ols with a method for adding sprites without triggering changed.
-                if (item.id != Sprite.GROWTH_STAGE_ID && item.id != Sprite.GOB_HEALTH_ID && item != animalradius)
+                if (item.id != Sprite.GROWTH_STAGE_ID && item != animalradius)
                     glob.oc.changed(Gob.this);
             }
             return(super.add(item));
@@ -441,18 +441,8 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                 ((Overlay.SetupMod) ol.spr).setupmain(rl);
         }
         final GobHealth hlt = getattr(GobHealth.class);
-        if (hlt != null) {
+        if (hlt != null)
             rl.prepc(hlt.getfx());
-            if (Config.showgobhp && hlt.hp < 4) {
-                Overlay ol = findol(Sprite.GOB_HEALTH_ID);
-                if (ol == null) {
-                    System.out.println("-adding dmg ol");
-                    addol(new Gob.Overlay(Sprite.GOB_HEALTH_ID, new GobHealthSprite(hlt.hp)));
-                } else if (((GobHealthSprite)ol.spr).val != hlt.hp) {
-                    ((GobHealthSprite)ol.spr).update(hlt.hp);
-                }
-            }
-        }
 
         Resource res = null;
         try {

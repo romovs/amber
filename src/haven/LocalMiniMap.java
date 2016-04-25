@@ -42,6 +42,8 @@ import java.util.Map;
 import haven.resutil.Ridges;
 
 public class LocalMiniMap extends Widget {
+    private static final Tex resize = Resource.loadtex("gfx/hud/wndmap/lg/resize");
+    private static final Tex gridblue = Resource.loadtex("gfx/hud/mmap/gridblue");
     private static final Tex gridred = Resource.loadtex("gfx/hud/mmap/gridred");
     public static final Text.Foundry bushf = new Text.Foundry(Text.sansb, 12);
     private static final Text.Foundry partyf = bushf;
@@ -570,6 +572,14 @@ public class LocalMiniMap extends Widget {
                         }
                     }
                 }
+            }
+
+            g.image(resize, new Coord(sz.sub(resize.sz())));
+
+            if (Config.mapshowviewdist) {
+                Gob player = mv.player();
+                if (player != null)
+                    g.image(gridblue, p2c(player.rc).add(delta).sub(44, 44));
             }
 
             try {

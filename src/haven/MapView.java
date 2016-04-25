@@ -1994,6 +1994,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                 camera = makecam(camtypes.get(cam), args);
                 Utils.setpref("defcam", cam);
                 Utils.setprefb("camargs", Utils.serialize(args));
+                refreshGobsAll();
             }
             return true;
         }
@@ -2286,6 +2287,64 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                 Gob.Overlay ol = gob.findol(id);
                 if (ol != null)
                     gob.ols.remove(ol);
+            }
+        }
+    }
+
+    public void addHealthSprites() {
+        OCache oc = glob.oc;
+        synchronized (oc) {
+            for (Gob gob : oc) {
+                final GobHealth hlt = gob.getattr(GobHealth.class);
+                if (hlt != null && hlt.hp < 4) {
+                    Gob.Overlay ol = gob.findol(Sprite.GOB_HEALTH_ID);
+                    if (ol == null)
+                        gob.addol(new Gob.Overlay(Sprite.GOB_HEALTH_ID, new GobHealthSprite(hlt.hp)));
+                    else if (((GobHealthSprite)ol.spr).val != hlt.hp)
+                        ((GobHealthSprite)ol.spr).update(hlt.hp);
+                    oc.changed(gob);
+                }
+            }
+        }
+    }
+
+    public void refreshGobsAll() {
+        OCache oc = glob.oc;
+        synchronized (oc) {
+            for (Gob gob : oc)
+                oc.changed(gob);
+        }
+    }
+
+    public void refreshGobsHidable() {
+        OCache oc = glob.oc;
+        synchronized (oc) {
+            for (Gob gob : oc) {
+                try {
+                    Resource res = gob.getres();
+                    if (res != null && res.name.startsWith("gfx/terobjs/trees")
+                            && !res.name.endsWith("log") && !res.name.endsWith("oldtrunk"))
+                        oc.changed(gob);
+                } catch (Loading l) {
+                }
+
+            }
+        }
+    }
+
+    public void refreshGobsGrowthStages() {
+        OCache oc = glob.oc;
+        synchronized (oc) {
+            for (Gob gob : oc) {
+                try {
+                    Resource res = gob.getres();
+                    if (res != null &&
+                            ((res.name.startsWith("gfx/terobjs/plants") && !res.name.endsWith("trellis")) ||
+                                    res.name.startsWith("gfx/terobjs/trees") || res.name.startsWith("gfx/terobjs/bushes")))
+                        oc.changed(gob);
+                } catch (Loading l) {
+                }
+
             }
         }
     }

@@ -364,8 +364,11 @@ public class RenderList {
             if(list[i].skip || ((c = list[i].statroot) == null))
                 continue;
             if(c.slots.isEmpty()) {
-                if(newcache.get(c) != null)
-                    throw(new RuntimeException(String.format("statroot for %s already in new cache even though empty", c.root)));
+                if(newcache.get(c) != null) {
+                    //throw(new RuntimeException(String.format("statroot for %s already in new cache even though empty", c.root)));
+                    System.err.println(String.format("statroot for %s already in new cache even though empty", c.root));
+                    continue;
+                }
                 newcache.put(c, c);
             }
             c.slots.add(new SavedSlot(list[i]));

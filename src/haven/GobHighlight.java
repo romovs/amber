@@ -41,4 +41,8 @@ public class GobHighlight extends GAttrib {
 
         return new Material.Colors(clr, clr, clr, emi, 128);
     }
+
+    public Object staticp() {
+        return null;
+    }
 }

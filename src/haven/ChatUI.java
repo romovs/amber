@@ -825,10 +825,12 @@ public class ChatUI extends Widget {
                 if (name.equals("Area Chat") && line.startsWith(CMD_PREFIX_HLIGHT)) {
                     try {
                         long gobid = Long.parseLong(line.substring(1));
-                        Gob gob = gameui().map.glob.oc.getgob(gobid);
+                        OCache oc = gameui().map.glob.oc;
+                        Gob gob = oc.getgob(gobid);
                         if (gob != null) {
                             gob.delattr(GobHighlight.class);
                             gob.setattr(new GobHighlight(gob));
+                            oc.changed(gob);
                             return;
                         }
                     } catch (NumberFormatException nfe) {

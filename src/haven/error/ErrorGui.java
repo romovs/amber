@@ -25,7 +25,6 @@
  */
 
 package haven.error;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -45,6 +44,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
+
+import haven.Config;
 
 public abstract class ErrorGui extends JFrame implements ErrorStatus {
     private JPanel details;
@@ -121,7 +122,7 @@ public abstract class ErrorGui extends JFrame implements ErrorStatus {
         final String tr = w.toString();
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                exbox.setText(tr);
+                exbox.setText(Config.version + ":" + Config.gitrev + "\n\n" + tr);
                 pack();
                 exbox.setCaretPosition(0);
                 setVisible(true);
