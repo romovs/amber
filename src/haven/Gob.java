@@ -37,8 +37,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import com.sun.org.apache.bcel.internal.generic.INSTANCEOF;
-
 import haven.resutil.BPRadSprite;
 import purus.CustomHitbox;
 
