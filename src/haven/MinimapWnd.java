@@ -152,7 +152,7 @@ public class MinimapWnd extends Widget {
         cbr = new Coord(wsz.x - br.sz().x, wsz.y);
         for (; mdo.x < cbr.x; mdo.x += hm.sz().x)
             g.image(hm, mdo, Coord.z, cbr);
-        g.image(br, new Coord(wsz.sub(br.sz())));
+        g.image(br, wsz.sub(br.sz()));
     }
 
     @Override

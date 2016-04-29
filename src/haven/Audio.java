@@ -577,6 +577,10 @@ public class Audio {
             }
             if (sz > 2)
                 reslastc.put(res, clip);
+
+            if (Config.sfxwhipvol != 1.0 && "sfx/balders".equals(res.name))
+                return new Audio.VolAdjust(clip.stream(), Config.sfxwhipvol);
+
             return (clip.stream());
         }
     }

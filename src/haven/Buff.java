@@ -78,28 +78,26 @@ public class Buff extends Widget {
 	}
     if (img == null) {
         try {
-            img = res.get().layer(Resource.imgc);
-        } catch (Loading e) {}
-    }
-    if (img != null) {
-        Tex tex = img.tex();
-	    g.image(tex, imgoff);
-	    if(nmeter >= 0)
-		g.aimage(nmeter(), imgoff.add(tex.sz()).sub(1, 1), 1, 1);
-	    if(cmeter >= 0) {
-		double m = cmeter / 100.0;
-		if(cticks >= 0) {
-		    double ot = cticks * 0.06;
-		    double pt = (System.currentTimeMillis() - gettime) / 1000.0;
-		    m *= (ot - pt) / ot;
-		}
-		m = Utils.clip(m, 0.0, 1.0);
-		g.chcolor(255, 255, 255, a / 2);
-		Coord ccc = tex.sz().div(2);
-		g.prect(imgoff.add(ccc), ccc.inv(), tex.sz().sub(ccc), Math.PI * 2 * m);
-		g.chcolor(255, 255, 255, a);
-	    }
-	}
+            Tex img = res.get().layer(Resource.imgc).tex();
+            g.image(img, imgoff);
+            if (nmeter >= 0)
+                g.aimage(nmeter(), imgoff.add(img.sz()).sub(1, 1), 1, 1);
+            if (cmeter >= 0) {
+                double m = cmeter / 100.0;
+                if (cticks >= 0) {
+                    double ot = cticks * 0.06;
+                    double pt = (System.currentTimeMillis() - gettime) / 1000.0;
+                    m *= (ot - pt) / ot;
+                }
+                m = Utils.clip(m, 0.0, 1.0);
+                g.chcolor(255, 255, 255, 170);
+                Coord ccc = img.sz().div(2);
+                g.prect(imgoff.add(ccc), ccc.inv(), img.sz().sub(ccc), Math.PI * 2 * m);
+                g.chcolor(255, 255, 255, a);
+            }
+        } catch (Loading e) {
+        }
+        }
     }
 
     private String shorttip() {

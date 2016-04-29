@@ -574,7 +574,7 @@ public class LocalMiniMap extends Widget {
                 }
             }
 
-            g.image(resize, new Coord(sz.sub(resize.sz())));
+            g.image(resize, sz.sub(resize.sz()));
 
             /*if (Config.mapshowviewdist) {
                 Gob player = mv.player();

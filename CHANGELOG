@@ -1,3 +1,39 @@
+Version 1.33.0
+    New:
+        * Arrow vectors.
+        * Attack cooldown delta.
+
+
+Version 1.32.8
+    Fixed:
+        * change was erroneously called for linstep event.
+        * NPE in OCache.cmppose
+
+
+Version 1.32.7
+    New:
+        * Cart icon.
+        * Volume slider for wagon whip sound.
+
+    Fixed:
+        * Floating hearth fire names when fire animation are disabled.
+
+    Misc:
+        * Merged upstream changes.
+
+
+Version 1.32.6
+    Fixed:
+        * Custom gfx/hud/drop resource conflict with other clients.
+        * Crash in F-belt
+        * Crash on alt+rbm equipory items.
+        * Back-quote/tilde key not working on non English locales on Windows.
+        * Misc. fixes related to optimization merge.
+
+    Misc:
+        * Updated curio list.
+
+
 Version 1.32.5
     Fixed:
         * Fixed crash when auto-mining.

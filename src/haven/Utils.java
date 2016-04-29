@@ -29,6 +29,7 @@ package haven;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.RenderingHints;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
@@ -47,6 +48,7 @@ import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.nio.ByteBuffer;
@@ -1339,6 +1341,17 @@ public class Utils {
         return az2qwmap.containsKey(az) ? az2qwmap.get(az) : az;
     }
 
+    // Windows only
+    public static Long getScancode(final KeyEvent keyEvent) {
+        try {
+            Field field = KeyEvent.class.getDeclaredField("scancode");
+            field.setAccessible(true);
+            return field.getLong(keyEvent);
+        } catch (NoSuchFieldException | SecurityException | IllegalAccessException e) {
+            return null;
+        }
+    }
+    
     public static final Comparator<Object> idcmd = new Comparator<Object>() {
         int eid = 0;
         final Map<Ref, Long> emerg = new HashMap<Ref, Long>();

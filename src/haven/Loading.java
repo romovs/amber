@@ -107,4 +107,12 @@ public class Loading extends RuntimeException {
                 Thread.currentThread().interrupt();
         }
     }
+
+    /*
+     * Shave some CPU cycles by disabling stacktraces. since it's not needed here
+     */
+    @Override
+    public synchronized Throwable fillInStackTrace() {
+        return this;
+    }
 }

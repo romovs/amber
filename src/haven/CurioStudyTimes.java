@@ -72,6 +72,6 @@ public class CurioStudyTimes {
         put("bladderwrack", 8.0);
         put("wishbone", 24.0);
         put("wondrouswoodshaving", 72.0);
-        put("thornythistle", 5.5);
+        put("ivoryfigurine", 9.0);
     }};
 }

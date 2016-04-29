@@ -302,6 +302,14 @@ public abstract class BGL {
         });
     }
 
+    public void glColorMaterial(final int face, final int mode) {
+        add(new Command() {
+            public void run(GL2 gl) {
+                gl.glColorMaterial(face, mode);
+            }
+        });
+    }
+
     public void glColorPointer(final int size, final int type, final int stride, final long pointer) {
         add(new Command() {
             public void run(GL2 gl) {
@@ -653,6 +661,14 @@ public abstract class BGL {
         });
     }
 
+    public void glLineStipple(final int factor, final short pattern) {
+        add(new Command() {
+            public void run(GL2 gl) {
+                gl.glLineStipple(factor, pattern);
+            }
+        });
+    }
+
     public void glLinkProgram(final ID program) {
         add(new Command() {
             public void run(GL2 gl) {
@@ -765,6 +781,22 @@ public abstract class BGL {
         add(new Command() {
             public void run(GL2 gl) {
                 gl.glPolygonOffset(factor, units);
+            }
+        });
+    }
+
+    public void glPopAttrib() {
+        add(new Command() {
+            public void run(GL2 gl) {
+                gl.glPopAttrib();
+            }
+        });
+    }
+
+    public void glPushAttrib(final int mask) {
+        add(new Command() {
+            public void run(GL2 gl) {
+                gl.glPushAttrib(mask);
             }
         });
     }

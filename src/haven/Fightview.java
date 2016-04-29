@@ -45,6 +45,7 @@ public class Fightview extends Widget {
     public Indir<Resource> blk, batk, iatk;
     public double atkcs, atkct;
     public int off, def;
+    public int atkcd;
     private GiveButton curgive;
     private Avaview curava;
     private Button curpurs;
@@ -303,8 +304,9 @@ public class Fightview extends Widget {
             }
             return;
         } else if (msg == "atkc") {
+            atkcd = (Integer) args[0];
             atkcs = System.currentTimeMillis() / 1000.0;
-            atkct = atkcs + (((Integer) args[0]) * 0.06);
+            atkct = atkcs + (atkcd * 0.06);
             return;
         } else if (msg == "blk") {
             blk = n2r((Integer) args[0]);

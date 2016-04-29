@@ -209,6 +209,9 @@ public class Config {
     public static boolean alarmbram =  Utils.getprefb("alarmbram", false);
     public static double alarmbramvol = Utils.getprefd("alarmbramvol", 1.0);
     public static boolean instantflowermenu =  Utils.getprefb("instantflowermenu", false);
+    public static double sfxwhipvol = Utils.getprefd("sfxwhipvol", 1.0);
+    public static boolean showarchvector =  Utils.getprefb("showarchvector", false);
+    public static boolean showcddelta =  Utils.getprefb("showcddelta", false);
     public static boolean pf = false;
     public static String playerposfile;
     public static byte[] authck = null;
@@ -239,11 +242,10 @@ public class Config {
 
     public final static String[] icons = new String[]{"dandelion", "chantrelle", "blueberry", "rat", "chicken", "chick",
             "spindlytaproot", "stingingnettle", "dragonfly", "toad", "bram", "rowboat", "arrow", "boarspear", "frog",
-            "wagon", "wheelbarrow"};
+            "wagon", "wheelbarrow", "cart"};
     public static String[] iconssel = null;
 
-    @SuppressWarnings("serial")
-    public final static Map<String, Tex> additonalicons = new HashMap<String, Tex>(11) {{
+    public final static Map<String, Tex> additonalicons = new HashMap<String, Tex>(12) {{
         put("gfx/terobjs/vehicle/bram", Resource.loadtex("gfx/icons/bram"));
         put("gfx/kritter/toad/toad", Resource.loadtex("gfx/icons/toad"));
         put("gfx/terobjs/vehicle/rowboat", Resource.loadtex("gfx/icons/rowboat"));
@@ -255,6 +257,7 @@ public class Config {
         put("gfx/kritter/frog/frog", Resource.loadtex("gfx/icons/frog"));
         put("gfx/terobjs/vehicle/wagon", Resource.loadtex("gfx/icons/wagon"));
         put("gfx/terobjs/vehicle/wheelbarrow", Resource.loadtex("gfx/icons/wheelbarrow"));
+        put("gfx/terobjs/vehicle/cart", Resource.loadtex("gfx/icons/cart"));
     }};
 
     public final static Set<String> dangerousgobres = new HashSet<String>(Arrays.asList(
