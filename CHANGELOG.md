@@ -1,5 +1,8 @@
 ## Changelog
 
+### 2.15.1
+	- White circles around non party members
+	- Latest amber merges
 ### 2.15.0
 	- Client optimizations
 	- Latest merges from Amber & default client
