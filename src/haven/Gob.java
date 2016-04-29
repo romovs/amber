@@ -69,6 +69,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
     private static final Material.Colors dframeEmpty = new Material.Colors(new Color(0, 255, 0, 255));
     private static final Material.Colors dframeDone = new Material.Colors(new Color(255, 0, 0, 255));
     private static final Gob.Overlay animalradius = new Gob.Overlay(new BPRadSprite(100.0F, -10.0F));
+    private final Map<Gob, Gob.Overlay> playerhighlight = new HashMap<Gob, Gob.Overlay>();
     private static final Set<String> dangerousanimalrad = new HashSet<String>(Arrays.asList(
             "gfx/kritter/bear/bear", "gfx/kritter/boar/boar", "gfx/kritter/lynx/lynx", "gfx/kritter/badger/badger"));
 
@@ -548,7 +549,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
             }
 
             if (Config.showplantgrowstage) {
-            	/*TODO:  kommentoi TOISTAISEKSI
+            	/* kommentoi TOISTAISEKSI
                 try {
                     if (res != null && res.name.startsWith("gfx/terobjs/plants") && !res.name.endsWith("trellis")) {
                     	GAttrib rd = getattr(ResDrawable.class);
@@ -645,6 +646,21 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                     ols.remove(animalradius);
                 }
             }
+            
+           if (res != null && (res.name.contains("body") && !isplayer())) {
+              /* boolean ispartymember = false;
+               synchronized (ui.sess.glob.party.memb) {
+                   ispartymember = ui.sess.glob.party.memb.containsKey(id);
+               }
+               if (!ispartymember && !playerhighlight.containsKey(this)) {
+               */
+            	   Overlay overlay = new Gob.Overlay(new PartyMemberOutline(this, new Color(255, 255, 255, 128), 0.1f));
+                   ols.add(overlay);
+                   playerhighlight.put(this, overlay);
+              // } else if (playerhighlight.containsKey(this) && ispartymember)
+            	//   playerhighlight.remove(this);
+        	   
+           }
         }
         Speaking sp = getattr(Speaking.class);
         if (sp != null)

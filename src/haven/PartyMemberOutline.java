@@ -10,12 +10,14 @@ public class PartyMemberOutline extends Sprite {
     private final GLState mat;
     private final VertexBuf.VertexArray posa;
     private final VertexBuf.NormalArray nrma;
-    private final ShortBuffer eidx;
+    private final ShortBuffer eidx; 
+    private final Float height;
     private Coord lc;
 
 
-    protected PartyMemberOutline(Owner owner, Color color) {
+    protected PartyMemberOutline(Owner owner, Color color, Float height) {
         super(owner, null);
+        this.height = height;
         float rad = 50 / 10.0F;
         int i = Math.max(24, (int)(Math.PI * 2 * rad / 11.0D));
         FloatBuffer posa = Utils.mkfbuf(i * 3);
@@ -31,8 +33,7 @@ public class PartyMemberOutline extends Sprite {
         this.posa = new VertexBuf.VertexArray(posa);
         this.nrma = new VertexBuf.NormalArray(nrma);
         this.eidx = eidx;
-        // Don't use kin color, might change in future ?
-        this.mat = new States.ColState(new Color(0, 255, 0, 125));
+        this.mat = new States.ColState(color);
     }
 
     @Override
@@ -75,7 +76,7 @@ public class PartyMemberOutline extends Sprite {
             float z = glob.map.getcz(c.x, c.y);
             for (int j = 0; j < this.posa.size(); j++) {
                 float tz = glob.map.getcz(c.x + posa.get(j * 3), c.y - posa.get(j * 3 + 1)) - z;
-                posa.put(j * 3 + 2, tz + 0.1f);
+                posa.put(j * 3 + 2, tz + height);
             }
         }
         catch (Loading e) {}

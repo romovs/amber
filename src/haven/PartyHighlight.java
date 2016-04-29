@@ -28,7 +28,7 @@ public class PartyHighlight {
                 if (gob == null)
                     continue;
                 if (Config.highlightParty) {
-                    highlight(gob, (m.gobid == playerId) ? PLAYER_OL_COLOR : MEMBER_OL_COLOR);
+                    highlight(gob, MEMBER_OL_COLOR);
                 } else
                     unhighlight(gob);
                 old.remove(gob);
@@ -37,11 +37,12 @@ public class PartyHighlight {
         for (Gob gob : old)
             unhighlight(gob);
     }
+    
 
     private void highlight(Gob gob, Color color) {
         if (overlays.containsKey(gob))
             return;
-        Gob.Overlay overlay = new Gob.Overlay(new PartyMemberOutline(gob, color));
+        Gob.Overlay overlay = new Gob.Overlay(new PartyMemberOutline(gob, color, 0.2f));
         gob.ols.add(overlay);
         overlays.put(gob, overlay);
     }
