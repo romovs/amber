@@ -655,9 +655,11 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                }
                if (!ispartymember && !playerhighlight.containsKey(this)) {
                */
+        	   		if(!playerhighlight.containsKey(this)) {
             	   Overlay overlay = new Gob.Overlay(new PartyMemberOutline(this, new Color(255, 255, 255, 128), 0.1f));
                    ols.add(overlay);
                    playerhighlight.put(this, overlay);
+        	   		}
               // } else if (playerhighlight.containsKey(this) && ispartymember)
             	//   playerhighlight.remove(this);
         	   
