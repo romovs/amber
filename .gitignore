@@ -6,4 +6,6 @@
 *.iml
 *.zip
 amber-*.zip
+/bin/
+CHANGELOG
 /l10n/*_new.properties

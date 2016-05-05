@@ -10,20 +10,22 @@ public class PartyMemberOutline extends Sprite {
     private final GLState mat;
     private final VertexBuf.VertexArray posa;
     private final VertexBuf.NormalArray nrma;
-    private final ShortBuffer eidx;
+    private final ShortBuffer eidx; 
+    private final Float height;
     private Coord lc;
 
 
-    protected PartyMemberOutline(Owner owner, Color color) {
+    protected PartyMemberOutline(Owner owner, Color color, Float height) {
         super(owner, null);
+        this.height = height;
         float rad = 50 / 10.0F;
-        int i = Math.max(24, (int) (Math.PI * 2 * rad / 11.0D));
+        int i = Math.max(24, (int)(Math.PI * 2 * rad / 11.0D));
         FloatBuffer posa = Utils.mkfbuf(i * 3);
         FloatBuffer nrma = Utils.mkfbuf(i * 3);
         ShortBuffer eidx = Utils.mksbuf(i);
         for (int j = 0; j < i; j++) {
-            float sin = (float) Math.sin(Math.PI * 2 * j / i);
-            float cos = (float) Math.cos(Math.PI * 2 * j / i);
+            float sin = (float)Math.sin(Math.PI * 2 * j / i);
+            float cos = (float)Math.cos(Math.PI * 2 * j / i);
             posa.put(j * 3, cos * rad).put(j * 3 + 1, sin * rad).put(j * 3 + 2, 0.1f);
             nrma.put(j * 3, cos).put(j * 3 + 1, sin).put(j * 3 + 2, 0.0F);
             eidx.put(j, (short) j);
@@ -58,23 +60,25 @@ public class PartyMemberOutline extends Sprite {
 
     @Override
     public boolean tick(int dt) {
-        Coord c = ((Gob) this.owner).rc;
-        if ((this.lc == null) || (!this.lc.equals(c))) {
+        Coord c = ((Gob)this.owner).rc;
+        if ((this.lc == null) || (!this.lc.equals(c)))
+        {
             setz(this.owner.glob(), c);
             this.lc = c;
         }
         return false;
     }
 
-    private void setz(Glob glob, Coord c) {
+    private void setz(Glob glob, Coord c)
+    {
         FloatBuffer posa = this.posa.data;
         try {
             float z = glob.map.getcz(c.x, c.y);
             for (int j = 0; j < this.posa.size(); j++) {
                 float tz = glob.map.getcz(c.x + posa.get(j * 3), c.y - posa.get(j * 3 + 1)) - z;
-                posa.put(j * 3 + 2, tz + 0.1f);
+                posa.put(j * 3 + 2, tz + height);
             }
-        } catch (Loading e) {
         }
+        catch (Loading e) {}
     }
 }

@@ -26,10 +26,13 @@
 
 package haven;
 
-import java.awt.*;
-import java.util.*;
-
 import static haven.Inventory.invsq;
+
+import java.awt.Color;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class Equipory extends Widget implements DTarget {
     private static final Tex bg = Resource.loadtex("gfx/hud/equip/bg");
@@ -70,6 +73,7 @@ public class Equipory extends Widget implements DTarget {
 
     Map<GItem, WItem[]> wmap = new HashMap<GItem, WItem[]>();
     public WItem[] quickslots = new WItem[ecoords.length];
+    private List<GItem> checkForDrop = new LinkedList<GItem>();
 
     @RName("epry")
     public static class $_ implements Factory {
@@ -108,6 +112,22 @@ public class Equipory extends Widget implements DTarget {
         }, new Coord(34, 0));
         ava.color = null;
     }
+    
+    @Override
+    public void tick(double dt) throws InterruptedException {
+	super.tick(dt);
+	try {
+	    if (!checkForDrop.isEmpty()) {
+		GItem g = checkForDrop.get(0);
+		if (g.resname().equals("gfx/invobjs/leech")) {
+			 g.drop = true; 
+			//ui.gui.map.wdgmsg("drop", Coord.z);
+		}
+		checkForDrop.remove(0);
+	    }
+	} catch (Resource.Loading ignore) {
+	}
+    }
 
     public void addchild(Widget child, Object... args) {
         if (child instanceof GItem) {
@@ -119,6 +139,9 @@ public class Equipory extends Widget implements DTarget {
                 v[i] = quickslots[ep] = add(new WItem(g), ecoords[ep].add(1, 1));
             }
             wmap.put(g, v);
+	    if(Config.dropleeches){
+		checkForDrop.add(g);
+	    }
 
             if (armorclass != null) {
                 armorclass.dispose();
@@ -167,7 +190,7 @@ public class Equipory extends Widget implements DTarget {
         super.draw(g);
 
         if (armorclass == null) {
-            int h = 0, s = 0;
+            int h = 0, s = 0, t = 0;
             try {
                 for (int i = 0; i < quickslots.length; i++) {
                     WItem itm = quickslots[i];
@@ -177,6 +200,7 @@ public class Equipory extends Widget implements DTarget {
                                 try {
                                     h += (int) info.getClass().getDeclaredField("hard").get(info);
                                     s += (int) info.getClass().getDeclaredField("soft").get(info);
+                                    t = h + s;
                                 } catch (Exception ex) { // ignore everything
                                 }
                             }
@@ -184,7 +208,7 @@ public class Equipory extends Widget implements DTarget {
                         }
                     }
                 }
-                armorclass = Text.render(Resource.getLocString(Resource.l10nLabel, "Armor Class: ") + h + "/" + s, Color.BLACK, acf).tex();
+                armorclass = Text.render(Resource.getLocString(Resource.l10nLabel, "Armor Class: ") + h + "/" + s + " (" + t + ")", Color.BLACK, acf).tex();
             } catch (Exception e) { // fail silently
             }
         }

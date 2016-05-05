@@ -26,10 +26,17 @@
 
 package haven;
 
+import java.nio.ShortBuffer;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
+
 import haven.glsl.ShaderMacro.Program;
-import java.util.*;
-import java.nio.*;
-import javax.media.opengl.*;
 
 public class FastMesh implements FRendered, Rendered.Instanced, Disposable {
     public static final GLState.Slot<GLState> vstate = new GLState.Slot<GLState>(GLState.Slot.Type.SYS, GLState.class);
@@ -338,6 +345,8 @@ public class FastMesh implements FRendered, Rendered.Instanced, Disposable {
                     case DLIST:
                         compiler = new DLCompiler();
                         break;
+				default:
+					break;
                 }
                 curmode = gc.pref.meshmode.val;
             }
@@ -482,7 +491,8 @@ public class FastMesh implements FRendered, Rendered.Instanced, Disposable {
         }
     }
 
-    @Resource.LayerName("mesh")
+    @SuppressWarnings("serial")
+	@Resource.LayerName("mesh")
     public static class MeshRes extends Resource.Layer implements Resource.IDLayer<Integer> {
         public transient FastMesh m;
         public transient Material.Res mat;

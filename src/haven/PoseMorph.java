@@ -26,11 +26,14 @@
 
 package haven;
 
-import java.util.*;
-import java.nio.*;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
-import haven.MorphedMesh.Morpher;
 import haven.MorphedMesh.MorphedBuf;
+import haven.MorphedMesh.Morpher;
 import haven.Skeleton.Pose;
 
 public class PoseMorph implements Morpher.Factory {

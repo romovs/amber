@@ -26,10 +26,15 @@
 
 package haven;
 
-import java.util.*;
-import javax.media.opengl.*;
-
 import static haven.GOut.checkerr;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+
+import javax.media.opengl.GL2;
 
 public abstract class GLObject {
     private static final Map<CurrentGL, Collection<GLObject>> disposed = new HashMap<CurrentGL, Collection<GLObject>>();

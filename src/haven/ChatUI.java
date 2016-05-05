@@ -26,20 +26,36 @@
 
 package haven;
 
-import java.io.*;
-import java.nio.charset.Charset;
-import java.util.*;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.KeyEvent;
 import java.awt.font.TextAttribute;
 import java.awt.font.TextHitInfo;
 import java.awt.image.BufferedImage;
-import java.text.*;
-import java.text.AttributedCharacterIterator.Attribute;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.URL;
-import java.util.regex.*;
-import java.awt.datatransfer.*;
+import java.nio.charset.Charset;
+import java.text.AttributedCharacterIterator;
+import java.text.AttributedCharacterIterator.Attribute;
+import java.text.CharacterIterator;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ChatUI extends Widget {
     private static final Resource alarmsfx = Resource.local().loadwait("sfx/chatalarm");
@@ -99,12 +115,14 @@ public class ChatUI extends Widget {
         resize(this.sz);
     }
 
-    public static class ChatAttribute extends Attribute {
+    @SuppressWarnings("serial")
+	public static class ChatAttribute extends Attribute {
         private ChatAttribute(String name) {
             super(name);
         }
 
         public static final Attribute HYPERLINK = new ChatAttribute("hyperlink");
+        public static final Attribute HEARTH_SECRET = new ChatAttribute("hearth-secret");
     }
 
     public static class FuckMeGentlyWithAChainsaw {
@@ -124,6 +142,7 @@ public class ChatUI extends Widget {
         public static final Pattern urlpat = Pattern.compile("\\b((https?://)|(www\\.[a-z0-9_.-]+\\.[a-z0-9_.-]+))[a-z0-9/_.~#%+?&:*=-]*", Pattern.CASE_INSENSITIVE);
         public static final Map<? extends Attribute, ?> urlstyle = RichText.fillattrs(TextAttribute.FOREGROUND, new Color(64, 64, 255),
                 TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+        private static final Pattern hspat = Pattern.compile("\\bhs: ?([^ ]+)", Pattern.CASE_INSENSITIVE);
 
         public ChatParser(Object... args) {
             super(args);
@@ -133,35 +152,46 @@ public class ChatUI extends Widget {
             RichText.Part ret = null;
             int p = 0;
             while (true) {
-                Matcher m = urlpat.matcher(text);
-                if (!m.find(p))
-                    break;
-                URL url;
-                try {
-                    String su = text.substring(m.start(), m.end());
-                    if (su.indexOf(':') < 0)
-                        su = "http://" + su;
-                    url = new URL(su);
-                } catch (java.net.MalformedURLException e) {
-                    p = m.end();
-                    continue;
+            	Map<Attribute, Object> na = null;
+
+                Matcher m = hspat.matcher(text);
+                if (m.find(p)) {
+                    String hs = m.group(1);
+                    na = new HashMap<Attribute, Object>(attrs);
+                    na.putAll(urlstyle);
+                    na.put(ChatAttribute.HEARTH_SECRET, hs);
+                } else {
+                    m = urlpat.matcher(text);
+                    if (m.find(p)) {
+                        URL url;
+                        try {
+                            String su = text.substring(m.start(), m.end());
+                            if(su.indexOf(':') < 0)
+                                su = "http://" + su;
+                            url = new URL(su);
+                        } catch(java.net.MalformedURLException e) {
+                            p = m.end();
+                            continue;
+                        }
+                        na = new HashMap<Attribute, Object>(attrs);
+                        na.putAll(urlstyle);
+                        na.put(ChatAttribute.HYPERLINK, new FuckMeGentlyWithAChainsaw(url));
+                    }
                 }
-                RichText.Part lead = new RichText.TextPart(text.substring(0, m.start()), attrs);
-                if (ret == null) ret = lead;
-                else ret.append(lead);
-                Map<Attribute, Object> na = new HashMap<Attribute, Object>(attrs);
-                na.putAll(urlstyle);
-                na.put(ChatAttribute.HYPERLINK, new FuckMeGentlyWithAChainsaw(url));
-                ret.append(new RichText.TextPart(text.substring(m.start(), m.end()), na));
-                p = m.end();
+                if (na == null)
+                    break;
+        		RichText.Part lead = new RichText.TextPart(text.substring(p, m.start()), attrs);
+        		if(ret == null) ret = lead; else ret.append(lead);
+        		ret.append(new RichText.TextPart(text.substring(m.start(), m.end()), na));
+        		p = m.end();
+        	    }
+        	    if(ret == null)
+        		ret = new RichText.TextPart(text, attrs);
+        	    else
+        		ret.append(new RichText.TextPart(text.substring(p), attrs));
+        	    return(ret);
+        	}
             }
-            if (ret == null)
-                ret = new RichText.TextPart(text, attrs);
-            else
-                ret.append(new RichText.TextPart(text.substring(p), attrs));
-            return (ret);
-        }
-    }
 
     public static abstract class Channel extends Widget {
         public final List<Message> msgs = new LinkedList<Message>();
@@ -334,7 +364,7 @@ public class ChatUI extends Widget {
                     }
                     throw (new IllegalStateException("CharPos message is no longer contained in the log"));
                 } else if (a.part != b.part) {
-                    for (RichText.Part part = ((RichText) a.msg.text()).parts; part != null; part = part.next) {
+                    for (RichText.Part part = ((RichText) a.msg.text()).parts; part != null;) {
                         if (part == a.part)
                             return (-1);
                         else
@@ -526,6 +556,11 @@ public class ChatUI extends Widget {
                 } catch (WebBrowser.BrowserException e) {
                     getparent(GameUI.class).error("Could not launch web browser.");
                 }
+            }
+            String hs = (String)inf.getAttribute(ChatAttribute.HEARTH_SECRET);
+            if (hs != null && ui.gui != null && ui.gui.buddies != null) {
+                ui.gui.buddies.show();
+                ui.gui.buddies.wdgmsg("bypwd", hs);
             }
         }
 
@@ -1132,13 +1167,11 @@ public class ChatUI extends Widget {
     }
 
     private class Notification {
-        public final Channel chan;
         public final Text chnm;
         public final Channel.Message msg;
         public final long time = System.currentTimeMillis();
 
         private Notification(Channel chan, Channel.Message msg) {
-            this.chan = chan;
             this.msg = msg;
             this.chnm = chansel.nf[0].render(chan.name());
         }

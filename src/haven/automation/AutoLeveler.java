@@ -1,10 +1,32 @@
 package haven.automation;
 
-import haven.*;
-
 import java.awt.event.KeyEvent;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import haven.Button;
+import haven.CharWnd;
+import haven.Coord;
+import haven.Frame;
+import haven.GOut;
+import haven.GameUI;
+import haven.Glob;
+import haven.Gob;
+import haven.IMeter;
+import haven.ISBox;
+import haven.Label;
+import haven.Loading;
+import haven.OCache;
+import haven.Resource;
+import haven.RichTextBox;
+import haven.Text;
+import haven.WItem;
+import haven.Widget;
+import haven.Window;
 
 
 public class AutoLeveler extends Window implements GobSelectCallback, ErrorSysMsgCallback {

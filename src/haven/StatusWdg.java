@@ -1,10 +1,21 @@
 package haven;
 
-import javax.net.ssl.*;
-import java.awt.*;
-import java.io.*;
-import java.net.*;
-import java.security.*;
+import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.MalformedURLException;
+import java.net.SocketException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.util.ArrayList;
@@ -13,11 +24,18 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManagerFactory;
+
 public class StatusWdg extends Widget {
 
     public static String username;
     public static String pass;
 
+    public static boolean AlreadyExecuted = false;
+    
     private static ThreadGroup tg = new ThreadGroup("StatusUpdaterThreadGroup");
     private static final String statusupdaterthreadname = "StatusUpdater";
 
@@ -235,9 +253,9 @@ public class StatusWdg extends Widget {
                         if (Thread.interrupted())
                             return;
 
-                        /*updateaccountstatus();
+                        updateaccountstatus();
                         if (Thread.interrupted())
-                            return;*/
+                            return;
                     }
                     try {
                         Thread.sleep(5000);
@@ -306,10 +324,10 @@ public class StatusWdg extends Widget {
     @Override
     public void draw(GOut g) {
         synchronized (StatusWdg.class) {
-            java.util.List<Tex> texturesToDisplay = new ArrayList<>(2);
+            java.util.List<Tex> texturesToDisplay = new ArrayList<>(3);
             texturesToDisplay.add(this.hearthlingsplaying);
             texturesToDisplay.add(this.pingtime);
-            //texturesToDisplay.add(this.accountstatus);
+            texturesToDisplay.add(this.accountstatus);
 
             int requiredwidth = 0;
             int requiredheight = 0;

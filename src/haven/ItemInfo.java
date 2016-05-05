@@ -26,9 +26,14 @@
 
 package haven;
 
-import java.util.*;
-import java.awt.image.BufferedImage;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class ItemInfo {
     public final Owner owner;
@@ -58,7 +63,8 @@ public abstract class ItemInfo {
 
     public static class Layout {
         private final List<Tip> tips = new ArrayList<Tip>();
-        private final Map<ID, Tip> itab = new HashMap<ID, Tip>();
+        @SuppressWarnings("rawtypes")
+		private final Map<ID, Tip> itab = new HashMap<ID, Tip>();
         public final CompImage cmp = new CompImage();
 
         public interface ID<T extends Tip> {
@@ -325,7 +331,7 @@ public abstract class ItemInfo {
                 } else if (a[0] instanceof Resource) {
                     ttres = (Resource) a[0];
                 } else if (a[0] instanceof Indir) {
-                    ttres = (Resource) ((Indir) a[0]).get();
+                    ttres = (Resource) ((Indir<?>) a[0]).get();
                 } else {
                     throw (new ClassCastException("Unexpected info specification " + a[0].getClass()));
                 }
@@ -340,23 +346,5 @@ public abstract class ItemInfo {
             }
         }
         return (ret);
-    }
-
-    private static String dump(Object arg) {
-        if (arg instanceof Object[]) {
-            StringBuilder buf = new StringBuilder();
-            buf.append("[");
-            boolean f = true;
-            for (Object a : (Object[]) arg) {
-                if (!f)
-                    buf.append(", ");
-                buf.append(dump(a));
-                f = false;
-            }
-            buf.append("]");
-            return (buf.toString());
-        } else {
-            return (arg.toString());
-        }
     }
 }

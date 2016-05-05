@@ -1,6 +1,6 @@
 package haven;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class GobHighlight extends GAttrib {
     private float[] emi = {1.0f, 0.0f, 1.0f, 0.0f};

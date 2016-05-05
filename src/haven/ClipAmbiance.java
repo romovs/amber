@@ -26,8 +26,8 @@
 
 package haven;
 
-import java.util.*;
-import haven.Audio.CS;
+import java.util.List;
+
 import haven.Audio.VolAdjust;
 
 public class ClipAmbiance implements Rendered, Rendered.Instanced {
@@ -263,7 +263,8 @@ public class ClipAmbiance implements Rendered, Rendered.Instanced {
         return(true);
     }
 
-    @Resource.LayerName("clamb")
+    @SuppressWarnings("serial")
+	@Resource.LayerName("clamb")
     public static class Desc extends Resource.Layer {
         public final Indir<Resource> parent;
         public final int minc, maxc, maxi;

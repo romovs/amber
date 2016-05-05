@@ -26,8 +26,11 @@
 
 package haven;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.NoSuchElementException;
 
+@SuppressWarnings("serial")
 public class PrioQueue<E extends Prioritized> extends LinkedList<E> {
     public E peek() {
         E rv = null;

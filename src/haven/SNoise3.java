@@ -26,9 +26,11 @@
 
 package haven;
 
-import java.util.*;
+import static java.lang.Math.floor;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
-import static java.lang.Math.*;
+import java.util.Random;
 
 public class SNoise3 {
     private final byte[] ptab = new byte[256];

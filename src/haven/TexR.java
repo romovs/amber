@@ -26,29 +26,30 @@
 
 package haven;
 
-import java.util.*;
 import java.awt.Graphics;
-import java.awt.image.*;
-import java.io.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.Raster;
+import java.awt.image.WritableRaster;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+
 import javax.imageio.ImageIO;
-import java.awt.color.ColorSpace;
-import java.nio.ByteBuffer;
-import javax.media.opengl.*;
-import java.security.*;
+import javax.media.opengl.GL;
 
-import haven.Defer.Future;
-
+@SuppressWarnings("serial")
 @Resource.LayerName("tex")
 public class TexR extends Resource.Layer implements Resource.IDLayer<Integer> {
     transient private byte[] img, mask;
     transient private final TexL tex;
-    private final Coord off, sz;
+    private final Coord sz;
     public final int id;
 
     public TexR(Resource res, Message buf) {
         res.super();
         this.id = buf.int16();
-        this.off = new Coord(buf.uint16(), buf.uint16());
+        new Coord(buf.uint16(), buf.uint16());
         this.sz = new Coord(buf.uint16(), buf.uint16());
         this.tex = new Real();
         int minfilter = -1, magfilter = -1;

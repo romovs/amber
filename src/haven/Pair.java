@@ -42,7 +42,7 @@ public class Pair<A, B> {
     public boolean equals(Object O) {
         if (!(O instanceof Pair))
             return (false);
-        Pair o = (Pair<?, ?>) O;
+        Pair<?, ?> o = (Pair<?, ?>) O;
         return (a.equals(o.a) && b.equals(o.b));
     }
 }

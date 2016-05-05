@@ -27,7 +27,8 @@
 package haven;
 
 import java.awt.Color;
-import javax.media.opengl.*;
+
+import javax.media.opengl.GL2;
 
 public class DirLight extends Light {
     public float[] dir;

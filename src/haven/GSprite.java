@@ -26,9 +26,11 @@
 
 package haven;
 
-import java.lang.reflect.Field;
-import java.util.*;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 public abstract class GSprite implements Drawn {
     public final Owner owner;
@@ -102,7 +104,7 @@ public abstract class GSprite implements Drawn {
     }
 
     public String getname() {
-        Class cl = this.getClass();
+        Class<? extends GSprite> cl = this.getClass();
         try {
             Field name = cl.getDeclaredField("name");
             return (String)name.get(this);

@@ -26,7 +26,9 @@
 
 package haven;
 
-import java.net.*;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 
 public class SessWidget extends AWidget {
     private final Defer.Future<Connection> conn;
@@ -84,7 +86,7 @@ public class SessWidget extends AWidget {
         });
     }
 
-    public void tick(double dt) {
+    public void tick(double dt) throws InterruptedException {
         super.tick(dt);
         if (!rep && conn.done()) {
             wdgmsg("res", conn.get().error);

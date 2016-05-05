@@ -26,8 +26,6 @@
 
 package haven;
 
-import javax.media.opengl.*;
-
 public class PointedCam extends Camera {
     Coord3f base = Coord3f.o;
     float dist = 5.0f, e, a;

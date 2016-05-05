@@ -57,6 +57,8 @@ public class Varying extends Variable.Global {
                     out.write("centroid ");
                     break;
                 }
+			default:
+				break;
             }
             out.write("varying ");
             super.output(out);

@@ -26,8 +26,9 @@
 
 package haven;
 
-import java.util.*;
-import java.lang.ref.*;
+import java.lang.ref.ReferenceQueue;
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
 
 public class IDSet<T> {
     private final HashMap<WRef<T>, WRef<T>> bk = new HashMap<WRef<T>, WRef<T>>();

@@ -26,8 +26,11 @@
 
 package haven;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
+@SuppressWarnings("serial")
 public class WeightList<T> implements java.io.Serializable {
     List<T> c;
     List<Integer> w;

@@ -1,0 +1,17 @@
+#ABUTTON LAYER FOR RES dout//timer.res
+#String pr
+paginae/amber/amber
+#uint16 pver
+1
+#String name
+Study Window
+#String preq
+
+#uint16 hk
+83
+#uint16 ad length
+2
+#String ad[0]
+@
+#String ad[1]
+study

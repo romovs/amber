@@ -1,0 +1,17 @@
+#ABUTTON LAYER FOR RES dout//fill-smelter.res
+#String pr
+paginae/amber/amber
+#uint16 pver
+1
+#String name
+Farm Carrots
+#String preq
+
+#uint16 hk
+67
+#uint16 ad length
+2
+#String ad[0]
+@
+#String ad[1]
+carrotfarmer

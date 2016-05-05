@@ -1,13 +1,13 @@
 package haven;
 
-import java.awt.*;
+import java.awt.Color;
 
 
 public class GobHealthSprite extends Sprite {
     private static final Text.Foundry gobhpf = new Text.Foundry(Text.sansb, 12).aa(true);
-    private static final Tex hlt0 = Text.renderstroked("25%", new Color(255, 227, 168), Color.BLACK, gobhpf).tex();
-    private static final Tex hlt1 = Text.renderstroked("50%", new Color(255, 227, 168), Color.BLACK, gobhpf).tex();
-    private static final Tex hlt2 = Text.renderstroked("75%", new Color(255, 227, 168), Color.BLACK, gobhpf).tex();
+    private static final Tex hlt0 = Text.renderstroked("25%", new Color(255, 225, 225), Color.BLACK, gobhpf).tex();
+    private static final Tex hlt1 = Text.renderstroked("50%", new Color(255, 225, 225), Color.BLACK, gobhpf).tex();
+    private static final Tex hlt2 = Text.renderstroked("75%", new Color(255, 225, 225), Color.BLACK, gobhpf).tex();
     public int val;
     private Tex tex;
 

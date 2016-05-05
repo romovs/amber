@@ -26,15 +26,18 @@
 
 package haven;
 
-import java.util.*;
-import java.lang.reflect.*;
-import javax.media.opengl.*;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /*
  * XXX: Hmmpf. This whole thing seems very overly complex, but I
  * really want to avoid duplicating the validation checks in every
  * place that changes a value.
  */
+@SuppressWarnings("serial")
 public class GLSettings implements java.io.Serializable {
     public final GLConfig cfg;
     public boolean dirty = false;
@@ -71,7 +74,7 @@ public class GLSettings implements java.io.Serializable {
         }
     }
 
-    public abstract class BoolSetting extends Setting<Boolean> {
+	public abstract class BoolSetting extends Setting<Boolean> {
         public BoolSetting(String nm) {
             super(nm);
         }
@@ -87,7 +90,7 @@ public class GLSettings implements java.io.Serializable {
         }
     }
 
-    public abstract class EnumSetting<E extends Enum<E>> extends Setting<E> {
+	public abstract class EnumSetting<E extends Enum<E>> extends Setting<E> {
         private final Class<E> real;
 
         public EnumSetting(String nm, Class<E> real) {
@@ -135,7 +138,7 @@ public class GLSettings implements java.io.Serializable {
         MEM, DLIST, VAO;
     }
 
-    public final EnumSetting<MeshMode> meshmode = new EnumSetting<MeshMode>("meshmode", MeshMode.class) {
+	public final EnumSetting<MeshMode> meshmode = new EnumSetting<MeshMode>("meshmode", MeshMode.class) {
         public MeshMode defval() {
             if (cfg.exts.contains("GL_ARB_vertex_array_object"))
                 return (MeshMode.VAO);
@@ -148,11 +151,13 @@ public class GLSettings implements java.io.Serializable {
                     if (!cfg.exts.contains("GL_ARB_vertex_array_object"))
                         throw (new SettingException("VAOs are not supported."));
                     break;
+			default:
+				break;
             }
         }
     };
 
-    public final BoolSetting instancing = new BoolSetting("instance") {
+	public final BoolSetting instancing = new BoolSetting("instance") {
 	    public Boolean defval() {return(cfg.exts.contains("GL_ARB_instanced_arrays"));}
 	    public void validate(Boolean val) {
 		if(!cfg.exts.contains("GL_ARB_instanced_arrays"))
@@ -160,7 +165,7 @@ public class GLSettings implements java.io.Serializable {
 	    }
 	};
 
-    public final BoolSetting fsaa = new BoolSetting("fsaa") {
+	public final BoolSetting fsaa = new BoolSetting("fsaa") {
         public Boolean defval() {
             return (false);
         }
@@ -170,7 +175,7 @@ public class GLSettings implements java.io.Serializable {
                 throw (new SettingException("FSAA is not supported."));
         }
     };
-    public final BoolSetting alphacov = new BoolSetting("alphacov") {
+	public final BoolSetting alphacov = new BoolSetting("alphacov") {
         public Boolean defval() {
             return (false);
         }
@@ -182,7 +187,7 @@ public class GLSettings implements java.io.Serializable {
         }
     };
 
-    public final BoolSetting flight = new BoolSetting("flight") {
+	public final BoolSetting flight = new BoolSetting("flight") {
         public Boolean defval() {
             return (true);
         }
@@ -191,7 +196,7 @@ public class GLSettings implements java.io.Serializable {
         }
     };
 
-    public final BoolSetting cel = new BoolSetting("cel") {
+	public final BoolSetting cel = new BoolSetting("cel") {
         public Boolean defval() {
             return (false);
         }
@@ -203,7 +208,7 @@ public class GLSettings implements java.io.Serializable {
         }
     };
 
-    public final BoolSetting lshadow = new BoolSetting("sdw") {
+	public final BoolSetting lshadow = new BoolSetting("sdw") {
         public Boolean defval() {
             return (true);
         }
@@ -216,7 +221,7 @@ public class GLSettings implements java.io.Serializable {
             }
         }
     };
-    public final BoolSetting outline = new BoolSetting("outl") {
+	public final BoolSetting outline = new BoolSetting("outl") {
         public Boolean defval() {
             return (true);
         }
@@ -229,7 +234,7 @@ public class GLSettings implements java.io.Serializable {
         }
     };
 
-    public final BoolSetting wsurf = new BoolSetting("wsurf") {
+	public final BoolSetting wsurf = new BoolSetting("wsurf") {
         public Boolean defval() {
             return (cfg.glmajver >= 3);
         }
@@ -238,7 +243,7 @@ public class GLSettings implements java.io.Serializable {
         }
     };
 
-    public final FloatSetting anisotex = new FloatSetting("aniso") {
+	public final FloatSetting anisotex = new FloatSetting("aniso") {
         public Float defval() {
             return (0f);
         }
@@ -300,7 +305,7 @@ public class GLSettings implements java.io.Serializable {
 
     public static GLSettings load(Object data, GLConfig cfg, boolean failsafe) {
         GLSettings gs = defconf(cfg);
-        Map<?, ?> dat = (Map) data;
+        Map<?, ?> dat = (Map<?, ?>) data;
         for (Setting<?> s : gs.settings) {
             if (dat.containsKey(s.nm)) {
                 try {

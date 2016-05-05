@@ -26,10 +26,20 @@
 
 package haven;
 
-import java.net.*;
-import java.util.*;
-import java.io.*;
-import java.lang.ref.*;
+import java.io.IOException;
+import java.lang.ref.Reference;
+import java.lang.ref.WeakReference;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.SocketAddress;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class Session {
     public static final int PVER = 5;
@@ -102,7 +112,8 @@ public class Session {
         }
     }
 
-    public static class LoadingIndir extends Loading {
+    @SuppressWarnings("serial")
+	public static class LoadingIndir extends Loading {
         public final int resid;
         private transient final CachedRes res;
 
@@ -464,11 +475,11 @@ public class Session {
                             }
                         } else if (type == OD_ICON) {
                             int resid = msg.uint16();
-                            Indir<Resource> res;
                             if (resid == 65535) {
                                 if (gob != null)
                                     oc.icon(gob, null);
                             } else {
+                            	@SuppressWarnings("unused")
                                 int ifl = msg.uint8();
                                 if (gob != null)
                                     oc.icon(gob, getres(resid));
@@ -529,8 +540,10 @@ public class Session {
                 glob.party.msg(msg);
             } else if (msg.type == RMessage.RMSG_SFX) {
                 Indir<Resource> res = getres(msg.uint16());
-                double vol = ((double) msg.uint16()) / 256.0;
-                double spd = ((double) msg.uint16()) / 256.0;
+                @SuppressWarnings("unused")
+				double vol = ((double) msg.uint16()) / 256.0;
+                @SuppressWarnings("unused")
+				double spd = ((double) msg.uint16()) / 256.0;
                 Audio.play(res);
             } else if (msg.type == RMessage.RMSG_CATTR) {
                 glob.cattr(msg);

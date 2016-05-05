@@ -44,37 +44,39 @@ public class Buff extends Widget {
     Tex ntext = null;
     int a = 255;
     boolean dest = false;
+    private Resource.Image img;
 
     @RName("buff")
     public static class $_ implements Factory {
-        public Widget create(Widget parent, Object[] args) {
-            Indir<Resource> res = parent.ui.sess.getres((Integer) args[0]);
-            return (new Buff(res));
-        }
+	public Widget create(Widget parent, Object[] args) {
+	    Indir<Resource> res = parent.ui.sess.getres((Integer)args[0]);
+	    return(new Buff(res));
+	}
     }
 
     public Buff(Indir<Resource> res) {
-        super(cframe.sz());
-        this.res = res;
+	super(cframe.sz());
+	this.res = res;
     }
 
     private Tex nmeter() {
-        if (ntext == null)
-            ntext = new TexI(Utils.outline2(nfnd.render(Integer.toString(nmeter), Color.WHITE).img, Color.BLACK));
-        return (ntext);
+	if(ntext == null)
+	    ntext = new TexI(Utils.outline2(nfnd.render(Integer.toString(nmeter), Color.WHITE).img, Color.BLACK));
+	return(ntext);
     }
 
     public void draw(GOut g) {
-        g.chcolor(255, 255, 255, a);
-        if (ameter >= 0) {
-            g.image(cframe, Coord.z);
-            g.chcolor(0, 0, 0, a);
-            g.frect(ameteroff, ametersz);
-            g.chcolor(255, 255, 255, a);
-            g.frect(ameteroff, new Coord((ameter * ametersz.x) / 100, ametersz.y));
-        } else {
-            g.image(frame, Coord.z);
-        }
+	g.chcolor(255, 255, 255, a);
+	if(ameter >= 0) {
+	    g.image(cframe, Coord.z);
+	    g.chcolor(0, 0, 0, a);
+	    g.frect(ameteroff, ametersz);
+	    g.chcolor(255, 255, 255, a);
+	    g.frect(ameteroff, new Coord((ameter * ametersz.x) / 100, ametersz.y));
+	} else {
+	    g.image(frame, Coord.z);
+	}
+    if (img == null) {
         try {
             Tex img = res.get().layer(Resource.imgc).tex();
             g.image(img, imgoff);
@@ -95,93 +97,98 @@ public class Buff extends Widget {
             }
         } catch (Loading e) {
         }
+        }
     }
 
     private String shorttip() {
-        if (tt != null)
-            return (tt);
-        String ret = res.get().layer(Resource.tooltip).t;
-        if (ameter >= 0)
-            ret = ret + " (" + ameter + "%)";
-        return (ret);
+	if(tt != null)
+	    return(tt);
+	String ret = res.get().layer(Resource.tooltip).t;
+	if(ameter >= 0)
+	    ret = ret + " (" + ameter + "%)";
+	return(ret);
     }
 
     private long hoverstart;
     private Text shorttip, longtip;
-
     public Object tooltip(Coord c, Widget prev) {
-        long now = System.currentTimeMillis();
-        if (prev != this)
-            hoverstart = now;
-        try {
-            if (now - hoverstart < 1000) {
-                if (shorttip == null)
-                    shorttip = Text.render(shorttip());
-                return (shorttip.tex());
-            } else {
-                if (longtip == null) {
-                    String text = RichText.Parser.quote(shorttip());
-                    Resource.Pagina pag = res.get().layer(Resource.pagina);
-                    if (pag != null)
-                        text += "\n\n" + pag.text;
-                    longtip = RichText.render(text, 200);
-                }
-                return (longtip.tex());
-            }
-        } catch (Loading e) {
-            return ("...");
-        }
+	long now = System.currentTimeMillis();
+	if(prev != this)
+	    hoverstart = now;
+	try {
+	    if(now - hoverstart < 1000) {
+		if(shorttip == null)
+		    shorttip = Text.render(shorttip());
+		return(shorttip.tex());
+	    } else {
+		if(longtip == null) {
+		    String text = RichText.Parser.quote(shorttip());
+		    Resource.Pagina pag = res.get().layer(Resource.pagina);
+		    if(pag != null)
+			text += "\n\n" + pag.text;
+		    longtip = RichText.render(text, 200);
+		}
+		return(longtip.tex());
+	    }
+	} catch(Loading e) {
+	    return("...");
+	}
     }
 
     public void reqdestroy() {
-        anims.clear();
-        final Coord o = this.c;
-        dest = true;
-        new NormAnim(0.5) {
-            public void ntick(double a) {
-                Buff.this.a = 255 - (int) (255 * a);
-                Buff.this.c = o.add(0, (int) (a * cframe.sz().y));
-                if (a == 1.0)
-                    destroy();
-            }
-        };
+	anims.clear();
+	final Coord o = this.c;
+	dest = true;
+	new NormAnim(0.5) {
+	    public void ntick(double a) {
+		Buff.this.a = 255 - (int)(255 * a);
+		Buff.this.c = o.add(0, (int)(a * cframe.sz().y));
+		if(a == 1.0)
+		    destroy();
+	    }
+	};
     }
 
     public void move(Coord c) {
-        if (dest)
-            return;
-        final Coord o = this.c;
-        final Coord d = c.sub(o);
-        new NormAnim(0.5) {
-            public void ntick(double a) {
-                Buff.this.c = o.add(d.mul(Utils.smoothstep(a)));
-            }
-        };
+	if(dest)
+	    return;
+	final Coord o = this.c;
+	final Coord d = c.sub(o);
+	new NormAnim(0.5) {
+	    public void ntick(double a) {
+		Buff.this.c = o.add(d.mul(Utils.smoothstep(a)));
+	    }
+	};
     }
 
     public void uimsg(String msg, Object... args) {
-        if (msg == "ch") {
-            this.res = ui.sess.getres((Integer) args[0]);
-        } else if (msg == "tip") {
-            String tt = (String) args[0];
-            this.tt = tt.equals("") ? null : tt;
-            shorttip = longtip = null;
-        } else if (msg == "am") {
-            this.ameter = (Integer) args[0];
-            shorttip = longtip = null;
-        } else if (msg == "nm") {
-            this.nmeter = (Integer) args[0];
-        } else if (msg == "cm") {
-            this.cmeter = (Integer) args[0];
-            this.cticks = (args.length > 1) ? ((Integer) args[1]) : -1;
-            gettime = System.currentTimeMillis();
-        } else {
-            super.uimsg(msg, args);
-        }
+	if(msg == "ch") {
+	    this.res = ui.sess.getres((Integer)args[0]);
+        this.img = null;
+	} else if(msg == "tip") {
+	    String tt = (String)args[0];
+	    this.tt = tt.equals("")?null:tt;
+	    shorttip = longtip = null;
+	} else if(msg == "am") {
+	    this.ameter = (Integer)args[0];
+	    shorttip = longtip = null;
+	} else if(msg == "nm") {
+	    this.nmeter = (Integer)args[0];
+	} else if(msg == "cm") {
+	    this.cmeter = (Integer)args[0];
+	    this.cticks = (args.length > 1)?((Integer)args[1]):-1;
+	    gettime = System.currentTimeMillis();
+	} else {
+	    super.uimsg(msg, args);
+	}
     }
 
     public boolean mousedown(Coord c, int btn) {
-        wdgmsg("cl", c.sub(imgoff), btn, ui.modflags());
-        return (true);
+	wdgmsg("cl", c.sub(imgoff), btn, ui.modflags());
+	return(true);
+    }
+
+    public Resource.Image getImage() {
+        return img;
     }
 }

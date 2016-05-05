@@ -1,11 +1,19 @@
 package haven.pathfinder;
 
 
-import haven.*;
-
-import java.awt.*;
-import java.util.*;
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+
+import haven.Coord;
+import haven.Gob;
+import haven.GobHitbox;
+import haven.MCache;
+import haven.Pair;
+import haven.Resource;
 
 public class Map {
     public final static byte CELL_FREE = 0;

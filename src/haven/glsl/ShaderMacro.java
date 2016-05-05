@@ -26,18 +26,26 @@
 
 package haven.glsl;
 
-import haven.*;
+import java.io.StringWriter;
+import java.util.Collection;
+import java.util.IdentityHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-import java.util.*;
-import java.io.*;
-
-import haven.GLShader.VertexShader;
+import haven.GLBuffer;
+import haven.GLProgram;
+import haven.GLShader;
 import haven.GLShader.FragmentShader;
+import haven.GLShader.VertexShader;
+import haven.GLState;
+import haven.GOut;
 
 public interface ShaderMacro {
     public void modify(ProgramContext prog);
 
-    public static class Program extends GLProgram {
+    @SuppressWarnings("serial")
+	public static class Program extends GLProgram {
         public static boolean dumpall = false;
         public transient final ProgramContext built;
         private final transient int[][] automask;
@@ -74,12 +82,12 @@ public interface ShaderMacro {
             {
                 int max = -1;
                 for (Uniform.AutoApply auto : this.auto) {
-                    for (GLState.Slot slot : auto.deps)
+                    for (@SuppressWarnings("rawtypes") GLState.Slot slot : auto.deps)
                         max = Math.max(max, slot.id);
                 }
                 LinkedList<Integer>[] buf = (LinkedList<Integer>[]) new LinkedList[max + 1];
                 for (int i = 0; i < auto.length; i++) {
-                    for (GLState.Slot slot : auto[i].deps) {
+                    for (@SuppressWarnings("rawtypes") GLState.Slot slot : auto[i].deps) {
                         if (buf[slot.id] == null)
                             buf[slot.id] = new LinkedList<Integer>();
                         buf[slot.id].add(i);
@@ -108,7 +116,7 @@ public interface ShaderMacro {
             this.curinst = new GLBuffer[this.autoinst.length];
         }
 
-        public void adirty(GLState.Slot slot) {
+        public void adirty(@SuppressWarnings("rawtypes") GLState.Slot slot) {
             if (slot.id < automask.length) {
                 for (int i : automask[slot.id])
                     adirty[i] = true;

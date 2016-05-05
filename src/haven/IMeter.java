@@ -27,16 +27,21 @@
 package haven;
 
 import java.awt.Color;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+
+
 
 public class IMeter extends Widget {
     private static final Resource ponysfx = Resource.local().loadwait("sfx/alarmpony");
+    private static final Resource stomachsfx = Resource.local().loadwait("sfx/alarmHungry");
     static Coord off = new Coord(22, 7);
     static Coord fsz = new Coord(101, 24);
     static Coord msz = new Coord(75, 10);
     Indir<Resource> bg;
     List<Meter> meters;
     private boolean ponyalarm = true;
+    private boolean hungeralarm = true;
 
     @RName("im")
     public static class $_ implements Factory {
@@ -90,6 +95,25 @@ public class IMeter extends Widget {
                 meters.add(new Meter((Color) args[i], (Integer) args[i + 1]));
             this.meters = meters;
 
+            // Hunger alarm
+            try {
+                Resource res = bg.get();
+                if (res != null && res.name.equals("gfx/hud/meter/nrj")) {
+                    if (meters.get(0).a <= 20) {
+                    	if(hungeralarm) {
+                        Audio.play(stomachsfx, 1.0);
+                        Window updwnd = new HungerWnd();
+                        HavenPanel.lui.root.add(updwnd);
+                        updwnd.show();
+                        updwnd.raise();
+                        hungeralarm = false;
+                    	}
+                    } else
+                    	hungeralarm = true;
+                }
+            } catch (Loading e) {
+            }
+            
             if (Config.ponyalarm && ponyalarm) {
                 try {
                     Resource res = bg.get();

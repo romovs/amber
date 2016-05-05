@@ -26,7 +26,7 @@
 
 package haven;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class Speaking extends GAttrib {
     float zo;
@@ -48,12 +48,13 @@ public class Speaking extends GAttrib {
         this.text = Text.render(text, Color.BLACK);
     }
 
-    public void draw(GOut g, Coord c) {
+    @SuppressWarnings("deprecation")
+	public void draw(GOut g, Coord c) {
         Coord sz = text.sz();
         if (sz.x < 10)
             sz.x = 10;
-        Coord tl = c.add(new Coord(sx, sb.bsz().y + sz.y + svans.sz().y - 1).inv());
-        Coord ftl = tl.add(sb.tloff());
+		Coord tl = c.add(new Coord(sx, sb.bsz().y + sz.y + svans.sz().y - 1).inv());
+		Coord ftl = tl.add(sb.tloff());
         g.chcolor(Color.WHITE);
         g.frect(ftl, sz);
         sb.draw(g, tl, sz.add(sb.bsz()));

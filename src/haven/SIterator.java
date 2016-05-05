@@ -26,7 +26,8 @@
 
 package haven;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public abstract class SIterator<T> implements Iterator<T> {
     private int st = 0;

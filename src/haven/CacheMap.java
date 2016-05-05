@@ -26,8 +26,17 @@
 
 package haven;
 
-import java.lang.ref.*;
-import java.util.*;
+import java.lang.ref.Reference;
+import java.lang.ref.ReferenceQueue;
+import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
+import java.util.AbstractMap;
+import java.util.AbstractSet;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
 public class CacheMap<K, V> extends AbstractMap<K, V> {
     private final Map<K, Reference<V>> back;
@@ -187,7 +196,7 @@ public class CacheMap<K, V> extends AbstractMap<K, V> {
     private void clean() {
         Reference<? extends V> ref;
         while ((ref = cleanq.poll()) != null) {
-            Ref rr = (Ref) ref;
+            Ref<?> rr = (Ref<?>) ref;
             remove(rr.key());
         }
     }

@@ -27,7 +27,7 @@
 package haven;
 
 import java.awt.Desktop;
-import java.net.*;
+import java.net.URL;
 
 public class DesktopBrowser extends WebBrowser {
     private final Desktop desktop;

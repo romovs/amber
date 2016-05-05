@@ -1,13 +1,21 @@
 package haven.resutil;
 
-import haven.*;
-import haven.States.ColState;
-import haven.VertexBuf.NormalArray;
-import haven.VertexBuf.VertexArray;
-
-import java.awt.*;
+import java.awt.Color;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
+
+import haven.GLState;
+import haven.GOut;
+import haven.Location;
+import haven.Material;
+import haven.RenderList;
+import haven.Rendered;
+import haven.Sprite;
+import haven.States;
+import haven.States.ColState;
+import haven.Utils;
+import haven.VertexBuf.NormalArray;
+import haven.VertexBuf.VertexArray;
 
 public class BPRadSprite extends Sprite {
     static final GLState smat = new ColState(new Color(192, 0, 0, 80));

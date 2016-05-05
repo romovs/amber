@@ -28,21 +28,25 @@ package haven;
 
 import static haven.MCache.tilesz;
 
-import java.util.*;
-import javax.media.opengl.*;
-import java.awt.Color;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
-import haven.Surface.Vertex;
 import haven.Surface.MeshVertex;
+import haven.Surface.Vertex;
 
 public class MapMesh implements Rendered, Disposable {
     public final Coord ul, sz;
     public final MCache map;
     private final long rnd;
-    private Map<Tex, GLState[]> texmap = new HashMap<Tex, GLState[]>();
-    private Map<DataID, Object> data = new LinkedHashMap<DataID, Object>();
+    @SuppressWarnings("rawtypes")
+	private Map<DataID, Object> data = new LinkedHashMap<DataID, Object>();
     private List<Rendered> extras = new ArrayList<Rendered>();
     private FastMesh[] flats;
     private List<Disposable> dparts = new ArrayList<Disposable>();
@@ -211,8 +215,8 @@ public class MapMesh implements Rendered, Disposable {
         }
     }
 
-    public static Order premap = new Order.Default(990);
-    public static Order postmap = new Order.Default(1010);
+    public static Order<?> premap = new Order.Default(990);
+    public static Order<?> postmap = new Order.Default(1010);
 
     private MapMesh(MCache map, Coord ul, Coord sz, Random rnd) {
         this.map = map;
@@ -375,7 +379,7 @@ public class MapMesh implements Rendered, Disposable {
     private static States.DepthOffset gmoff = new States.DepthOffset(-1, -1);
 
     public static class GroundMod implements Rendered, Disposable {
-        private static final Order gmorder = new Order.Default(1001);
+        private static final Order<?> gmorder = new Order.Default(1001);
         public final Coord cc;
         public final FastMesh mesh;
 
@@ -572,9 +576,8 @@ public class MapMesh implements Rendered, Disposable {
     }
 
     private void clean() {
-        texmap = null;
-        int on = data.size();
-        for (Iterator<Map.Entry<DataID, Object>> i = data.entrySet().iterator(); i.hasNext(); ) {
+        for (@SuppressWarnings("rawtypes")
+		Iterator<Map.Entry<DataID, Object>> i = data.entrySet().iterator(); i.hasNext(); ) {
             Object d = i.next().getValue();
             if (!(d instanceof ConsHooks) || !((ConsHooks) d).clean())
                 i.remove();

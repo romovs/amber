@@ -26,7 +26,10 @@
 
 package com.jcraft.jorbis;
 
-import com.jcraft.jogg.*;
+import com.jcraft.jogg.Packet;
+import com.jcraft.jogg.Page;
+import com.jcraft.jogg.StreamState;
+import com.jcraft.jogg.SyncState;
 
 // Takes a vorbis bitstream from stdin and writes raw stereo PCM to
 // stdout.  Decodes simple and chained OggVorbis files from beginning

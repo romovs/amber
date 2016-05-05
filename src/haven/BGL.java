@@ -26,11 +26,20 @@
 
 package haven;
 
-import javax.media.opengl.*;
-import java.nio.*;
-import java.util.*;
-import java.io.*;
-import java.lang.reflect.*;
+import java.io.PrintStream;
+import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+import java.nio.Buffer;
+import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.media.opengl.GL2;
+import javax.media.opengl.GL3;
 
 public abstract class BGL {
     protected static abstract class Command {
@@ -74,7 +83,7 @@ public abstract class BGL {
     protected abstract void add(Command cmd);
 
     protected abstract Iterable<Command> dump();
-
+    @SuppressWarnings("serial")
     //throw (new BGLException(this, list[i], exc));
     public static class BGLException extends RuntimeException {
         public final Dump dump;
@@ -86,7 +95,6 @@ public abstract class BGL {
     }
 
     public void bglCheckErr() {
-        final Throwable place = null;
         add(new Command() {
             public void run(GL2 gl) {
                 GOut.checkerr(gl);
@@ -1121,7 +1129,8 @@ public abstract class BGL {
         });
     }
 
-    public static class Dump implements Serializable {
+    @SuppressWarnings("serial")
+	public static class Dump implements Serializable {
         public final List<DCmd> list;
         public final DCmd mark;
         private final transient Map<Object, Dummy> dummies = new IdentityHashMap<Object, Dummy>();

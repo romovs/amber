@@ -26,7 +26,9 @@
 
 package haven.glsl;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
 
 public class Block extends Statement {
     public final List<Statement> stmts = new LinkedList<Statement>();

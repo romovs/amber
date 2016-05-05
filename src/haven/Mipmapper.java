@@ -26,8 +26,10 @@
 
 package haven;
 
-import java.util.*;
-import java.awt.image.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.awt.image.Raster;
+import java.util.Random;
 
 public abstract class Mipmapper {
     public abstract byte[] gen4(Coord dim, byte[] data, int fmt);

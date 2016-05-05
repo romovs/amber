@@ -26,7 +26,7 @@
 
 package haven;
 
-import java.util.*;
+import java.util.Arrays;
 
 public class Profwnd extends Window {
     public final Profile prof;

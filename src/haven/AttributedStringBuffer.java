@@ -26,10 +26,10 @@
 
 package haven;
 
-import java.util.*;
-import java.text.*;
-
-import static java.text.AttributedCharacterIterator.Attribute;
+import java.text.AttributedCharacterIterator;
+import java.text.AttributedCharacterIterator.Attribute;
+import java.text.AttributedString;
+import java.util.Map;
 
 public class AttributedStringBuffer {
     private AttributedString current = new AttributedString("");

@@ -26,8 +26,13 @@
 
 package haven;
 
-import java.util.*;
-import javax.media.opengl.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.media.opengl.GL2;
+import javax.media.opengl.GL3;
 
 public class GPUProfile extends Profile {
     private Collection<Frame> waiting = new LinkedList<Frame>();
@@ -90,7 +95,6 @@ public class GPUProfile extends Profile {
     }
 
     public void check() {
-        int[] buf = new int[1];
         int[] rb = new int[1];
         for (Iterator<Frame> i = waiting.iterator(); i.hasNext(); ) {
             Frame f = i.next();

@@ -26,7 +26,6 @@
 
 package haven;
 
-import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class RootWidget extends ConsoleHost {
@@ -44,7 +43,8 @@ public class RootWidget extends ConsoleHost {
     public boolean globtype(char key, KeyEvent ev) {
         if (!super.globtype(key, ev)) {
             if (key == '`') {
-                GameUI gi = findchild(GameUI.class);
+                @SuppressWarnings("deprecation")
+				GameUI gi = findchild(GameUI.class);
                 if (Config.profile) {
                     add(new Profwnd(guprof, "UI profile"), new Coord(100, 100));
                     add(new Profwnd(grprof, "GL profile"), new Coord(450, 100));

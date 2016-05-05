@@ -27,16 +27,19 @@
 package haven;
 
 import java.awt.Color;
-import java.util.*;
 import java.text.Collator;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public class BuddyWnd extends Widget implements Iterable<BuddyWnd.Buddy> {
     private List<Buddy> buddies = new ArrayList<Buddy>();
     private Map<Integer, Buddy> idmap = new HashMap<Integer, Buddy>();
     private BuddyList bl;
-    private Button sbalpha;
-    private Button sbgroup;
-    private Button sbstatus;
     private TextEntry pname, charpass, opass;
     private Buddy editing = null;
     private TextEntry nicksel;
@@ -316,17 +319,17 @@ public class BuddyWnd extends Widget implements Iterable<BuddyWnd.Buddy> {
 
         add(new Label("Sort by:"), new Coord(0, y));
         y += 15;
-        sbstatus = add(new Button(60, "Status") {
+        add(new Button(60, "Status") {
             public void click() {
                 setcmp(statuscmp);
             }
         }, new Coord(0, y));
-        sbgroup = add(new Button(60, "Group") {
+        add(new Button(60, "Group") {
             public void click() {
                 setcmp(groupcmp);
             }
         }, new Coord(70, y));
-        sbalpha = add(new Button(60, "Name") {
+        add(new Button(60, "Name") {
             public void click() {
                 setcmp(alphacmp);
             }

@@ -26,7 +26,10 @@
 
 package haven;
 
-import java.util.*;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Charlist extends Widget {
     public static final Tex bg = Resource.loadtex("gfx/hud/avakort");
@@ -141,13 +144,13 @@ public class Charlist extends Widget {
     }
 
     public boolean keydown(java.awt.event.KeyEvent ev) {
-        if (ev.getKeyCode() == ev.VK_UP) {
+        if (ev.getKeyCode() == KeyEvent.VK_UP) {
             sel = Math.max(sel - 1, 0);
             return (true);
-        } else if (ev.getKeyCode() == ev.VK_DOWN) {
+        } else if (ev.getKeyCode() == KeyEvent.VK_DOWN) {
             sel = Math.min(sel + 1, chars.size() - 1);
             return (true);
-        } else if (ev.getKeyCode() == ev.VK_ENTER) {
+        } else if (ev.getKeyCode() == KeyEvent.VK_ENTER) {
             if ((sel >= 0) && (sel < chars.size())) {
                 chars.get(sel).plb.click();
             }

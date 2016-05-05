@@ -26,11 +26,24 @@
 
 package haven;
 
-import java.util.*;
-import java.lang.annotation.*;
-import java.lang.reflect.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.AbstractSet;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.Stack;
+import java.util.TreeMap;
 
 public class Widget {
     public UI ui;
@@ -643,7 +656,7 @@ public class Widget {
             parent.wdgmsg(sender, msg, args);
     }
 
-    public void tick(double dt) {
+    public void tick(double dt) throws InterruptedException {
         Widget next;
 
         for (Widget wdg = child; wdg != null; wdg = next) {
@@ -932,7 +945,7 @@ public class Widget {
         return (new AbstractSet<T>() {
             public int size() {
                 int i = 0;
-                for (T w : this)
+                for (@SuppressWarnings("unused") T w : this)
                     i++;
                 return (i);
             }
@@ -1069,6 +1082,8 @@ public class Widget {
         return (true);
     }
 
+    public void bound() {}
+    
     public final Collection<Anim> anims = new LinkedList<Anim>();
     public final Collection<Anim> nanims = new LinkedList<Anim>();
 

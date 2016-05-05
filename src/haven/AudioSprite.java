@@ -26,7 +26,8 @@
 
 package haven;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import haven.Audio.CS;
 
@@ -80,6 +81,7 @@ public class AudioSprite {
                 stream = new Audio.VolAdjust(stream, Config.sfxsqueakvol);
             else if (Config.sfxquernvol != 1.0 && "sfx/terobjs/quern".equals(res.name))
                 stream = new Audio.VolAdjust(stream, Config.sfxquernvol);
+            
 
             this.clip = new ActAudio.PosClip(new Audio.Monitor(stream) {
                 protected void eof() {

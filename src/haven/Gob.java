@@ -26,10 +26,19 @@
 
 package haven;
 
-import haven.resutil.BPRadSprite;
+import java.awt.Color;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 
-import java.awt.*;
-import java.util.*;
+import haven.resutil.BPRadSprite;
+import purus.CustomHitbox;
 
 public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
     public Coord rc, sc;
@@ -61,6 +70,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
     private static final Material.Colors dframeEmpty = new Material.Colors(new Color(0, 255, 0, 255));
     private static final Material.Colors dframeDone = new Material.Colors(new Color(255, 0, 0, 255));
     private static final Gob.Overlay animalradius = new Gob.Overlay(new BPRadSprite(100.0F, -10.0F));
+    private final Map<Gob, Gob.Overlay> playerhighlight = new HashMap<Gob, Gob.Overlay>();
     private static final Set<String> dangerousanimalrad = new HashSet<String>(Arrays.asList(
             "gfx/kritter/bear/bear", "gfx/kritter/boar/boar", "gfx/kritter/lynx/lynx", "gfx/kritter/badger/badger"));
 
@@ -274,6 +284,18 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
     public Coord3f getrc() {
         return (new Coord3f(rc.x, rc.y, glob.map.getcz(rc)));
     }
+    
+    public int getStage() {
+        //
+        Resource res = getres();
+        if (res != null && res.name.startsWith("gfx/terobjs/plants") && !res.name.endsWith("trellis")) {
+    	GAttrib rd = getattr(ResDrawable.class);
+    	final int stage = ((ResDrawable) rd).sdt.peekrbuf(0);
+        return stage;
+        } else
+        return 404;
+        //
+    }
 
     private Class<? extends GAttrib> attrclass(Class<? extends GAttrib> cl) {
         while (true) {
@@ -466,16 +488,47 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
         Drawable d = getattr(Drawable.class);
         if (d != null) {
             boolean hide = false;
-            if (Config.hidegobs) {
+            if (Config.hideall && res != null) {
+                    hide = true;
+            } else if (Config.hidegobs && res != null) {
                 try {
-                    if (res != null && res.name.startsWith("gfx/terobjs/trees")
-                            && !res.name.endsWith("log") && !res.name.endsWith("oldtrunk")) {
-                        hide = true;
-                        GobHitbox.BBox bbox = GobHitbox.getBBox(this, true);
-                        if (bbox != null) {
-                            rl.add(new Overlay(new GobHitbox(this, bbox.a, bbox.b, true)), null);
-                        }
-                    }
+                    if (Config.hidetrees) 
+                        if (res != null && res.name.startsWith("gfx/terobjs/trees") && !res.name.endsWith("log") && !res.name.endsWith("oldtrunk")) 
+                            hide = true;
+                        
+                    if (Config.hidecrops) 
+                        if (res.name.startsWith("gfx/terobjs/plants") && !res.name.equals("gfx/terobjs/plants/trellis")) 
+                        	hide = true;
+                    
+                    if (Config.hidewalls) 
+                    	 if (res .name.startsWith("gfx/terobjs/arch/pali") &&  !res.name.equals("gfx/terobjs/arch/palisadegate") || res.name.startsWith("gfx/terobjs/arch/brick") && !res.name.equals("gfx/terobjs/arch/brickwallgate") || res.name.startsWith("gfx/terobjs/arch/pole") && !res.name.equals("gfx/terobjs/arch/polegate")) 
+                    		 hide = true;
+                    
+                    if (Config.hidewagons) 
+                   	 if (res.name.startsWith("gfx/terobjs/vehicle/wagon")) 
+                            hide = true;
+                    
+                    if (Config.hidehouses) 
+                      	 if ((res.name.equals("gfx/terobjs/arch/stonemansion") || res.name.equals("gfx/terobjs/arch/logcabin") || res.name.equals("gfx/terobjs/arch/greathall") || res.name.equals("gfx/terobjs/arch/stonestead") || res.name.equals("gfx/terobjs/arch/timberhouse") || res.name.equals("gfx/terobjs/arch/stonetower"))) 
+                      		 hide = true;
+                      
+                    if (Config.hidebushes) 
+                     	 if ((res.name.startsWith("gfx/terobjs/bushes"))) 
+                     		 hide = true;
+                    
+                    if (Config.hidedframes) 
+                    	 if ((res.name.startsWith("gfx/terobjs/dframe"))) 
+                    		 hide = true;
+                    
+                    if (Config.hidehfs) 
+                    	 if ((res.name.startsWith("gfx/terobjs/pow"))) 
+                    		 hide = true;
+                    
+                    if (Config.hidedcatchers) 
+                    	 if ((res.name.startsWith("gfx/terobjs/dreca"))) 
+                    		 hide = true;
+                          
+                     
                 } catch (Loading le) {
                 }
             }
@@ -485,11 +538,50 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                 if (bbox != null)
                     rl.add(new Overlay(new GobHitbox(this, bbox.a, bbox.b, false)), null);
             }
-
-            if (!hide)
-                d.setup(rl);
+            
+            if (!hide) 
+               d.setup(rl);
+            else if (hide)  {
+            Resource.Neg neg = res.layer(Resource.Neg.class);
+            if (neg != null && !Config.nohidebox)
+            rl.add(new Overlay(new CustomHitbox(this, neg.ac, neg.bc, true)), null);
+            else if(!Config.nohidebox)
+            	rl.add(new Overlay(new CustomHitbox(this, new Coord(-5, -5), new Coord(5, 5), true)), null);
+            }
 
             if (Config.showplantgrowstage) {
+            	/* kommentoi TOISTAISEKSI
+                try {
+                    if (res != null && res.name.startsWith("gfx/terobjs/plants") && !res.name.endsWith("trellis")) {
+                    	GAttrib rd = getattr(ResDrawable.class);
+                    	final int stage = ((ResDrawable) rd).sdt.peekrbuf(0);
+                    	int maxStage = 0;
+                    	for (FastMesh.MeshRes layer : getres().layers(FastMesh.MeshRes.class)) {
+                    		if (layer.id / 10 > maxStage) {
+                    			maxStage = layer.id / 10;
+                    		}
+                    	}
+									final int stageMax = maxStage;
+									PView.Draw2D staged = new PView.Draw2D() {
+										@Override
+										public void draw2d(GOut g) {
+											if (sc != null) {
+												String str = String.format("%d/%d", new Object[]{stage, stageMax});
+												if (!plantTex.containsKey(str)) {
+													plantTex.put(str, Text.renderstroked(str, stage >= stageMax ? Color.GREEN : Color.RED, Color.BLACK, gobhpf).tex());
+												}
+												Tex tex = plantTex.get(str);
+												g.image(tex, sc.sub(tex.sz().div(2)));
+											}
+										}	
+	                                };
+	                                rl.add(staged, null);
+
+	                            }
+	                            
+                } catch (ArrayIndexOutOfBoundsException e) { // ignored
+                }   
+                */
                 if (res != null && res.name.startsWith("gfx/terobjs/plants") && !res.name.endsWith("trellis")) {
                     GAttrib rd = getattr(ResDrawable.class);
                     if (rd != null) {
@@ -503,10 +595,8 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                                 }
                             }
                             Overlay ol = findol(Sprite.GROWTH_STAGE_ID);
-                            if (ol == null && (stage == cropstgmaxval || stage > 0 && stage < 5)) {
+                            if (ol == null && (stage == cropstgmaxval || stage >= 0 && stage <= 5)) {
                                 addol(new Gob.Overlay(Sprite.GROWTH_STAGE_ID, new PlantStageSprite(stage, cropstgmaxval)));
-                            } else if (stage <= 0 || stage >= 5) {
-                                ols.remove(ol);
                             } else if (((PlantStageSprite)ol.spr).stg != stage) {
                                 ((PlantStageSprite)ol.spr).update(stage, cropstgmaxval);
                             }
@@ -529,7 +619,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                                 }
                             }
                         } catch (ArrayIndexOutOfBoundsException e) { // ignored
-                        }
+                        }  
                     }
                 }
             }
@@ -557,6 +647,23 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                     ols.remove(animalradius);
                 }
             }
+            
+           if (res != null && (res.name.contains("body") && !isplayer())) {
+              /* boolean ispartymember = false;
+               synchronized (ui.sess.glob.party.memb) {
+                   ispartymember = ui.sess.glob.party.memb.containsKey(id);
+               }
+               if (!ispartymember && !playerhighlight.containsKey(this)) {
+               */
+        	   		if(!playerhighlight.containsKey(this)) {
+            	   Overlay overlay = new Gob.Overlay(new PartyMemberOutline(this, new Color(255, 255, 255, 128), 0.1f));
+                   ols.add(overlay);
+                   playerhighlight.put(this, overlay);
+        	   		}
+              // } else if (playerhighlight.containsKey(this) && ispartymember)
+            	//   playerhighlight.remove(this);
+        	   
+           }
 
             if (Config.showarchvector && res != null && res.name.equals("gfx/borka/body") && d instanceof Composite) {
                 boolean targetting = false;
@@ -689,7 +796,6 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
     public class GobLocation extends GLState.Abstract {
         private Coord3f c = null;
         private double a = 0.0;
-        private Matrix4f update = null;
         private final Location xl = new Location(Matrix4f.id, "gobx"), rot = new Location(Matrix4f.id, "gob");
 
         public void tick() {

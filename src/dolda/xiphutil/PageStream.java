@@ -1,8 +1,10 @@
 package dolda.xiphutil;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 
-import com.jcraft.jogg.*;
+import com.jcraft.jogg.Page;
+import com.jcraft.jogg.SyncState;
 
 /**
  * The <code>PageStream</code> class decodes Ogg pages from a byte

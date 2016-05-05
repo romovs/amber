@@ -26,12 +26,13 @@
 
 package haven;
 
-import java.util.*;
+import java.util.ArrayList;
 
 public interface RenderLink {
     public Rendered make();
 
-    @Resource.LayerName("rlink")
+    @SuppressWarnings("serial")
+	@Resource.LayerName("rlink")
     public class Res extends Resource.Layer implements Resource.IDLayer<Integer> {
         public transient final RenderLink l;
         public final int id;

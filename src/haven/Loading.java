@@ -26,6 +26,7 @@
 
 package haven;
 
+@SuppressWarnings("serial")
 public class Loading extends RuntimeException {
     public final Loading rec;
 

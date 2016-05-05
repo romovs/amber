@@ -1,7 +1,8 @@
 package com.jcraft.jorbis;
 
-import java.util.*;
-import java.lang.ref.*;
+import java.lang.ref.ReferenceQueue;
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
 
 public class InternSet<T> {
     private final HashMap<Ref<T>, Ref<T>> bk = new HashMap<Ref<T>, Ref<T>>();

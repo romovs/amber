@@ -26,9 +26,14 @@
 
 package haven.rs;
 
-import haven.*;
+import javax.media.opengl.GL;
 
-import javax.media.opengl.*;
+import haven.Coord;
+import haven.GLState;
+import haven.GOut;
+import haven.PView;
+import haven.RenderList;
+import haven.Rendered;
 
 public class BufView {
     public final GBuffer buf;

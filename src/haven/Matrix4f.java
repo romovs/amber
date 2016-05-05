@@ -26,7 +26,8 @@
 
 package haven;
 
-import javax.media.opengl.*;
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 
 public class Matrix4f {
     public final float[] m;

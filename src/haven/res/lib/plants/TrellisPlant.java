@@ -1,14 +1,19 @@
 package haven.res.lib.plants;
 
-import haven.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Random;
+
+import haven.Config;
 import haven.FastMesh.MeshRes;
+import haven.Gob;
+import haven.Message;
+import haven.Resource;
+import haven.Sprite;
 import haven.Sprite.Factory;
 import haven.Sprite.Owner;
 import haven.Sprite.ResourceException;
 import haven.resutil.CSprite;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Random;
 
 public class TrellisPlant implements Factory {
     public final int num;
@@ -24,7 +29,7 @@ public class TrellisPlant implements Factory {
     public Sprite create(Owner owner, Resource res, Message std) {
         int stg = std.uint8();
         ArrayList<MeshRes> meshes = new ArrayList<MeshRes>();
-        Iterator allmeshes = res.layers(MeshRes.class).iterator();
+        Iterator<MeshRes> allmeshes = res.layers(MeshRes.class).iterator();
 
         while(allmeshes.hasNext()) {
             MeshRes mesh = (MeshRes)allmeshes.next();

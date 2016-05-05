@@ -26,8 +26,6 @@
 
 package haven.glsl;
 
-import java.util.*;
-
 public class Index extends LValue {
     public final Expression val;
     public final Expression idx;

@@ -26,9 +26,9 @@
 
 package haven;
 
-import java.awt.Color;
-
 import static java.lang.Math.PI;
+
+import java.awt.Color;
 
 public class FlowerMenu extends Widget {
     public static final Color pink = new Color(255, 0, 128);
@@ -49,7 +49,7 @@ public class FlowerMenu extends Widget {
             return (new FlowerMenu(opts));
         }
     }
-
+ 
     public class Petal extends Widget {
         public String name;
         public double ta, tr;
@@ -92,7 +92,7 @@ public class FlowerMenu extends Widget {
             return (ta(Coord.sc(a, r)));
         }
     }
-
+    
     public class Opening extends NormAnim {
         Opening() {
             super(Config.instantflowermenu ? 0 : 0.15);
@@ -103,6 +103,7 @@ public class FlowerMenu extends Widget {
             Petal harvest = null;
             Petal eat = null;
             Petal split = null;
+            Petal study = null;
             for (Petal p : opts) {
                 p.move(p.ta + ((1 - s) * PI), p.tr * s);
                 p.a = s;
@@ -114,15 +115,35 @@ public class FlowerMenu extends Widget {
                     eat = p;
                 else if (p.name.equals(Resource.getLocString(Resource.l10nFlower, "Split")))
                     split = p;
+                else if (p.name.equals("Study"))
+                	study = p;
             }
             if (Config.autopick && pick != null && s == 1.0)
                 choose(pick);
             else if (Config.autoharvest && harvest != null && s == 1.0)
                 choose(harvest);
-            else if (Config.autoeat && eat != null && s == 1.0)
+            else if (Config.autoeat && eat != null && s == 1.0 && study == null)
                 choose(eat);
             else if (Config.autosplit && split != null && s == 1.0)
                 choose(split);
+        }
+    }
+    
+    public class OpeningFast extends NormAnim {
+        OpeningFast() {
+            super(0.0);
+        }
+
+        public void ntick(double s) {
+            Petal pick = null;
+            for (Petal p : opts) {
+                p.move(p.ta + ((1 - s) * PI), p.tr * s);
+                p.a = s;
+                if (p.name.equals("Pick"))
+                    pick = p;
+            }
+            if (Config.autopick && pick != null && s == 1.0)
+                choose(pick);
         }
     }
 
@@ -157,6 +178,21 @@ public class FlowerMenu extends Widget {
     public class Cancel extends NormAnim {
         Cancel() {
             super(Config.instantflowermenu ? 0 : 0.20);
+        }
+
+        public void ntick(double s) {
+            for (Petal p : opts) {
+                p.move(p.ta + ((s) * PI), p.tr * (1 - s));
+                p.a = 1 - s;
+            }
+            if (s == 1.0)
+                ui.destroy(FlowerMenu.this);
+        }
+    }
+    
+    public class CancelFast extends NormAnim {
+        CancelFast() {
+            super(0.0);
         }
 
         public void ntick(double s) {
@@ -230,6 +266,9 @@ public class FlowerMenu extends Widget {
         mg = ui.grabmouse(this);
         kg = ui.grabkeys(this);
         organize(opts);
+        if (Config.fastflower)
+        new OpeningFast(); 
+        else 
         new Opening();
     }
 
@@ -243,7 +282,10 @@ public class FlowerMenu extends Widget {
 
     public void uimsg(String msg, Object... args) {
         if (msg == "cancel") {
-            new Cancel();
+        	if (Config.fastflower)
+        		new CancelFast();
+        	else
+        		new Cancel();
             mg.remove();
             kg.remove();
         } else if (msg == "act") {

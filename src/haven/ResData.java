@@ -26,7 +26,8 @@
 
 package haven;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ResData {
     public Indir<Resource> res;

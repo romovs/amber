@@ -26,21 +26,46 @@
 
 package haven;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
-import java.io.*;
-import java.nio.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.Raster;
+import java.awt.image.WritableRaster;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.lang.ref.Reference;
+import java.lang.ref.ReferenceQueue;
+import java.lang.ref.WeakReference;
+import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.lang.ref.*;
-import java.lang.reflect.*;
-import java.util.prefs.*;
-import java.util.*;
-import java.awt.Graphics;
-import java.awt.Color;
-import java.awt.image.*;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.nio.ShortBuffer;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Random;
+import java.util.prefs.Preferences;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class Utils {
     public static final java.nio.charset.Charset utf8 = java.nio.charset.Charset.forName("UTF-8");
@@ -1127,7 +1152,16 @@ public class Utils {
                 ((float) c.getAlpha() / 255.0f)
         });
     }
-
+    
+    public static String formatGameTime(long milliseconds) {
+    	
+    	        long seconds = milliseconds / 1000;
+    	        long hours = (seconds / 3600) % 24;
+    	        long minutes = (seconds / 60) % 60;
+    	
+    	        return String.format("%02d:%02d", hours, minutes);
+    	    }
+    
     @SuppressWarnings("unchecked")
     public static <T> T[] mkarray(Class<T> cl, int len) {
         return ((T[]) Array.newInstance(cl, len));
@@ -1289,7 +1323,8 @@ public class Utils {
         return (null);
     }
 
-    private final static Map<Character, Character> az2qwmap = new HashMap<Character, Character>(10) {{
+    @SuppressWarnings("serial")
+	private final static Map<Character, Character> az2qwmap = new HashMap<Character, Character>(10) {{
         put('&', '1');
         put('é', '2');
         put('"', '3');
@@ -1400,5 +1435,21 @@ public class Utils {
                 System.gc();
             }
         });
+    }
+    public static String timeLeft(long at) {
+		long t = at - System.currentTimeMillis();
+		if (t<0) return "Finishing...";
+		long hours = t / 3600000;
+		long mins = t / 60000 % 60;
+		long seconds = t / 1000 % 60;
+		return String.format("%02d:%02d:%02d",hours,mins,seconds);
+	}
+    public static String join(String separator, String[] array) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < array.length - 1; i++)
+            sb.append(array[i]).append(separator);
+        if (array.length > 0)
+            sb.append(array[array.length - 1]);
+        return sb.toString();
     }
 }

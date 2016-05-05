@@ -26,8 +26,6 @@
 
 package haven.glsl;
 
-import java.util.*;
-
 public abstract class BinOp extends Expression {
     public final Expression lhs, rhs;
 

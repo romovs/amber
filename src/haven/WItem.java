@@ -26,20 +26,18 @@
 
 package haven;
 
+import static haven.Inventory.sqsz;
+
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.image.BufferedImage;
 import java.net.URL;
-import java.util.*;
-
-import static haven.Inventory.sqsz;
+import java.util.List;
 
 public class WItem extends Widget implements DTarget {
     public static final Resource missing = Resource.local().loadwait("gfx/invobjs/missing");
     private static final Resource studyalarmsfx = Resource.local().loadwait("sfx/study");
     public final GItem item;
-    private Resource cspr = null;
-    private Message csdt = Message.nil;
     public static final Color famountclr = new Color(24, 116, 205);
     private static final Color qualitybg = new Color(20, 20, 20, 250);
     public static final Color[] wearclr = new Color[]{
@@ -73,10 +71,12 @@ public class WItem extends Widget implements DTarget {
 
     public class ItemTip implements Indir<Tex> {
         private final TexI tex;
+        public final BufferedImage img;
 
         public ItemTip(BufferedImage img) {
             if (img == null)
                 throw (new Loading());
+            this.img = img;
             tex = new TexI(img);
         }
 
@@ -125,15 +125,17 @@ public class WItem extends Widget implements DTarget {
                 shorttip = longtip = null;
                 ttinfo = info;
             }
+        	ItemTip tres;
             if (now - hoverstart < 1000) {
                 if (shorttip == null)
-                    shorttip = new ShortTip(info);
-                return (shorttip);
+                shorttip = new ShortTip(info);
+                tres = shorttip;
             } else {
                 if (longtip == null)
                     longtip = new LongTip(info);
-                return (longtip);
+                tres = longtip;
             }
+            return new TexI(CustomTips.itemTooltip(item, tres));
         } catch (Loading e) {
             return ("...");
         }

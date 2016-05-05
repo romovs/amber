@@ -26,7 +26,8 @@
 
 package haven;
 
-import java.util.zip.*;
+import java.util.zip.DataFormatException;
+import java.util.zip.Inflater;
 
 public class ZMessage extends Message {
     private Inflater z = new Inflater();

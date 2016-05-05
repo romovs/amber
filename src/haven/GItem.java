@@ -26,11 +26,13 @@
 
 package haven;
 
-import haven.res.ui.tt.q.qbuff.QBuff;
-
 import java.awt.Color;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+
+import haven.res.ui.tt.q.qbuff.QBuff;
 
 public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owner {
     public Indir<Resource> res;
@@ -48,6 +50,14 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
     private double studytime = 0.0;
     public Tex timelefttex;
     private String name = "";
+    
+    public long finishedTime = -1;
+    public long totalTime = -1;
+    public int lmeter1 = -1, lmeter2 = -1, lmeter3 = -1;
+    public long meterTime;
+    
+    public boolean drop = false;
+    private double dropTimer = 0;
 
     public static class Quality {
         private static final DecimalFormat shortfmt = new DecimalFormat("#.#");
@@ -195,6 +205,14 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
     public Resource getres() {
         return (res.get());
     }
+    
+    public String resname(){
+    	Resource res = resource();
+    	if(res != null){
+    	    return res.name;
+    	}
+    	return "";
+        }
 
     public Glob glob() {
         return (ui.sess.glob);
@@ -211,7 +229,16 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
         return (spr);
     }
 
-    public void tick(double dt) {
+    public void tick(double dt) throws InterruptedException {
+    	super.tick(dt);
+	if(drop) {
+	    dropTimer += dt;
+	    if (dropTimer > 0.1) {
+		dropTimer = 0;
+		wdgmsg("drop", Coord.z);
+		//wdgmsg("take", Coord.z);
+	    }
+	}
         GSprite spr = spr();
         if (spr != null)
             spr.tick(dt);
@@ -251,6 +278,7 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
             meter = (Integer) args[0];
             metertex = Text.renderstroked(String.format("%d%%", meter), Color.WHITE, Color.BLACK).tex();
             timelefttex = null;
+            updateMeter(meter);
         }
     }
 
@@ -290,6 +318,24 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
         }
         return quality;
     }
+    private void updateMeter(int val) {
+		if (val > lmeter1) {
+			lmeter3 = lmeter2;
+			lmeter2 = lmeter1;
+			lmeter1 = val;
+			long prevTime = meterTime;
+			meterTime = System.currentTimeMillis();
+			if (lmeter3 >= 0) {
+				finishedTime = System.currentTimeMillis()+(long)((100.0-lmeter1)*(meterTime - prevTime)/(lmeter1-lmeter2));
+			}
+		} else if (val < lmeter1) {
+			lmeter3 = lmeter2 = -1;
+			lmeter1 = val;
+			meterTime = System.currentTimeMillis();
+			finishedTime = -1;
+			totalTime = -1;
+		}
+	}
 
     public ItemInfo.Contents getcontents() {
         try {

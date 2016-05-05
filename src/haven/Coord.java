@@ -28,6 +28,7 @@ package haven;
 
 import static java.lang.Math.PI;
 
+@SuppressWarnings("serial")
 public class Coord implements Comparable<Coord>, java.io.Serializable {
     public int x, y;
     public static Coord z = new Coord(0, 0);

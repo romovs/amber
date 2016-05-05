@@ -26,7 +26,11 @@
 
 package haven;
 
-import java.io.*;
+import java.io.Closeable;
+import java.io.Flushable;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class StreamMessage extends Message implements Closeable, Flushable {
     private final InputStream bkin;
@@ -46,7 +50,8 @@ public class StreamMessage extends Message implements Closeable, Flushable {
         this(null, out);
     }
 
-    public static class IOError extends BinError {
+    @SuppressWarnings("serial")
+	public static class IOError extends BinError {
         public IOError(Throwable cause) {
             super(cause);
         }

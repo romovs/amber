@@ -2,7 +2,9 @@ package dolda.xiphutil;
 
 import java.io.IOException;
 
-import com.jcraft.jogg.*;
+import com.jcraft.jogg.Packet;
+import com.jcraft.jogg.Page;
+import com.jcraft.jogg.StreamState;
 
 /**
  * The <code>PacketStream</code> class decodes Ogg packets from a page

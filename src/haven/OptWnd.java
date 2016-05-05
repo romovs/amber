@@ -1,5 +1,5 @@
 /*
- *  This file is part of the Haven & Hearth game client.
+  *  This file is part of the Haven & Hearth game client.
  *  Copyright (C) 2009 Fredrik Tolf <fredrik@dolda2000.com>, and
  *                     Björn Johannessen <johannessen.bjorn@gmail.com>
  *
@@ -30,12 +30,17 @@ package haven;
 import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class OptWnd extends Window {
-    public final Panel main, video, audio, display, map, general, combat, control, uis, quality;
+    public final Panel main, video, audio, display, map, general, combat, hide, control, uis, quality;
     public Panel current;
 
     public void chpanel(Panel p) {
@@ -248,18 +253,19 @@ public class OptWnd extends Window {
                     }
                 }, new Coord(0, y));
                 y += 35;
-                add(new CheckBox("Hide crops") {
-                    {
-                        a = Config.hidecrops;
-                    }
-
-                    public void set(boolean val) {
-                        Utils.setprefb("hidecrops", val);
-                        Config.hidecrops = val;
-                        a = val;
-                    }
+                add(new CheckBox("Limit background FPS to 1") {
+                	{
+                		a = Config.limitbgfps;
+                	}
+                
+                	public void set(boolean val) {
+                		Utils.setprefb("limitbgfps", val);
+                		Config.limitbgfps = val;
+                		a = val;
+                		HavenPanel.bgfd = val ? 1000 : 200;
+                	}
                 }, new Coord(0, y));
-                y += 35;
+                y = 0; //2nd column
                 add(new CheckBox("Show FPS") {
                     {
                         a = Config.showfps;
@@ -270,7 +276,7 @@ public class OptWnd extends Window {
                         Config.showfps = val;
                         a = val;
                     }
-                }, new Coord(0, y));
+                }, new Coord(250, y));
 
                 add(new Label("Disable animations (req. restart):"), new Coord(550, 0));
                 CheckListbox animlist = new CheckListbox(180, 18) {
@@ -325,9 +331,11 @@ public class OptWnd extends Window {
         map = add(new Panel());
         general = add(new Panel());
         combat = add(new Panel());
+        hide = add(new Panel());
         control = add(new Panel());
         uis = add(new Panel());
         quality = add(new Panel());
+        
         int y;
 
         main.add(new PButton(200, "Video settings", 'v', video), new Coord(0, 0));
@@ -336,6 +344,7 @@ public class OptWnd extends Window {
         main.add(new PButton(200, "Map settings", 'm', map), new Coord(0, 90));
         main.add(new PButton(200, "General settings", 'g', general), new Coord(210, 0));
         main.add(new PButton(200, "Combat settings", 'c', combat), new Coord(210, 30));
+        main.add(new PButton(200, "Hide settings", 'h', hide), new Coord(0, 120));
         main.add(new PButton(200, "Control settings", 'k', control), new Coord(210, 60));
         main.add(new PButton(200, "UI settings", 'u', uis), new Coord(210, 90));
         main.add(new PButton(200, "Quality settings", 'q', quality), new Coord(420, 0));
@@ -450,6 +459,33 @@ public class OptWnd extends Window {
                 Utils.setprefd("alarmredvol", vol);
             }
         }, new Coord(0, y));
+        //
+        y += 20;
+        audio.add(new CheckBox("Alarm on Battering Rams") {
+            {
+                a = Config.alarmram;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("alarmram", val);
+                Config.alarmram = val;
+                a = val;
+            }
+        }, new Coord(0, y));
+        y += 15;
+        audio.add(new HSlider(200, 0, 1000, 0) {
+            protected void attach(UI ui) {
+                super.attach(ui);
+                val = (int) (Config.alarmramvol * 1000);
+            }
+
+            public void changed() {
+                double vol = val / 1000.0;
+                Config.alarmramvol = vol;
+                Utils.setprefd("alarmramvol", vol);
+            }
+        }, new Coord(0, y));
+        //
         y += 20;
         audio.add(new Label("Timers alarm volume"), new Coord(0, y));
         y += 15;
@@ -914,6 +950,54 @@ public class OptWnd extends Window {
         }, new Coord(0, y));
         // -------------------------------------------- display 2nd column
         y = 0;
+        display.add(new CheckBox("Remove toggle ui via space") {
+            {
+                a = Config.toggleuinot;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("toggleuinot", val);
+                Config.toggleuinot = val;
+                a = val;
+            }
+        }, new Coord(520, y));
+        y += 35;
+        display.add(new CheckBox("Display Fep Meter (Req. Restart)") {
+            {
+                a = Config.fepmeter;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("fepmeter", val);
+                Config.fepmeter = val;
+                a = val;
+            }
+        }, new Coord(520, y));
+        y += 35;
+        display.add(new CheckBox("Display Hunger Meter (Req. Restart)") {
+            {
+                a = Config.hungermeter;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("hungermeter", val);
+                Config.hungermeter = val;
+                a = val;
+            }
+        }, new Coord(520, y));
+        y += 35;
+        display.add(new CheckBox("Log satiation gain when eating") {
+            {
+                a = Config.logfoodchanges;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("logfoodchanges", val);
+                Config.logfoodchanges = val;
+                a = val;
+            }
+        }, new Coord(520, y));
+        y += 35;
         display.add(new CheckBox("Show wear bars") {
             {
                 a = Config.showwearbars;
@@ -924,7 +1008,31 @@ public class OptWnd extends Window {
                 Config.showwearbars = val;
                 a = val;
             }
-        }, new Coord(400, y));
+        }, new Coord(520, y));
+        y += 35;
+        display.add(new CheckBox("Highlight party members") {
+            {
+                a = Config.highlightParty;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("highlightParty", val);
+                Config.highlightParty = val;
+                a = val;
+            }
+        }, new Coord(520, y));
+        y += 35;
+        display.add(new CheckBox("Show troughs/beehives radius") {
+            {
+                a = Config.showfarmrad;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("showfarmrad", val);
+                Config.showfarmrad = val;
+                a = val;
+            }
+        }, new Coord(520, y));
         y += 35;
         display.add(new CheckBox("Show animal radius") {
             {
@@ -936,7 +1044,38 @@ public class OptWnd extends Window {
                 Config.showanimalrad = val;
                 a = val;
             }
-        }, new Coord(400, y));
+        }, new Coord(520, y));
+        y += 35;
+        display.add(new CheckBox("Hide Horizon Meter  (Req. Restart)") {
+            {
+                a = Config.hideum;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("hideum", val);
+                Config.hideum = val;
+                a = val;
+            }
+        }, new Coord(520, y));
+        y += 35;
+        display.add(new CheckBox("Show F-key toolbar") {
+            {
+                a = Config.fbelt;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("fbelt", val);
+                Config.fbelt = val;
+                a = val;
+                FBelt fbelt = gameui().fbelt;
+                if (fbelt != null) {
+                    if (val)
+                        fbelt.show();
+                    else
+                        fbelt.hide();
+                }
+            }
+        }, new Coord(520, y));
         y += 35;
         display.add(new CheckBox("Highlight empty/finished drying frames") {
             {
@@ -948,19 +1087,29 @@ public class OptWnd extends Window {
                 Config.showdframestatus = val;
                 a = val;
             }
-        }, new Coord(400, y));
-        y += 35;
-        display.add(new CheckBox("Draw circles around party members") {
-            {
-                a = Config.partycircles;
-            }
+        }, new Coord(520, y));
 
-            public void set(boolean val) {
-                Utils.setprefb("partycircles", val);
-                Config.partycircles = val;
-                a = val;
+        display.add(new Button(220, "Reset Windows (req. logout)") {
+            @Override
+            public void click() {
+                for (String wndcap : Window.persistentwnds)
+                    Utils.delpref(wndcap + "_c");
+                Utils.delpref("mmapc");
+                Utils.delpref("mmapwndsz");
+                Utils.delpref("mmapsz");
+                Utils.delpref("quickslotsc");
+                Utils.delpref("chatsz");
+                Utils.delpref("chatvis");
+                Utils.delpref("gui-bl-visible");
+                Utils.delpref("gui-br-visible");
+                Utils.delpref("gui-ul-visible");
+                Utils.delpref("gui-ur-visible");
+                Utils.delpref("menu-visible");
+                Utils.delpref("haven.study.position");
+                Utils.delpref("fbelt_c");
+                Utils.delpref("fbelt_vertical");
             }
-        }, new Coord(400, y));
+        }, new Coord(260, 320));
 
         display.add(new PButton(200, "Back", 27, main), new Coord(270, 360));
         display.pack();
@@ -1080,6 +1229,32 @@ public class OptWnd extends Window {
                 a = val;
             }
         }, new Coord(0, y));
+        //
+        y += 35;
+        general.add(new CheckBox("Fast Flower Menu") {
+            {
+                a = Config.fastflower;
+            } 
+
+            public void set(boolean val) {
+                Utils.setprefb("fastflower", val);
+                Config.fastflower = val;
+                a = val;
+            }
+        }, new Coord(0, y));
+        y += 35;
+        general.add(new CheckBox("Auto Logout after 5 minutes afking") {
+            {
+                a = Config.afklogout;
+            } 
+
+            public void set(boolean val) {
+                Utils.setprefb("afklogout", val);
+                Config.afklogout = val;
+                a = val;
+            }
+        }, new Coord(0, y));
+        //
         y += 35;
         general.add(new CheckBox("Automatically select 'Harvest' action") {
             {
@@ -1093,6 +1268,30 @@ public class OptWnd extends Window {
             }
         }, new Coord(0, y));
         y += 35;
+        general.add(new CheckBox("Toggle Tracking on logon") {
+            {
+                a = Config.toggletracking;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("toggletracking", val);
+                Config.toggletracking = val;
+                a = val;
+            }
+        }, new Coord(500, y));
+        y += 25;
+        general.add(new CheckBox("Toggle Criminal Acts on logon") {
+            {
+                a = Config.togglecriminalacts;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("togglecriminalacts", val);
+                Config.togglecriminalacts = val;
+                a = val;
+            }
+        }, new Coord(500,y));
+        y -= 25;
         general.add(new CheckBox("Automatically select 'Eat' action") {
             {
                 a = Config.autoeat;
@@ -1101,18 +1300,6 @@ public class OptWnd extends Window {
             public void set(boolean val) {
                 Utils.setprefb("autoeat", val);
                 Config.autoeat = val;
-                a = val;
-            }
-        }, new Coord(0, y));
-        y += 35;
-        general.add(new CheckBox("Automatically select 'Split' action") {
-            {
-                a = Config.autosplit;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("autosplit", val);
-                Config.autosplit = val;
                 a = val;
             }
         }, new Coord(0, y));
@@ -1154,30 +1341,6 @@ public class OptWnd extends Window {
             }
         }, new Coord(260, y));
         y += 35;
-        general.add(new CheckBox("Enable tracking on login") {
-            {
-                a = Config.enabletracking;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("enabletracking", val);
-                Config.enabletracking = val;
-                a = val;
-            }
-        }, new Coord(260, y));
-        y += 35;
-        general.add(new CheckBox("Enable criminal acts on login") {
-            {
-                a = Config.enablecrime;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("enablecrime", val);
-                Config.enablecrime = val;
-                a = val;
-            }
-        }, new Coord(260, y));
-        y += 35;
         general.add(new CheckBox("Select System log on login") {
             {
                 a = Config.syslogonlogin;
@@ -1186,6 +1349,30 @@ public class OptWnd extends Window {
             public void set(boolean val) {
                 Utils.setprefb("syslogonlogin", val);
                 Config.syslogonlogin = val;
+                a = val;
+            }
+        }, new Coord(260, y));
+        y += 35;
+        general.add(new CheckBox("Automatically select 'Split' action") {
+            {
+                a = Config.autosplit;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("autosplit", val);
+                Config.autosplit = val;
+                a = val;
+            }
+        }, new Coord(260, y));
+        y += 35;
+        general.add(new CheckBox("Drop Leeches Automatically") {
+            {
+                a = Config.dropleeches;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("dropleeches", val);
+                Config.dropleeches = val;
                 a = val;
             }
         }, new Coord(260, y));
@@ -1255,14 +1442,14 @@ public class OptWnd extends Window {
             }
         }, new Coord(0, y));
         y += 35;
-        combat.add(new CheckBox("Display cooldown time") {
+        combat.add(new CheckBox("Smaller Combat Move Icons") {
             {
-                a = Config.showcooldown;
+                a = Config.smallicon;
             }
 
             public void set(boolean val) {
-                Utils.setprefb("showcooldown", val);
-                Config.showcooldown = val;
+                Utils.setprefb("smallicon", val);
+                Config.smallicon = val;
                 a = val;
             }
         }, new Coord(0, y));
@@ -1293,7 +1480,187 @@ public class OptWnd extends Window {
 
         combat.add(new PButton(200, "Back", 27, main), new Coord(270, 360));
         combat.pack();
+        // -------------------- HIDE SETTINGS
+        y = 0;
+        hide.add(new Label("Ctrl + h to toggle hide"), new Coord(0, y));
+        y += 35;
+        hide.add(new CheckBox("Disable highlight boxes") {
+            {
+                a = Config.nohidebox;
+            }
 
+            public void set(boolean val) {
+                Utils.setprefb("nohidebox", val);
+                Config.nohidebox = val;
+                a = val;
+            }
+        }, new Coord(0, y));
+        y += 35;
+        hide.add(new CheckBox("Hide Everything") {
+            {
+                a = Config.hideall;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("hideall", val);
+                Config.hideall = val;
+                a = val;
+            }
+        }, new Coord(0, y));
+        y += 35;
+        hide.add(new CheckBox("Hide Trees") {
+            {
+                a = Config.hidetrees;
+            }
+            public void set(boolean val) {
+                Utils.setprefb("hidetrees", val);
+                Config.hidetrees = val;
+                a = val;
+            }
+        }, new Coord(0,y));
+        y += 35;
+        hide.add(new CheckBox("Hide Bushes") {
+            {
+                a = Config.hidebushes;
+            }
+            public void set(boolean val) {
+                Utils.setprefb("hidebushes", val);
+                Config.hidebushes = val;
+                a = val;
+            }
+        }, new Coord(0,y));
+        y += 35;
+                hide.add(new CheckBox("Hide Crops") {
+                    {
+                        a = Config.hidecrops;
+                    }
+
+                    public void set(boolean val) {
+                        Utils.setprefb("hidecrops", val);
+                        Config.hidecrops = val;
+                        a = val;
+                    }
+                }, new Coord(0, y));
+                y += 35;
+                hide.add(new CheckBox("Hide Walls") {
+                    {
+                        a = Config.hidewalls;
+                    }
+
+                    public void set(boolean val) {
+                        Utils.setprefb("hidewalls", val);
+                        Config.hidewalls = val;
+                        a = val;
+                    }
+                }, new Coord(0, y));
+                y += 35;
+                hide.add(new CheckBox("Hide Wagons") {
+                    {
+                        a = Config.hidewagons;
+                    }
+
+                    public void set(boolean val) {
+                        Utils.setprefb("hidewagons", val);
+                        Config.hidewagons = val;
+                        a = val;
+                    }
+                }, new Coord(0, y));
+                y += 35;
+                hide.add(new CheckBox("Hide Drying Frames") {
+                    {
+                        a = Config.hidedframes;
+                    }
+
+                    public void set(boolean val) {
+                        Utils.setprefb("hidedframes", val);
+                        Config.hidedframes = val;
+                        a = val;
+                    }
+                }, new Coord(0, y));
+                y += 35;
+                hide.add(new CheckBox("Hide Houses (Hides also door)") {
+                    {
+                        a = Config.hidehouses;
+                    }
+
+                    public void set(boolean val) {
+                        Utils.setprefb("hidehouses", val);
+                        Config.hidehouses = val;
+                        a = val;
+                    }
+                }, new Coord(0, y));
+                y = 0;
+                hide.add(new CheckBox("Hide Hearth Fires") {
+                    {
+                        a = Config.hidehfs;
+                    }
+
+                    public void set(boolean val) {
+                        Utils.setprefb("hidehfs", val);
+                        Config.hidehfs = val;
+                        a = val;
+                    }
+                	}, new Coord(260, y));
+                y += 35;
+                hide.add(new CheckBox("Hide Dream Catchers") {
+                    {
+                        a = Config.hidedcatchers;
+                    }
+
+                    public void set(boolean val) {
+                        Utils.setprefb("hidedcatchers", val);
+                        Config.hidedcatchers = val;
+                        a = val;
+                    }
+                	}, new Coord(260, y));
+                y = 0;
+                hide.add(new Label("Red"), new Coord(550, y));
+                y += 15;
+                hide.add(new HSlider(150, 0, 255, 0) {
+                    protected void attach(UI ui) {
+                        super.attach(ui);
+                        val = (int) (Config.hidered);
+                    }
+
+                    public void changed() {
+                        double vol = val;
+                        Config.hidered = vol;
+                        Utils.setprefd("hidered", vol);
+                    }
+                }, new Coord(550, y));
+                y += 20;
+                hide.add(new Label("Green"), new Coord(550, y));
+                y += 15;
+                hide.add(new HSlider(150, 0, 255, 0) {
+                    protected void attach(UI ui) {
+                        super.attach(ui);
+                        val = (int) (Config.hidegreen);
+                    }
+
+                    public void changed() {
+                        double vol = val;
+                        Config.hidegreen = vol;
+                        Utils.setprefd("hidegreen", vol);
+                    }
+                }, new Coord(550, y));
+                y += 20;
+                hide.add(new Label("Blue"), new Coord(550, y));
+                y += 15;
+                hide.add(new HSlider(150, 0, 255, 0) {
+                    protected void attach(UI ui) {
+                        super.attach(ui);
+                        val = (int) (Config.hideblue);
+                    }
+
+                    public void changed() {
+                        double vol = val;
+                        Config.hideblue = vol;
+                        Utils.setprefd("hideblue", vol);
+                    }
+                }, new Coord(550, y));
+                
+                hide.add(new PButton(200, "Back", 27, main), new Coord(270, 360));
+                hide.pack();
         // -------------------------------------------- control
         y = 0;
         control.add(new CheckBox("Free camera rotation") {
@@ -1376,18 +1743,6 @@ public class OptWnd extends Window {
             public void set(boolean val) {
                 Utils.setprefb("hwcursor", val);
                 Config.hwcursor = val;
-                a = val;
-            }
-        }, new Coord(0, y));
-        y += 35;
-        control.add(new CheckBox("Disable UI hiding with space-bar") {
-            {
-                a = Config.disablespacebar;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("disablespacebar", val);
-                Config.disablespacebar = val;
                 a = val;
             }
         }, new Coord(0, y));

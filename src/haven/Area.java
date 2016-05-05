@@ -26,6 +26,7 @@
 
 package haven;
 
+@SuppressWarnings("serial")
 public class Area implements java.io.Serializable {
     public Coord ul, br;
 

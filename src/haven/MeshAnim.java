@@ -26,11 +26,13 @@
 
 package haven;
 
-import java.util.*;
-import java.nio.*;
+import java.nio.FloatBuffer;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 
-import haven.MorphedMesh.Morpher;
 import haven.MorphedMesh.MorphedBuf;
+import haven.MorphedMesh.Morpher;
 
 public class MeshAnim {
     public final Frame[] frames;
@@ -254,7 +256,8 @@ public class MeshAnim {
         }
     }
 
-    @Resource.LayerName("manim")
+    @SuppressWarnings("serial")
+	@Resource.LayerName("manim")
     public static class Res extends Resource.Layer {
         public final int id;
         public final MeshAnim a;

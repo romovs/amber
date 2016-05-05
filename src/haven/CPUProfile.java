@@ -26,7 +26,8 @@
 
 package haven;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 
 public class CPUProfile extends Profile {
     public CPUProfile(int hl) {

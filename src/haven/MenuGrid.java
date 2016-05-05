@@ -29,12 +29,32 @@ package haven;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.font.TextAttribute;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.WeakHashMap;
 
-import haven.automation.*;
-import haven.Resource.AButton;
 import haven.Glob.Pagina;
+import haven.Resource.AButton;
+import haven.automation.AddBranchesToOven;
+import haven.automation.AddCoalToSmelter;
+import haven.automation.AutoLeveler;
+import haven.automation.ErrorSysMsgCallback;
+import haven.automation.GobSelectCallback;
+import haven.automation.LightWithTorch;
+import haven.automation.SteelRefueler;
+import haven.util.ObservableCollection;
+import purus.CarrotFarmer;
+import purus.DragonflyCollector;
+import purus.MusselPicker;
 
-import java.util.*;
 
 public class MenuGrid extends Widget {
     public final static Tex bg = Resource.loadtex("gfx/hud/invsq");
@@ -49,6 +69,9 @@ public class MenuGrid extends Widget {
     private int pagseq = 0;
     private boolean loading = true;
     private Map<Character, Pagina> hotmap = new TreeMap<Character, Pagina>();
+    public GameUI gameui;
+    private haven.Widget w;
+    private haven.Inventory i;
 
     @RName("scm")
     public static class $_ implements Factory {
@@ -57,7 +80,8 @@ public class MenuGrid extends Widget {
         }
     }
 
-    public class PaginaException extends RuntimeException {
+    @SuppressWarnings("serial")
+	public class PaginaException extends RuntimeException {
         public Pagina pag;
 
         public PaginaException(Pagina p) {
@@ -67,7 +91,6 @@ public class MenuGrid extends Widget {
     }
 
     private boolean cons(Pagina p, Collection<Pagina> buf) {
-        Pagina[] cp = new Pagina[0];
         Collection<Pagina> open, close = new HashSet<Pagina>();
         synchronized (ui.sess.glob.paginae) {
             open = new LinkedList<Pagina>();
@@ -114,23 +137,32 @@ public class MenuGrid extends Widget {
     public MenuGrid() {
         super(bgsz.mul(gsz).add(1, 1));
     }
-
+    
     @Override
     protected void attach(UI ui) {
-        super.attach(ui);
-        Glob glob = ui.sess.glob;
-        synchronized (glob.paginae) {
-            Collection<Pagina> p = glob.paginae;
-            if (!Config.hidexmenu) {
-                p.add(glob.paginafor(Resource.local().load("paginae/amber/coal11")));
-                p.add(glob.paginafor(Resource.local().load("paginae/amber/coal12")));
-                p.add(glob.paginafor(Resource.local().load("paginae/amber/branchoven")));
-                p.add(glob.paginafor(Resource.local().load("paginae/amber/steel")));
-                p.add(glob.paginafor(Resource.local().load("paginae/amber/autosurvey")));
-                p.add(glob.paginafor(Resource.local().load("paginae/amber/torch")));
-            }
+    	super.attach(ui);
+    	Glob glob = ui.sess.glob;
+    	ObservableCollection<Pagina> p = glob.paginae;
+    	// Amber Stuff
+        if (!Config.hidexmenu) {
+            p.add(glob.paginafor(Resource.local().load("paginae/amber/coal11")));
+            p.add(glob.paginafor(Resource.local().load("paginae/amber/coal12")));
+            p.add(glob.paginafor(Resource.local().load("paginae/amber/branchoven")));
+            p.add(glob.paginafor(Resource.local().load("paginae/amber/steel")));
+            p.add(glob.paginafor(Resource.local().load("paginae/amber/autosurvey")));
+            p.add(glob.paginafor(Resource.local().load("paginae/amber/torch")));
         }
+    	// Purus Cor Stuff
+    	p.add(glob.paginafor(Resource.local().load("paginae/custom/timer")));
+    	p.add(glob.paginafor(Resource.local().load("paginae/custom/study")));
+    	p.add(glob.paginafor(Resource.local().load("paginae/custom/mussel")));
+    	p.add(glob.paginafor(Resource.local().load("paginae/custom/carrotfarm")));
+    	p.add(glob.paginafor(Resource.local().load("paginae/custom/flycollect")));
+    	// Disable this for now because amber has one
+    	//p.add(glob.paginafor(Resource.local().load("paginae/custom/fillsmelter")));
+    	//p.add(glob.paginafor(Resource.local().load("paginae/custom/oven")));
     }
+
 
     private static Comparator<Pagina> sorter = new Comparator<Pagina>() {
         public int compare(Pagina a, Pagina b) {
@@ -358,6 +390,7 @@ public class MenuGrid extends Widget {
                 curoff += 14;
         } else {
             r.newp = 0;
+            use(r);
             String[] ad = r.act().ad;
             if(ad[0].equals("@")) {
                 use(ad);
@@ -371,6 +404,36 @@ public class MenuGrid extends Widget {
             curoff = 0;
         }
         updlayout();
+    }
+    
+    public boolean use(Pagina r) {
+        String [] ad = r.act().ad;
+        if((ad == null) || (ad.length < 1)){
+            return false;
+        }
+        if(ad[0].equals("@")) {
+            usecustom(ad);
+        } else {
+        	// Disable to prevent double toggling
+           // wdgmsg("act", (Object[])ad);
+        }
+        return true;
+    }
+
+    public void usecustom(String[] ad) {
+        if(ad[1].equals("timer")) {
+        	GameUI.AvaaTimer();
+        } else if (ad[1].equals("study")) {
+    		if(ui.gui!=null){
+		    ui.gui.toggleStudy();
+    		}
+        } else if (ad[1].equals("mussel")) {
+        	new MusselPicker(ui, w, i).Run(); 
+        } else if (ad[1].equals("carrotfarmer")) {
+        	new CarrotFarmer(ui, w, i).Run();
+        } else if (ad[1].equals("flycollect")) {
+        	new DragonflyCollector(ui, w, i).Run();
+        }
     }
 
     public void tick(double dt) {

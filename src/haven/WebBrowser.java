@@ -44,7 +44,8 @@ public abstract class WebBrowser {
         });
     }
 
-    public static class BrowserException extends RuntimeException {
+    @SuppressWarnings("serial")
+	public static class BrowserException extends RuntimeException {
         public BrowserException(String msg) {
             super(msg);
         }

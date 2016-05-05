@@ -26,7 +26,8 @@
 
 package haven.glsl;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class PostProc implements Walker {
     public final Object id;

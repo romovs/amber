@@ -26,9 +26,9 @@
 
 package haven;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.awt.Color;
 
 public class KinInfo extends GAttrib {
     public static final BufferedImage vlg = Resource.loadimg("gfx/hud/vilind");

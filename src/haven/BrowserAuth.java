@@ -26,8 +26,8 @@
 
 package haven;
 
-import java.net.*;
-import java.io.*;
+import java.io.IOException;
+import java.net.URL;
 
 public abstract class BrowserAuth extends AuthClient.Credentials {
     public abstract String method();

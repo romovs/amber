@@ -3,7 +3,6 @@ package haven.automation;
 import haven.Equipory;
 import haven.GameUI;
 import haven.IMeter;
-import haven.WItem;
 
 
 public class Utils {

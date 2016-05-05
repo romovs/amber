@@ -26,11 +26,16 @@
 
 package haven;
 
+import static haven.glsl.Type.VEC4;
+
 import java.awt.Color;
 
-import haven.glsl.*;
-
-import static haven.glsl.Type.*;
+import haven.glsl.Expression;
+import haven.glsl.Macro1;
+import haven.glsl.MiscLib;
+import haven.glsl.ProgramContext;
+import haven.glsl.ShaderMacro;
+import haven.glsl.Uniform;
 
 public class ColorMask extends GLState {
     public static final Slot<ColorMask> slot = new Slot<ColorMask>(Slot.Type.DRAW, ColorMask.class);

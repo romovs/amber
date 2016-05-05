@@ -26,6 +26,7 @@
 
 package haven.test;
 
+@SuppressWarnings("serial")
 public class RobotException extends RuntimeException {
     public Robot bot;
 

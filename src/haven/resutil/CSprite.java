@@ -26,9 +26,20 @@
 
 package haven.resutil;
 
-import haven.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
-import java.util.*;
+import haven.Coord3f;
+import haven.GLState;
+import haven.Gob;
+import haven.Location;
+import haven.Matrix4f;
+import haven.RenderList;
+import haven.Rendered;
+import haven.Resource;
+import haven.Sprite;
+import haven.Transform;
 
 public class CSprite extends Sprite {
     private final Coord3f cc;

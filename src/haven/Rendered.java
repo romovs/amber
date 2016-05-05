@@ -26,9 +26,10 @@
 
 package haven;
 
-import java.util.Comparator;
 import java.util.List;
-import javax.media.opengl.*;
+
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 
 public interface Rendered extends Drawn {
     public boolean setup(RenderList r);
@@ -78,11 +79,11 @@ public interface Rendered extends Drawn {
         }
     }
 
-    public final static Order deflt = new Order.Default(0);
-    public final static Order first = new Order.Default(Integer.MIN_VALUE);
-    public final static Order last = new Order.Default(Integer.MAX_VALUE);
-    public final static Order postfx = new Order.Default(5000);
-    public final static Order postpfx = new Order.Default(5500);
+    public final static Order<?> deflt = new Order.Default(0);
+    public final static Order<?> first = new Order.Default(Integer.MIN_VALUE);
+    public final static Order<?> last = new Order.Default(Integer.MAX_VALUE);
+    public final static Order<?> postfx = new Order.Default(5000);
+    public final static Order<?> postpfx = new Order.Default(5500);
 
     public static class EyeOrder extends Order.Default {
         public EyeOrder(int z) {super(z);}
@@ -113,8 +114,8 @@ public interface Rendered extends Drawn {
         }
     }
 
-    public final static Order eyesort = new EyeOrder(10000);
-    public final static Order eeyesort = new EyeOrder(4500);
+    public final static Order<?> eyesort = new EyeOrder(10000);
+    public final static Order<?> eeyesort = new EyeOrder(4500);
 
     public final static GLState.StandAlone skip = new GLState.StandAlone(GLState.Slot.Type.GEOM, HavenPanel.global) {
         public void apply(GOut g) {}

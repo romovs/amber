@@ -26,17 +26,26 @@
 
 package haven;
 
-import haven.Resource.Tileset;
-
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+import java.util.TreeMap;
+
+import haven.Resource.Tileset;
 
 public class MCache {
     public static final Coord tilesz = new Coord(11, 11);
     public static final Coord cmaps = new Coord(100, 100);
     public static final Coord cutsz = new Coord(25, 25);
     public static final Coord cutn = cmaps.div(cutsz);
+    public static final Coord sgridsz = new Coord(100, 100);
     private final Resource.Spec[] nsets = new Resource.Spec[256];
     @SuppressWarnings("unchecked")
     private final Reference<Resource>[] sets = new Reference[256];
@@ -51,7 +60,8 @@ public class MCache {
     public int olseq = 0;
     Map<Integer, Defrag> fragbufs = new TreeMap<Integer, Defrag>();
 
-    public static class LoadingMap extends Loading {
+    @SuppressWarnings("serial")
+	public static class LoadingMap extends Loading {
         public LoadingMap() {
             super("Waiting for map data...");
         }

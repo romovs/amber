@@ -26,15 +26,42 @@
 
 package haven.resutil;
 
-import haven.*;
-import haven.glsl.*;
+import static haven.glsl.Cons.texture2D;
+import static haven.glsl.Type.SAMPLER2D;
+import static haven.glsl.Type.VEC2;
+import static haven.glsl.Type.VEC4;
 
-import java.util.*;
-import java.nio.*;
-import javax.media.opengl.*;
+import java.nio.FloatBuffer;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
-import static haven.glsl.Cons.*;
-import static haven.glsl.Type.*;
+import javax.media.opengl.GL;
+
+import haven.BGL;
+import haven.Console;
+import haven.Debug;
+import haven.GLState;
+import haven.GOut;
+import haven.Indir;
+import haven.Material;
+import haven.Message;
+import haven.Resource;
+import haven.TexGL;
+import haven.TexR;
+import haven.Utils;
+import haven.VertexBuf;
+import haven.glsl.Attribute;
+import haven.glsl.AutoVarying;
+import haven.glsl.Expression;
+import haven.glsl.Function;
+import haven.glsl.Macro1;
+import haven.glsl.MiscLib;
+import haven.glsl.ProgramContext;
+import haven.glsl.ShaderMacro;
+import haven.glsl.Uniform;
+import haven.glsl.ValBlock;
+import haven.glsl.VertexContext;
 
 public class OverTex extends GLState {
     public static final Slot<OverTex> slot = new Slot<OverTex>(Slot.Type.DRAW, OverTex.class);

@@ -26,9 +26,10 @@
 
 package haven;
 
-import java.util.*;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.Collection;
+import java.util.LinkedList;
 
 public class CompImage {
     public Coord sz;

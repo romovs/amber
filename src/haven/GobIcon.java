@@ -26,9 +26,10 @@
 
 package haven;
 
-import java.util.*;
 import java.awt.Color;
-import java.awt.image.*;
+import java.awt.image.BufferedImage;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 public class GobIcon extends GAttrib {
     public static final PUtils.Convolution filter = new PUtils.Hanning(1);

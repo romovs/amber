@@ -26,11 +26,23 @@
 
 package haven;
 
-import java.util.*;
-import java.io.*;
-import javax.sound.sampled.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
 
-import dolda.xiphutil.*;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.SourceDataLine;
+
+import dolda.xiphutil.VorbisStream;
 
 public class Audio {
     public static boolean enabled = true;
@@ -371,11 +383,10 @@ public class Audio {
     public static class LDump implements CS {
         public final CS bk;
         private double val = 0.0;
-        private int n = 0, iv;
+        private int n = 0;
 
         public LDump(CS bk, int iv) {
             this.bk = bk;
-            this.iv = iv;
         }
 
         public LDump(CS bk) {

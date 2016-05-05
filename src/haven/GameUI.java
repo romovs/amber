@@ -26,14 +26,19 @@
 
 package haven;
 
-import haven.automation.ErrorSysMsgCallback;
+import static haven.Inventory.invsq;
 
-import java.util.*;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.image.WritableRaster;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
-import static haven.Inventory.invsq;
+import haven.automation.ErrorSysMsgCallback;
 
 public class GameUI extends ConsoleHost implements Console.Directory {
     public static final Text.Foundry msgfoundry = new Text.Foundry(Text.dfont, 14);
@@ -41,15 +46,16 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     private static final int blpw = 142, brpw = 142;
     public final String chrid;
     public final long plid;
-    private final Hidepanel ulpanel, umpanel, urpanel, brpanel, menupanel;
+    public static  Hidepanel ulpanel, umpanel, urpanel, brpanel, menupanel;
     public Avaview portrait;
     public MenuGrid menu;
     public MapView map;
     public Fightview fv;
     private List<Widget> meters = new LinkedList<Widget>();
-    private Text lastmsg;
-    private long msgtime;
-    public Window invwnd, equwnd, makewnd;
+    private List<Widget> cmeters = new LinkedList<Widget>();
+    public Text lastmsg;
+    public long msgtime;
+    public Window invwnd, equwnd;
     public Inventory maininv;
     public CharWnd chrwdg;
     private Widget qqview;
@@ -59,6 +65,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     public HelpWnd help;
     public OptWnd opts;
     public Collection<DraggedItem> hand = new LinkedList<DraggedItem>();
+    public Collection<DraggedItem> handSave = new LinkedList<DraggedItem>();
     public WItem vhand;
     public ChatUI chat;
     public ChatUI.Channel syslog;
@@ -70,11 +77,14 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     public String polowner;
     public Bufflist buffs;
     public MinimapWnd minimapWnd;
-    public TimersWnd timerswnd;
+    public static TimersWnd timerswnd;
+    public StudyWnd studywnd;
     public QuickSlotsWdg quickslots;
     public StatusWdg statuswindow;
     public AlignPanel questpanel;
     private boolean updhanddestroyed = false;
+    public GameUI gui = null;
+    public final CraftWindow makewnd;
     public static boolean swimon = false;
     public static boolean crimeon = false;
     public static boolean trackon = false;
@@ -151,7 +161,17 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                 return (new Coord(GameUI.this.sz.x, Math.min(brpanel.c.y - 79, GameUI.this.sz.y - menupanel.sz.y)));
             }
         }, new Coord(1, 0)));
-        menu = brpanel.add(new MenuGrid(), 20, 34);
+        menu = brpanel.add(new MenuGrid() {
+            // HACK:
+            // intercept menu item usage and notify craft window about it to be able
+            // to determine which crafting receipt caused creation of Makewindow
+            @Override
+            public boolean use(Glob.Pagina pagina) {
+                boolean result = super.use(pagina);
+                if (result)
+                    makewnd.setLastAction(pagina);
+                return result;
+            }}, 20, 34);
         brpanel.add(new Img(Resource.loadtex("gfx/hud/brframe")), 0, 0);
         menupanel.add(new MainMenu(), 0, 0);
         foldbuttons();
@@ -161,7 +181,8 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             }
         }, new Coord(10, 10));
         buffs = ulpanel.add(new Bufflist(), new Coord(95, 65));
-        umpanel.add(new Cal(), new Coord(0, 10));
+        if(!Config.hideum)
+        umpanel.add(new Cal(), new Coord(0, 65));
         syslog = chat.add(new ChatUI.Log("System"));
         opts = add(new OptWnd());
         opts.hide();
@@ -180,7 +201,10 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         statuswindow = new StatusWdg();
         if (!Config.statuswdgvisible)
             statuswindow.hide();
-        add(statuswindow, new Coord(HavenPanel.w / 2 + 80, 10));
+        add(statuswindow, new Coord(HavenPanel.w / 2, 20));
+        
+        makewnd = add(new CraftWindow(), new Coord(400, 200));
+        makewnd.hide();
 
         if (!chrid.equals("")) {
             Config.boulderssel = Utils.getprefsa("boulderssel_" + chrid, null);
@@ -202,6 +226,12 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             histbelt.hide();
     }
 
+    @Override
+    protected void attach(UI ui) {
+    	super.attach(ui);
+    	ui.gui = this;
+    }
+    
     /* Ice cream */
     private final IButton[] fold_br = new IButton[4];
 
@@ -474,9 +504,9 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         }
     }
 
-    static class DraggedItem {
-        final GItem item;
-        final Coord dc;
+    public static class DraggedItem {
+        public final GItem item;
+        public final Coord dc;
 
         DraggedItem(GItem item, Coord dc) {
             this.item = item;
@@ -500,6 +530,50 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             }
         }
     }
+    public void addcmeter(Widget meter) {
+        ulpanel.add(meter);
+        cmeters.add(meter);
+        updcmeters();
+    }
+
+    private void updcmeters() {
+        int i = 0;
+        for (Widget meter : cmeters) {
+            int x = ((meters.size() + i) % 3) * (IMeter.fsz.x + 5);
+            int y = ((meters.size() + i) / 3) * (IMeter.fsz.y + 2);
+            meter.c = new Coord(portrait.c.x + portrait.sz.x + 10 + x, portrait.c.y + y);
+            i++;
+        }
+    }
+
+	public <T extends Widget> void delcmeter(Class<T> cl) {
+		Widget widget = null;
+		for (Widget meter : cmeters) {
+			if (cl.isAssignableFrom(meter.getClass())) {
+				widget = meter;
+				break;
+			}
+		}
+		if (widget != null) {
+			cmeters.remove(widget);
+			widget.destroy();
+			updcmeters();
+		}
+	}
+
+
+	private Coord getMeterPos(int x, int y) {
+		return new Coord(portrait.c.x + portrait.sz.x + 10 + x * (IMeter.fsz.x + 5), portrait.c.y + y * (IMeter.fsz.y + 2));
+	}
+
+	public void addMeterAt(Widget m, int x, int y) {
+		ulpanel.add(m, getMeterPos(x, y));
+		ulpanel.pack();
+	}
+	
+	public void toggleStudy() {
+		studywnd.show(!studywnd.visible);
+	}
 
     public void addchild(Widget child, Object... args) {
         String place = ((String) args[0]).intern();
@@ -511,27 +585,6 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             if (minimapWnd != null)
                 ui.destroy(minimapWnd);
             minimapWnd = minimap();
-            if (Config.enabletracking && menu != null && !trackon) {
-                menu.wdgmsg("act", new Object[]{"tracking"});
-                trackautotgld = true;
-            }
-            if (Config.enablecrime && menu != null && !crimeon) {
-                crimeautotgld = true;
-                menu.wdgmsg("act", new Object[]{"crime"});
-            }
-
-            if (trackon) {
-                buffs.addchild(new BuffToggle("track", Bufflist.bufftrack));
-                errornosfx("Tracking is now turned on.");
-            }
-            if (crimeon) {
-                buffs.addchild(new BuffToggle("crime", Bufflist.buffcrime));
-                errornosfx("Criminal acts are now turned on.");
-            }
-            if (swimon) {
-                buffs.addchild(new BuffToggle("swim", Bufflist.buffswim));
-                errornosfx("Swimming is now turned on.");
-            }
         } else if (place == "fight") {
             fv = urpanel.add((Fightview) child, 0, 0);
         } else if (place == "fsess") {
@@ -558,29 +611,18 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             hand.add(new DraggedItem(g, lc));
             updhand();
         } else if (place == "chr") {
+        	studywnd = add(new StudyWnd(Coord.z), Config.getStudyPosition());
+        	studywnd.hide();
             chrwdg = add((CharWnd) child, new Coord(300, 50));
             chrwdg.hide();
+            if (Config.hungermeter)
+            addcmeter(new HungerMeter(chrwdg.glut));
+            if (Config.fepmeter)
+            addcmeter(new FepMeter(chrwdg.feps));
         } else if (place == "craft") {
-            final Widget mkwdg = child;
-            makewnd = new Window(Coord.z, "Crafting", true) {
-                public void wdgmsg(Widget sender, String msg, Object... args) {
-                    if ((sender == this) && msg.equals("close")) {
-                        mkwdg.wdgmsg("close");
-                        return;
-                    }
-                    super.wdgmsg(sender, msg, args);
-                }
-
-                public void cdestroy(Widget w) {
-                    if (w == mkwdg) {
-                        ui.destroy(this);
-                        makewnd = null;
-                    }
-                }
-            };
-            makewnd.add(mkwdg, Coord.z);
-            makewnd.pack();
-            add(makewnd, new Coord(400, 200));
+	    makewnd.add(child);
+        makewnd.pack();
+        makewnd.show();
         } else if (place == "buddy") {
             zerg.ntab(buddies = (BuddyWnd) child, zerg.kin);
         } else if (place == "pol") {
@@ -599,6 +641,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             int y = (meters.size() / 3) * (IMeter.fsz.y + 2);
             ulpanel.add(child, portrait.c.x + portrait.sz.x + 10 + x, portrait.c.y + y);
             meters.add(child);
+            updcmeters();
         } else if (place == "buff") {
             buffs.addchild(child);
         } else if (place == "qq") {
@@ -652,7 +695,9 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         } else if (w == chrwdg) {
             chrwdg = null;
         }
-        meters.remove(w);
+	if (meters.remove(w))
+        updcmeters();
+        cmeters.remove(w);
     }
 
     private static final Resource.Anim progt = Resource.local().loadwait("gfx/hud/prog").layer(Resource.animc);
@@ -705,11 +750,14 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         }
     }
 
-    public void tick(double dt) {
+    public void tick(double dt) throws InterruptedException {
         super.tick(dt);
-        if (!afk && (System.currentTimeMillis() - ui.lastevent > 300000)) {
+        if (!afk && (System.currentTimeMillis() - ui.lastevent > (300000))) {
             afk = true;
             wdgmsg("afk");
+            if(Config.afklogout)
+                getparent(GameUI.class).act("lo");
+            Thread.sleep(10000);
         } else if (afk && (System.currentTimeMillis() - ui.lastevent < 300000)) {
             afk = false;
         }
@@ -777,7 +825,6 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             }
         } else if (msg == "polowner") {
             String o = (String) args[0];
-            boolean n = ((Integer) args[1]) != 0;
             if (o.length() == 0)
                 o = null;
             else
@@ -907,12 +954,17 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             super.draw(g);
         }
     }
+    public static void AvaaTimer () {
+    	
+    	timerswnd.show(!timerswnd.visible);
+        timerswnd.raise();
+    }
 
     public boolean globtype(char key, KeyEvent ev) {
         if (key == ':') {
             entercmd();
             return (true);
-        } else if (key == ' ' && !Config.disablespacebar) {
+        } else if (key == ' ') {
             toggleui();
             return (true);
         } else if (key == 3) {
@@ -1030,6 +1082,9 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     private int uimode = 1;
 
     public void toggleui(int mode) {
+    	if(Config.toggleuinot){
+    		mode = 0;
+    	}
         Hidepanel[] panels = {brpanel, ulpanel, umpanel, urpanel, menupanel};
         switch (uimode = mode) {
             case 0:
@@ -1067,7 +1122,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         if (map != null)
             map.resize(sz);
         beltwdg.c = new Coord(blpw + 10, sz.y - beltwdg.sz.y - 5);
-        statuswindow.c = new Coord(HavenPanel.w / 2 + 80, 10);
+        statuswindow.c = new Coord(HavenPanel.w / 2, 15);
         super.resize(sz);
     }
 
@@ -1117,6 +1172,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     public void act(String... args) {
         wdgmsg("act", (Object[]) args);
     }
+
 
     public void act(int mods, Coord mc, Gob gob, String... args) {
         int n = args.length;
@@ -1180,6 +1236,8 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     }
 
     public IMeter.Meter getmeter(String name, int midx) {
+        if (getmeters(name) != null || midx < getmeters(name).size())
+            return getmeters(name).get(midx);
         List<IMeter.Meter> meters = getmeters(name);
         if (meters != null && midx < meters.size())
             return meters.get(midx);
@@ -1320,7 +1378,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
 
                 public void draw(GOut g) {
                     super.draw(g);
-                    Color urg = chat.urgcols[chat.urgency];
+                    Color urg = ChatUI.urgcols[chat.urgency];
                     if (urg != null) {
                         GOut g2 = g.reclipl(new Coord(-2, -2), g.sz.add(4, 4));
                         g2.chcolor(urg.getRed(), urg.getGreen(), urg.getBlue(), 128);
@@ -1427,6 +1485,15 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         } else {
             beltwdg = add(new NKeyBelt());
         }
+    }
+    
+    @Override
+    public void bound() {
+        toggleui(0);
+        if (Config.toggletracking)
+            act("tracking");
+        if (Config.togglecriminalacts)
+        	act("crime");
     }
 
     private Map<String, Console.Command> cmdmap = new TreeMap<String, Console.Command>();

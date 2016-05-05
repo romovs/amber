@@ -26,7 +26,9 @@
 
 package haven;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Fightview extends Widget {
     static Tex bg = Resource.loadtex("gfx/hud/bosq");
@@ -175,7 +177,8 @@ public class Fightview extends Widget {
         super.draw(g);
     }
 
-    public static class Notfound extends RuntimeException {
+    @SuppressWarnings("serial")
+	public static class Notfound extends RuntimeException {
         public final long id;
 
         public Notfound(long id) {

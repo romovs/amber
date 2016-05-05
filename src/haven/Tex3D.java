@@ -26,13 +26,11 @@
 
 package haven;
 
-import java.awt.image.*;
-import java.nio.*;
-import javax.media.opengl.*;
+import static haven.GOut.checkerr;
+
+import javax.media.opengl.GL2;
 
 import haven.TexGL.TexOb;
-
-import static haven.GOut.checkerr;
 
 public abstract class Tex3D {
     protected TexOb t = null;

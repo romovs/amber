@@ -26,15 +26,14 @@
 
 package haven;
 
-import java.awt.Color;
-import java.awt.image.*;
-import java.util.*;
-import java.nio.*;
-import javax.media.opengl.*;
+import static haven.GOut.checkerr;
+
+import java.awt.image.BufferedImage;
+import java.nio.ByteBuffer;
+
+import javax.media.opengl.GL;
 
 import haven.TexGL.TexOb;
-
-import static haven.GOut.checkerr;
 
 public class TexCube {
     protected TexOb t = null;

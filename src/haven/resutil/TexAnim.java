@@ -26,16 +26,22 @@
 
 package haven.resutil;
 
-import java.util.*;
+import static haven.glsl.Cons.add;
+import static haven.glsl.Cons.mul;
+import static haven.glsl.Type.VEC2;
 
-import haven.*;
-import haven.glsl.*;
-
-import static haven.glsl.Cons.*;
-import static haven.glsl.Function.PDir.*;
-import static haven.glsl.Type.*;
-
-import haven.glsl.ValBlock.Value;
+import haven.Coord3f;
+import haven.GLState;
+import haven.GOut;
+import haven.Material;
+import haven.Resource;
+import haven.glsl.Expression;
+import haven.glsl.Macro1;
+import haven.glsl.MiscLib;
+import haven.glsl.ProgramContext;
+import haven.glsl.ShaderMacro;
+import haven.glsl.Tex2D;
+import haven.glsl.Uniform;
 
 @Material.ResName("texrot")
 public class TexAnim extends GLState {

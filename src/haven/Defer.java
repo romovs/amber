@@ -26,8 +26,16 @@
 
 package haven;
 
-import java.util.*;
-import java.security.*;
+import java.security.AccessControlContext;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
+import java.util.WeakHashMap;
 
 public class Defer extends ThreadGroup {
     private static final Map<ThreadGroup, Defer> groups = new WeakHashMap<ThreadGroup, Defer>();
@@ -39,8 +47,10 @@ public class Defer extends ThreadGroup {
         public T call() throws InterruptedException;
     }
 
-    public static class CancelledException extends RuntimeException {
-        public CancelledException() {
+    @SuppressWarnings("serial")
+	public static class CancelledException extends RuntimeException {
+
+		public CancelledException() {
             super("Execution cancelled");
         }
 
@@ -49,20 +59,22 @@ public class Defer extends ThreadGroup {
         }
     }
 
-    public static class DeferredException extends RuntimeException {
+    @SuppressWarnings("serial")
+	public static class DeferredException extends RuntimeException {
         public DeferredException(Throwable cause) {
             super(cause);
         }
     }
 
-    public static class NotDoneException extends Loading {
-        public final transient Future future;
+    @SuppressWarnings("serial")
+	public static class NotDoneException extends Loading {
+        public final transient Future<?> future;
 
-        public NotDoneException(Future future) {
+        public NotDoneException(Future<?> future) {
             this.future = future;
         }
 
-        public NotDoneException(Future future, Loading cause) {
+        public NotDoneException(Future<?> future, Loading cause) {
             super(cause);
             this.future = future;
         }

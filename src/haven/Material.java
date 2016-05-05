@@ -26,13 +26,24 @@
 
 package haven;
 
-import java.awt.Color;
-import java.util.*;
-import java.lang.annotation.*;
-import java.lang.reflect.*;
-import javax.media.opengl.*;
-
 import static haven.Utils.c2fa;
+
+import java.awt.Color;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.lang.reflect.Constructor;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 
 public class Material extends GLState {
     public final GLState[] states;
@@ -79,10 +90,6 @@ public class Material extends GLState {
             this.spc = spc;
             this.emi = emi;
             this.shine = shine;
-        }
-
-        private static float[] colmul(float[] c1, float[] c2) {
-            return (new float[]{c1[0] * c2[0], c1[1] * c2[1], c1[2] * c2[2], c1[3] * c2[3]});
         }
 
         private static float[] colblend(float[] in, float[] bl) {
@@ -235,7 +242,9 @@ public class Material extends GLState {
 	return(res.layer(Material.Res.class).get());
     }
 
-    public static class Res extends Resource.Layer implements Resource.IDLayer<Integer> {
+
+	@SuppressWarnings("serial")
+	public static class Res extends Resource.Layer implements Resource.IDLayer<Integer> {
         public final int id;
         private transient List<GLState> states = new LinkedList<GLState>();
         private transient List<Resolver> left = new LinkedList<Resolver>();
@@ -269,7 +278,8 @@ public class Material extends GLState {
             }
         }
 
-        public void init() {
+        @SuppressWarnings("deprecation")
+		public void init() {
             for (Resource.Image img : getres().layers(Resource.imgc)) {
                 TexGL tex = (TexGL) img.tex();
                 if (mipmap)

@@ -26,10 +26,22 @@
 
 package haven;
 
-import java.nio.*;
-import java.util.*;
-import java.lang.annotation.*;
-import javax.media.opengl.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.nio.Buffer;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 
 import haven.GLProgram.VarID;
 
@@ -476,7 +488,8 @@ public class VertexBuf {
         }
     }
 
-    @Resource.LayerName("vbuf2")
+    @SuppressWarnings("serial")
+	@Resource.LayerName("vbuf2")
     public static class VertexRes extends Resource.Layer {
         public transient final VertexBuf b;
 
@@ -488,7 +501,8 @@ public class VertexBuf {
         public VertexRes(Resource res, Message buf) {
             res.super();
             List<AttribArray> bufs = new LinkedList<AttribArray>();
-            int fl = buf.uint8();
+            @SuppressWarnings("unused")
+			int fl = buf.uint8();
             int num = buf.uint16();
             while (!buf.eom()) {
                 String nm = buf.string();
@@ -508,7 +522,8 @@ public class VertexBuf {
     public static class Legacy implements Resource.LayerFactory<VertexRes> {
         public VertexRes cons(Resource res, Message buf) {
             ArrayList<AttribArray> bufs = new ArrayList<AttribArray>();
-            int fl = buf.uint8();
+            @SuppressWarnings("unused")
+			int fl = buf.uint8();
             int num = buf.uint16();
             while (!buf.eom()) {
                 int id = buf.uint8();

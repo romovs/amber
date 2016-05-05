@@ -26,9 +26,12 @@
 
 package haven;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.*;
+import java.util.ArrayList;
 
 public class Text {
     public static final Font serif = new Font("Serif", Font.PLAIN, 10);
@@ -250,7 +253,7 @@ public class Text {
             });
         }
 
-        public static UText forfield(Furnace fnd, final Object obj, String fn) {
+        public static UText<Object> forfield(Furnace fnd, final Object obj, String fn) {
             final java.lang.reflect.Field f;
             try {
                 f = obj.getClass().getField(fn);
@@ -268,7 +271,7 @@ public class Text {
             });
         }
 
-        public static UText forfield(Object obj, String fn) {
+        public static UText<?> forfield(Object obj, String fn) {
             return (forfield(std, obj, fn));
         }
     }

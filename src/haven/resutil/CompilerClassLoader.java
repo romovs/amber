@@ -1,6 +1,10 @@
 package haven.resutil;
 
-import haven.*;
+import haven.Config;
+import haven.Indir;
+import haven.Loading;
+import haven.Resource;
+import haven.Utils;
 
 public class CompilerClassLoader extends ClassLoader {
     private Indir<Resource>[] useres;

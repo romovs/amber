@@ -26,9 +26,9 @@
 
 package haven.glsl;
 
+import haven.GLProgram.VarID;
 import haven.GLState.Slot;
 import haven.GOut;
-import haven.GLProgram.VarID;
 
 public class Uniform extends Variable.Global {
     public Uniform(Type type, Symbol name) {
@@ -61,19 +61,20 @@ public class Uniform extends Variable.Global {
     }
 
     public static abstract class AutoApply extends Uniform {
-        public final Slot[] deps;
+        @SuppressWarnings("rawtypes")
+		public final Slot[] deps;
 
-        public AutoApply(Type type, Symbol name, Slot... deps) {
+        public AutoApply(Type type, Symbol name, Slot<?>... deps) {
             super(type, name);
             this.deps = deps;
         }
 
-        public AutoApply(Type type, String infix, Slot... deps) {
+        public AutoApply(Type type, String infix, Slot<?>... deps) {
             super(type, infix);
             this.deps = deps;
         }
 
-        public AutoApply(Type type, Slot... deps) {
+        public AutoApply(Type type, Slot<?>... deps) {
             super(type);
             this.deps = deps;
         }

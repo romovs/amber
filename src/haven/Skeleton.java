@@ -26,8 +26,17 @@
 
 package haven;
 
-import java.util.*;
-import javax.media.opengl.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.media.opengl.GL2;
 
 public class Skeleton {
     public final Map<String, Bone> bones = new HashMap<String, Bone>();
@@ -886,7 +895,8 @@ public class Skeleton {
         }
     }
 
-    @Resource.LayerName("skan")
+    @SuppressWarnings("serial")
+	@Resource.LayerName("skan")
     public static class ResPose extends Resource.Layer implements Resource.IDLayer<Integer> {
         public final int id;
         public final float len;
@@ -1020,7 +1030,8 @@ public class Skeleton {
         }
     }
 
-    @Resource.LayerName("boneoff")
+    @SuppressWarnings("serial")
+	@Resource.LayerName("boneoff")
     public static class BoneOffset extends Resource.Layer implements Resource.IDLayer<String> {
         public final String nm;
         public final transient Command[] prog;

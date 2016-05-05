@@ -26,9 +26,11 @@
 
 package haven;
 
-import java.util.*;
-import java.io.*;
-import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import haven.Audio.CS;
 import haven.Audio.VolAdjust;

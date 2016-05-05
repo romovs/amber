@@ -26,9 +26,36 @@
 
 package haven.glsl;
 
-import static haven.glsl.Cons.*;
-import static haven.glsl.Function.PDir.*;
-import static haven.glsl.Type.*;
+import static haven.glsl.Cons.aadd;
+import static haven.glsl.Cons.add;
+import static haven.glsl.Cons.ass;
+import static haven.glsl.Cons.div;
+import static haven.glsl.Cons.dot;
+import static haven.glsl.Cons.eq;
+import static haven.glsl.Cons.fref;
+import static haven.glsl.Cons.gt;
+import static haven.glsl.Cons.idx;
+import static haven.glsl.Cons.inv;
+import static haven.glsl.Cons.l;
+import static haven.glsl.Cons.length;
+import static haven.glsl.Cons.linc;
+import static haven.glsl.Cons.lt;
+import static haven.glsl.Cons.max;
+import static haven.glsl.Cons.mul;
+import static haven.glsl.Cons.neg;
+import static haven.glsl.Cons.normalize;
+import static haven.glsl.Cons.pick;
+import static haven.glsl.Cons.pow;
+import static haven.glsl.Cons.reflect;
+import static haven.glsl.Cons.stmt;
+import static haven.glsl.Cons.sub;
+import static haven.glsl.Cons.vec4;
+import static haven.glsl.Function.PDir.IN;
+import static haven.glsl.Function.PDir.INOUT;
+import static haven.glsl.Type.FLOAT;
+import static haven.glsl.Type.INT;
+import static haven.glsl.Type.VEC3;
+import static haven.glsl.Type.VOID;
 
 import haven.glsl.ValBlock.Value;
 
@@ -82,8 +109,8 @@ public class Phong extends ValBlock.Group {
         public final Expression norm = param(IN, VEC3).ref();
         public final LValue diff = param(INOUT, VEC3).ref();
         public final LValue spec = param(INOUT, VEC3).ref();
-        public final Expression ls = idx(prog.gl_LightSource.ref(), i);
-        public final Expression mat = prog.gl_FrontMaterial.ref();
+        public final Expression ls = idx(ProgramContext.gl_LightSource.ref(), i);
+        public final Expression mat = ProgramContext.gl_FrontMaterial.ref();
         public final Expression shine = fref(mat, "shininess");
         public final Value lvl, dir, dl, sl;
         public final ValBlock dvals = new ValBlock();
@@ -125,7 +152,6 @@ public class Phong extends ValBlock.Group {
             sl = svals.new Value(FLOAT) {
                 public Expression root() {
                     Expression reflvl = pow(max(dot(edir, reflect(neg(dir.ref()), norm)), l(0.0)), shine);
-                    Expression hvlvl = pow(max(dot(norm, normalize(add(edir, dir.ref())))), shine);
                     return (reflvl);
                 }
             };
@@ -168,7 +194,7 @@ public class Phong extends ValBlock.Group {
     }
 
     public void cons2(Block blk) {
-        bcol.tgt = blk.local(VEC3, pick(fref(prog.gl_FrontMaterial.ref(), "emission"), "rgb")).ref();
+        bcol.tgt = blk.local(VEC3, pick(fref(ProgramContext.gl_FrontMaterial.ref(), "emission"), "rgb")).ref();
         scol.tgt = blk.local(VEC3, Vec3Cons.z).ref();
         boolean unroll = true;
         if (!unroll) {
@@ -191,7 +217,7 @@ public class Phong extends ValBlock.Group {
     private static void fmod(final FragmentContext fctx, final Expression bcol, final Expression scol) {
         fctx.fragcol.mod(new Macro1<Expression>() {
             public Expression expand(Expression in) {
-                return (add(mul(in, vec4(bcol, pick(fref(fctx.prog.gl_FrontMaterial.ref(), "diffuse"), "a"))), vec4(scol, l(0.0))));
+                return (add(mul(in, vec4(bcol, pick(fref(ProgramContext.gl_FrontMaterial.ref(), "diffuse"), "a"))), vec4(scol, l(0.0))));
             }
         }, 500);
     }

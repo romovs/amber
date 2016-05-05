@@ -1,6 +1,8 @@
 package haven;
 
-import java.awt.*;
+import java.awt.Color;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class PlantStageSprite extends Sprite {
@@ -16,8 +18,11 @@ public class PlantStageSprite extends Sprite {
             Text.renderstroked("5", stagecolor, Color.BLACK, fndr).tex()
     };
     public int stg;
+    public int stgmax;
     private Tex tex;
     GLState.Buffer buf;
+    private static final Map<String, Tex> plantTex = new HashMap<>();
+    private static final Text.Foundry gobhpf = new Text.Foundry(Text.sansb, 14).aa(true);
 
     public PlantStageSprite(int stg, int stgmax) {
         super(null, null);
@@ -40,7 +45,11 @@ public class PlantStageSprite extends Sprite {
 
     public void update(int stg, int stgmax) {
         this.stg = stg;
-        tex = stg == stgmax ? stgmaxtex : stgtex[stg - 1];
+		String str = String.format("%d/%d", new Object[]{stg, stgmax});
+		if (!plantTex.containsKey(str)) {
+			plantTex.put(str, Text.renderstroked(str, stg >= stgmax ? Color.GREEN : Color.RED, Color.BLACK, gobhpf).tex());
+		}
+        tex = plantTex.get(str);
     }
 
     public Object staticp() {

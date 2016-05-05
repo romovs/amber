@@ -26,9 +26,11 @@
 
 package haven;
 
-import java.net.*;
-import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Bootstrap implements UI.Receiver, UI.Runner {
     Session sess;

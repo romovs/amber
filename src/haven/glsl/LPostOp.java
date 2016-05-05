@@ -26,8 +26,6 @@
 
 package haven.glsl;
 
-import java.util.*;
-
 public abstract class LPostOp extends Expression {
     public final LValue op;
 

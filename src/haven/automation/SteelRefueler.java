@@ -1,13 +1,22 @@
 package haven.automation;
 
-import haven.*;
-import haven.Button;
-import haven.Label;
-import haven.Window;
-
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+
+import haven.Button;
+import haven.Coord;
+import haven.GameUI;
+import haven.Glob;
+import haven.Gob;
+import haven.Inventory;
+import haven.Label;
+import haven.Resource;
+import haven.Text;
+import haven.VMeter;
+import haven.WItem;
+import haven.Widget;
+import haven.Window;
 
 
 public class SteelRefueler extends Window implements GobSelectCallback {

@@ -26,20 +26,26 @@
 
 package haven.glsl;
 
-import java.util.*;
-import java.nio.*;
-import javax.media.opengl.*;
-import haven.*;
-import haven.GLState.Slot;
-import haven.GLState.Buffer;
+import java.nio.FloatBuffer;
+import java.util.List;
+
+import javax.media.opengl.GL;
+
+import haven.BGL;
+import haven.GLBuffer;
 import haven.GLProgram.VarID;
+import haven.GLState.Buffer;
+import haven.GLState.Slot;
+import haven.GOut;
+import haven.Matrix4f;
 
 public abstract class InstancedUniform {
-    public final Slot[] deps;
+    @SuppressWarnings("rawtypes")
+	public final Slot[] deps;
     public final Uniform.AutoApply uniform;
     public final Attribute.AutoInstanced attrib;
 
-    public InstancedUniform(Type type, String infix, Slot... deps) {
+    public InstancedUniform(Type type, String infix, @SuppressWarnings("rawtypes") Slot... deps) {
         this.deps = deps;
         uniform = new Uniform.AutoApply(type, infix, deps) {
             public void apply(GOut g, VarID location) {InstancedUniform.this.apply(g, location);}

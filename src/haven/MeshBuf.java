@@ -26,11 +26,13 @@
 
 package haven;
 
-import haven.glsl.Attribute;
-
 import java.awt.Color;
-import java.util.*;
-import java.nio.*;
+import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+
+import haven.glsl.Attribute;
 
 public class MeshBuf {
     public final Collection<Vertex> v = new ArrayList<Vertex>();
@@ -245,7 +247,7 @@ public class MeshBuf {
     }
 
     @SuppressWarnings("unchecked")
-    public <L extends Layer> L layer(LayerID<L> id) {
+    public <L extends Layer<?>> L layer(LayerID<L> id) {
         if (id == null)
             throw (new NullPointerException());
         for (int i = 0; i < lids.length; i++) {
@@ -285,7 +287,7 @@ public class MeshBuf {
     }
 
     public interface LayerMapper {
-        public Layer mapbuf(MeshBuf buf, VertexBuf.AttribArray src);
+        public Layer<?> mapbuf(MeshBuf buf, VertexBuf.AttribArray src);
     }
 
     public Vertex[] copy(FastMesh src, LayerMapper mapper) {
@@ -313,7 +315,7 @@ public class MeshBuf {
             }
         }
         for (VertexBuf.AttribArray data : src.vert.bufs) {
-            Layer l = mapper.mapbuf(this, data);
+            Layer<?> l = mapper.mapbuf(this, data);
             if (l != null)
                 l.copy(src.vert, vmap, min);
         }
@@ -333,7 +335,7 @@ public class MeshBuf {
     }
 
     private static final LayerMapper defmapper = new LayerMapper() {
-        public Layer mapbuf(MeshBuf buf, VertexBuf.AttribArray src) {
+        public Layer<?> mapbuf(MeshBuf buf, VertexBuf.AttribArray src) {
             if (src instanceof VertexBuf.TexelArray)
                 return (buf.layer(tex));
             return (null);
@@ -365,7 +367,7 @@ public class MeshBuf {
         {
             pos = Utils.wfbuf(v.size() * 3);
             nrm = Utils.wfbuf(v.size() * 3);
-            int pi = 0, ni = 0;
+            int pi = 0;
             short i = 0;
             for (Vertex v : this.v) {
                 pos.put(pi + 0, v.pos.x);
@@ -375,7 +377,6 @@ public class MeshBuf {
                 nrm.put(pi + 1, v.nrm.y);
                 nrm.put(pi + 2, v.nrm.z);
                 pi += 3;
-                ni += 3;
                 v.idx = i++;
                 if (i == 0)
                     throw (new RuntimeException("Too many vertices in meshbuf"));

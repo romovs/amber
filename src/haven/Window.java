@@ -26,13 +26,14 @@
 
 package haven;
 
+import static haven.PUtils.blurmask2;
+import static haven.PUtils.rasterimg;
+
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-
-import static haven.PUtils.*;
 
 public class Window extends Widget implements DTarget {
     public static final Tex bg = Resource.loadtex("gfx/hud/wnd/lg/bg");
@@ -54,6 +55,7 @@ public class Window extends Widget implements DTarget {
     public static final int capo = 7, capio = 2;
     public static final Coord dlmrgn = new Coord(23, 14), dsmrgn = new Coord(9, 9);
     public static final BufferedImage ctex = Resource.loadimg("gfx/hud/fonttex");
+    
     public static final Text.Furnace cf = new Text.Imager(new PUtils.TexFurn(new Text.Foundry(Text.sans, 14).aa(true), ctex)) {
         protected BufferedImage proc(Text text) {
             return (rasterimg(blurmask2(text.img.getRaster(), 1, 1, Color.BLACK)));
@@ -229,10 +231,6 @@ public class Window extends Widget implements DTarget {
         return (max);
     }
 
-    private void placecbtn() {
-        cbtn.c = xlate(new Coord(ctl.x + csz.x - cbtn.sz.x, ctl.y).add(2, -2), false);
-    }
-
     public void resize(Coord sz) {
         asz = sz;
         csz = asz.add(mrgn.mul(2));
@@ -349,5 +347,10 @@ public class Window extends Widget implements DTarget {
 
     public boolean ismousegrab() {
         return dm != null;
+    }
+    public void setLocal(boolean value) {
+    }
+
+    public void setHideOnClose(boolean value) {
     }
 }

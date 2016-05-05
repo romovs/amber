@@ -1,7 +1,7 @@
 /*
  *  This file is part of the Haven & Hearth game client.
  *  Copyright (C) 2009 Fredrik Tolf <fredrik@dolda2000.com>, and
- *                     Björn Johannessen <johannessen.bjorn@gmail.com>
+ *                     Bjorn Johannessen <johannessen.bjorn@gmail.com>
  *
  *  Redistribution and/or modification of this file is subject to the
  *  terms of the GNU Lesser General Public License, version 3, as
@@ -29,19 +29,40 @@ package haven;
 public abstract class ListWidget<T> extends Widget {
     public final int itemh;
     public T sel;
+    public int selindex;
 
     public ListWidget(Coord sz, int itemh) {
-        super(sz);
-        this.itemh = itemh;
+	super(sz);
+	this.itemh = itemh;
     }
 
     protected abstract T listitem(int i);
-
     protected abstract int listitems();
-
     protected abstract void drawitem(GOut g, T item, int i);
 
     public void change(T item) {
-        this.sel = item;
+        change(indexof(item));
     }
+
+    public void change(int index) {
+        int count = listitems();
+        if (index >= 0 && index < count) {
+            selindex = index;
+            sel = listitem(index);
+        } else {
+            selindex = -1;
+            sel = null;
+        }
+    }
+
+    public int indexof(T item) {
+        for (int i = 0; i < listitems(); i++)
+            if (listitem(i) == item)
+                return i;
+        return -1;
+    }
+
+	public boolean mouseclick(Coord c, int button, int count) {
+		return false;
+	}
 }

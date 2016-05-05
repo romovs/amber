@@ -26,7 +26,12 @@
 
 package haven;
 
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.AbstractSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
 public class IntMap<V> extends AbstractMap<Integer, V> {
     private static final Object nil = new Object();

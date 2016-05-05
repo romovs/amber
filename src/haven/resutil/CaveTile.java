@@ -26,12 +26,18 @@
 
 package haven.resutil;
 
-import java.util.*;
+import java.util.Random;
 
-import haven.*;
-import haven.Resource.Tile;
+import haven.Coord;
+import haven.Coord3f;
+import haven.MapMesh;
 import haven.MapMesh.Scan;
+import haven.Material;
+import haven.MeshBuf;
+import haven.Resource;
+import haven.Surface;
 import haven.Surface.Vertex;
+import haven.Tiler;
 
 public class CaveTile extends Tiler {
     public static final float h = 16;
@@ -52,7 +58,7 @@ public class CaveTile extends Tiler {
 
         public Vertex[] fortile(Coord tc) {
             if (wv[cs.o(tc)] == null) {
-                Random rnd = m.grnd(tc.add(m.ul));
+                Random rnd = MapMesh.grnd(tc.add(m.ul));
                 Vertex[] buf = wv[cs.o(tc)] = new Vertex[4];
                 buf[0] = ms.new Vertex(ms.fortile(tc));
                 for (int i = 1; i < buf.length; i++) {
@@ -115,7 +121,7 @@ public class CaveTile extends Tiler {
         Vertex[] lw = w.fortile(ltc), rw = w.fortile(rtc);
         MapMesh.Model mod = MapMesh.Model.get(m, wtex);
         MeshBuf.Vertex[] lv = new MeshBuf.Vertex[lw.length], rv = new MeshBuf.Vertex[rw.length];
-        MeshBuf.Tex tex = mod.layer(mod.tex);
+        MeshBuf.Tex tex = mod.layer(MeshBuf.tex);
         for (int i = 0; i < lv.length; i++) {
             float ty = (float) i / (float) (lv.length - 1);
             lv[i] = new Surface.MeshVertex(mod, lw[i]);

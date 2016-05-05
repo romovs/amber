@@ -26,7 +26,8 @@
 
 package haven.glsl;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.Writer;
 
 public class Output {
     private final Writer out;

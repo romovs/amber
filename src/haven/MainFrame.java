@@ -26,19 +26,32 @@
 
 package haven;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.util.*;
-import java.lang.reflect.*;
+import java.awt.Dimension;
+import java.awt.DisplayMode;
+import java.awt.EventQueue;
+import java.awt.GraphicsDevice;
+import java.awt.Image;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintStream;
+import java.io.Writer;
+import java.util.Collection;
+import java.util.Map;
+import java.util.TreeMap;
 
 
+@SuppressWarnings("serial")
 public class MainFrame extends java.awt.Frame implements Runnable, Console.Directory {
     HavenPanel p;
     private final ThreadGroup g;
     public final Thread mt;
     DisplayMode fsmode = null, prefs = null;
-    private static final String TITLE = "Haven and Hearth (Amber v" + Config.version + ")";
+    private static final String TITLE = "Haven and Hearth Purus Pasta v" + Config.version + " | Based On Amber Client";
 
     static {
         try {
@@ -157,7 +170,8 @@ public class MainFrame extends java.awt.Frame implements Runnable, Console.Direc
                             }
                         };
                     }
-                    getToolkit().getSystemEventQueue().invokeLater(r);
+                    getToolkit().getSystemEventQueue();
+					EventQueue.invokeLater(r);
                 }
             }
         });

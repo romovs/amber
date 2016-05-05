@@ -26,8 +26,6 @@
 
 package haven;
 
-import javax.media.opengl.*;
-
 public class Location extends Transform {
     public final String id;
 
@@ -43,8 +41,6 @@ public class Location extends Transform {
     public static class Chain extends GLState {
         public final Location loc;
         public final Chain p;
-        private Matrix4f bk;
-
         private Chain(Location loc, Chain p) {
             this.loc = loc;
             this.p = p;

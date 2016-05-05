@@ -26,8 +26,10 @@
 
 package haven;
 
-import java.util.*;
-import javax.media.opengl.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.media.opengl.GL2;
 
 public class TestView extends PView {
     static final FastMesh[] tmesh;
@@ -45,7 +47,6 @@ public class TestView extends PView {
 
     public TestView(Coord sz) {
         super(sz);
-        PointedCam cam;
         camera = new PointedCam();
         camera.a = (float) Math.PI * 3 / 2;
         camera.e = (float) Math.PI / 2;

@@ -27,9 +27,14 @@
 package haven;
 
 import java.awt.Color;
-import java.awt.image.*;
-import javax.media.opengl.*;
-import java.nio.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.awt.image.Raster;
+import java.awt.image.WritableRaster;
+import java.nio.ByteBuffer;
+
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 
 public class GOut {
     public final BGL gl;
@@ -67,7 +72,8 @@ public class GOut {
         defstate();
     }
 
-    public static class GLException extends RuntimeException {
+    @SuppressWarnings("serial")
+	public static class GLException extends RuntimeException {
         public int code;
         public String str;
         private static javax.media.opengl.glu.GLU glu = new javax.media.opengl.glu.GLU();
@@ -108,25 +114,29 @@ public class GOut {
         }
     }
 
-    public static class GLInvalidEnumException extends GLException {
+    @SuppressWarnings("serial")
+	public static class GLInvalidEnumException extends GLException {
         public GLInvalidEnumException() {
             super(GL.GL_INVALID_ENUM);
         }
     }
 
-    public static class GLInvalidValueException extends GLException {
+    @SuppressWarnings("serial")
+	public static class GLInvalidValueException extends GLException {
         public GLInvalidValueException() {
             super(GL.GL_INVALID_VALUE);
         }
     }
 
-    public static class GLInvalidOperationException extends GLException {
+    @SuppressWarnings("serial")
+	public static class GLInvalidOperationException extends GLException {
         public GLInvalidOperationException() {
             super(GL.GL_INVALID_OPERATION);
         }
     }
 
-    public static class GLOutOfMemoryException extends GLException {
+    @SuppressWarnings("serial")
+	public static class GLOutOfMemoryException extends GLException {
         public GLOutOfMemoryException() {
             super(GL.GL_OUT_OF_MEMORY);
         }
@@ -461,16 +471,24 @@ public class GOut {
     }
 
     public void rect(Coord ul, Coord sz) {
-        st.set(cur2d);
-        apply();
-        gl.glLineWidth(1);
-        gl.glBegin(GL.GL_LINE_LOOP);
-        vertex(ul.x + 0.5f, ul.y + 0.5f);
-        vertex(ul.x + sz.x - 0.5f, ul.y + 0.5f);
-        vertex(ul.x + sz.x - 0.5f, ul.y + sz.y - 0.5f);
-        vertex(ul.x + 0.5f, ul.y + sz.y - 0.5f);
-        gl.glEnd();
-        checkerr();
+    	ul = tx.add(ul);
+    	Coord br = ul.add(sz);
+    	if(ul.x < this.ul.x) ul.x = this.ul.x;
+    	if(ul.y < this.ul.y) ul.y = this.ul.y;
+    	if(br.x > this.ul.x + this.sz.x) br.x = this.ul.x + this.sz.x;
+    	if(br.y > this.ul.y + this.sz.y) br.y = this.ul.y + this.sz.y;
+    	if((ul.x >= br.x) || (ul.y >= br.y))
+    		return;
+    	st.set(cur2d);
+    	apply();
+    	gl.glLineWidth(1);
+    	gl.glBegin(GL.GL_LINE_LOOP);
+    	gl.glVertex2i(ul.x, ul.y);
+    	gl.glVertex2i(br.x, ul.y);
+    	gl.glVertex2i(br.x, br.y);
+    	gl.glVertex2i(ul.x, br.y);
+    	gl.glEnd();
+    	checkerr();
     }
 
     public void prect(Coord c, Coord ul, Coord br, double a) {
@@ -552,6 +570,9 @@ public class GOut {
     public void chcolor() {
         usestate(States.color);
     }
+    public void chcolor(Color c, int a) {
+        chcolor(c.getRed(), c.getGreen(), c.getBlue(), a);
+    }
 
     Color getcolor() {
         States.ColState color = curstate(States.color);
@@ -616,5 +637,13 @@ public class GOut {
 
     public void getimage(final Callback<BufferedImage> cb) {
         getimage(Coord.z, sz, cb);
+    }
+    public void astext(String text, Coord c, double ax, double ay, Color ca, Color cb) {
+        Text t = Text.renderstroked(text, ca, cb);
+        Tex T = t.tex();
+        Coord sz = t.sz();
+        image(T, c.add((int)((double)sz.x * -ax), (int)((double)sz.y * -ay)));
+        T.dispose();
+        checkerr();
     }
 }

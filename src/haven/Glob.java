@@ -26,8 +26,18 @@
 
 package haven;
 
-import java.awt.*;
-import java.util.*;
+import java.awt.Color;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Observable;
+import java.util.WeakHashMap;
+
+import haven.util.ObservableCollection;
 
 public class Glob {
     public long time, epoch = System.currentTimeMillis();
@@ -36,7 +46,7 @@ public class Glob {
     public MCache map;
     public Session sess;
     public Party party;
-    public Set<Pagina> paginae = new HashSet<Pagina>();
+    public ObservableCollection<Pagina> paginae = new ObservableCollection<Pagina>(new HashSet<Pagina>());
     public int pagseq = 0;
     public Map<Resource.Named, Pagina> pmap = new WeakHashMap<Resource.Named, Pagina>();
     public Map<String, CAttr> cattr = new HashMap<String, CAttr>();
@@ -103,7 +113,8 @@ public class Glob {
         }
     }
 
-    public static class Pagina implements java.io.Serializable {
+    @SuppressWarnings("serial")
+	public static class Pagina implements java.io.Serializable {
         public final Indir<Resource> res;
         public State st;
         public int meter, dtime;
@@ -216,10 +227,6 @@ public class Glob {
         map.ctick(dt);
 
         lastctick = now;
-    }
-
-    private static double defix(int i) {
-        return (((double) i) / 1e9);
     }
 
     private long lastrep = 0;

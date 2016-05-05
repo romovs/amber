@@ -26,8 +26,6 @@
 
 package haven.glsl;
 
-import java.util.*;
-
 public class LFieldRef extends LValue {
     public final LValue val;
     public final String el;

@@ -1,7 +1,7 @@
 /*
  *  This file is part of the Haven & Hearth game client.
  *  Copyright (C) 2009 Fredrik Tolf <fredrik@dolda2000.com>, and
- *                     Björn Johannessen <johannessen.bjorn@gmail.com>
+ *                     Bjorn Johannessen <johannessen.bjorn@gmail.com>
  *
  *  Redistribution and/or modification of this file is subject to the
  *  terms of the GNU Lesser General Public License, version 3, as
@@ -33,66 +33,85 @@ public abstract class Listbox<T> extends ListWidget<T> {
     public final Scrollbar sb;
 
     public Listbox(int w, int h, int itemh) {
-        super(new Coord(w, h * itemh), itemh);
-        this.h = h;
-        this.sb = adda(new Scrollbar(sz.y, 0, 0), sz.x, 0, 1, 0);
+	super(new Coord(w, h * itemh), itemh);
+	this.h = h;
+	this.sb = adda(new Scrollbar(sz.y, 0, 0), sz.x, 0, 1, 0);
     }
 
     protected void drawsel(GOut g) {
-        g.chcolor(255, 255, 0, 128);
-        g.frect(Coord.z, g.sz);
-        g.chcolor();
+	g.chcolor(255, 255, 0, 128);
+	g.frect(Coord.z, g.sz);
+	g.chcolor();
     }
 
     protected void drawbg(GOut g) {
-        g.chcolor(Color.BLACK);
-        g.frect(Coord.z, sz);
-        g.chcolor();
+	g.chcolor(Color.BLACK);
+	g.frect(Coord.z, sz);
+	g.chcolor();
     }
 
     public void draw(GOut g) {
-        sb.max = listitems() - h;
-        drawbg(g);
-        int n = listitems();
-        for (int i = 0; i < h; i++) {
-            int idx = i + sb.val;
-            if (idx >= n)
-                break;
-            T item = listitem(idx);
-            int w = sz.x - (sb.vis() ? sb.sz.x : 0);
-            GOut ig = g.reclip(new Coord(0, i * itemh), new Coord(w, itemh));
-            if (item == sel)
-                drawsel(ig);
-            drawitem(ig, item, idx);
-        }
-        super.draw(g);
+	sb.max = listitems() - h;
+	drawbg(g);
+	int n = listitems();
+	for(int i = 0; i < h; i++) {
+	    int idx = i + sb.val;
+	    if(idx >= n)
+		break;
+	    T item = listitem(idx);
+	    int w = sz.x - (sb.vis()?sb.sz.x:0);
+	    GOut ig = g.reclip(new Coord(0, i * itemh), new Coord(w, itemh));
+	    if(item == sel)
+		drawsel(ig);
+	    drawitem(ig, item, idx);
+	}
+	super.draw(g);
     }
 
     public boolean mousewheel(Coord c, int amount) {
-        sb.ch(amount);
-        return (true);
+	sb.ch(amount);
+	return(true);
     }
 
     protected void itemclick(T item, int button) {
-        if (button == 1)
-            change(item);
+	if(button == 1)
+	    change(item);
     }
 
+    protected void itemactivate(T item) {}
+
     public T itemat(Coord c) {
-        int idx = (c.y / itemh) + sb.val;
-        if (idx >= listitems())
-            return (null);
-        return (listitem(idx));
+	int idx = (c.y / itemh) + sb.val;
+	if(idx >= listitems())
+	    return(null);
+	return(listitem(idx));
     }
 
     public boolean mousedown(Coord c, int button) {
-        if (super.mousedown(c, button))
-            return (true);
+	if(super.mousedown(c, button))
+	    return(true);
+	T item = itemat(c);
+	if((item == null) && (button == 1))
+	    change(null);
+	else if(item != null)
+	    itemclick(item, button);
+	return(true);
+    }
+
+    public boolean mouseclick(Coord c, int button, int count) {
+        if(super.mouseclick(c, button, count))
+            return(true);
         T item = itemat(c);
-        if ((item == null) && (button == 1))
-            change(null);
-        else if (item != null)
-            itemclick(item, button);
-        return (true);
+        if(item != null && button == 1 && count >= 2)
+            itemactivate(item);
+        return(true);
+    }
+
+    // ensures that selected element is visible
+    public void showsel() {
+        if (sb.val + h - 1 < selindex)
+            sb.val = Math.max(0, selindex - h + 1);
+        if (sb.val > selindex)
+            sb.val = Math.max(0, selindex);
     }
 }

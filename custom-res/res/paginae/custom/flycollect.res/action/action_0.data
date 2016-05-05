@@ -1,0 +1,17 @@
+#ABUTTON LAYER FOR RES dout//carrotfarm.res
+#String pr
+paginae/amber/amber
+#uint16 pver
+1
+#String name
+Collect Dragonflies
+#String preq
+
+#uint16 hk
+70
+#uint16 ad length
+2
+#String ad[0]
+@
+#String ad[1]
+flycollect

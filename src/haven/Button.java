@@ -26,9 +26,9 @@
 
 package haven;
 
-import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 public class Button extends SIWidget {

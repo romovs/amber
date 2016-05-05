@@ -1,7 +1,12 @@
 package haven.automation;
 
 
-import haven.*;
+import haven.Coord;
+import haven.Equipory;
+import haven.GameUI;
+import haven.Gob;
+import haven.Resource;
+import haven.WItem;
 
 public class LightWithTorch implements Runnable {
     private GameUI gui;

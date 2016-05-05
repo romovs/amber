@@ -26,8 +26,11 @@
 
 package haven;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.LinkedList;
+import java.util.List;
 
 public class StreamTee extends InputStream {
     private InputStream in;

@@ -26,15 +26,22 @@
 
 package haven.rs;
 
-import haven.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
-import java.util.*;
-import java.io.*;
-import java.net.*;
-import java.security.*;
-
-import haven.Composited.MD;
-import haven.Composited.ED;
+import haven.Message;
+import haven.MessageBuf;
+import haven.Utils;
 
 public class Server extends Thread {
     public static final Map<String, Command> commands = new HashMap<String, Command>();

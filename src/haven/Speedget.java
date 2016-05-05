@@ -34,6 +34,9 @@ public class Speedget extends Widget {
     public static final Coord tsz;
     public int cur, max;
     public boolean runonloginset;
+    
+    public static boolean setSpeed = false;
+    public static int SpeedToSet;
 
     static {
         String[] names = {"crawl", "walk", "run", "sprint"};
@@ -66,6 +69,15 @@ public class Speedget extends Widget {
         this.cur = cur;
         this.max = max;
     }
+    
+    @Override
+    public void tick(double dt) throws InterruptedException {
+    	super.tick(dt);
+    	if(setSpeed) {
+	    	  set(SpeedToSet);
+	    	  setSpeed = false;
+    	    }
+    	}
 
     public void draw(GOut g) {
         if (Config.runonlogin && !runonloginset && max > 1) {

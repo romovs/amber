@@ -26,19 +26,59 @@
 
 package haven;
 
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.annotation.*;
+import java.net.ConnectException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CodingErrorAction;
-import java.util.*;
-import java.net.*;
-import java.io.*;
-import javax.imageio.*;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
+import java.util.AbstractCollection;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Properties;
+import java.util.Set;
+import java.util.TreeMap;
 
+import javax.imageio.ImageIO;
+
+@SuppressWarnings("serial")
 public class Resource implements Serializable {
     private static File rescustom = new File("res");
     private static ResCache prscache;
@@ -209,7 +249,8 @@ public class Resource implements Serializable {
         }
     }
 
-    public static class HttpSource implements ResSource, Serializable {
+    @SuppressWarnings("static-access")
+	public static class HttpSource implements ResSource, Serializable {
         private final transient SslHelper ssl;
         public URL baseurl;
 
@@ -672,7 +713,7 @@ public class Resource implements Serializable {
     public static void addurl(URL url) {
         ResSource src = new HttpSource(url);
         if (prscache != null) {
-            class Caching extends TeeSource {
+			class Caching extends TeeSource {
                 private final transient ResCache cache;
 
                 Caching(ResSource bk, ResCache cache) {
@@ -990,7 +1031,7 @@ public class Resource implements Serializable {
         }
     }
 
-    @LayerName("neg")
+	@LayerName("neg")
     public class Neg extends Layer {
         public Coord cc;
         public Coord ac, bc;
@@ -1016,7 +1057,7 @@ public class Resource implements Serializable {
         }
     }
 
-    @LayerName("anim")
+	@LayerName("anim")
     public class Anim extends Layer {
         private int[] ids;
         public int id, d;
@@ -1216,7 +1257,6 @@ public class Resource implements Serializable {
     public static class OrigTileset implements LayerFactory<Tileset> {
         public Tileset cons(Resource res, Message buf) {
             Tileset ret = res.new Tileset();
-            int fl = buf.uint8();
             int flnum = buf.uint16();
             ret.flavprob = buf.uint16();
             for (int i = 0; i < flnum; i++) {
@@ -1233,7 +1273,7 @@ public class Resource implements Serializable {
         }
     }
 
-    @LayerName("pagina")
+	@LayerName("pagina")
     public class Pagina extends Layer {
         public final String text;
 
@@ -1261,7 +1301,7 @@ public class Resource implements Serializable {
         }
     }
 
-    @LayerName("action")
+	@LayerName("action")
     public class AButton extends Layer {
         public final String name;
         public final Named parent;
@@ -1317,7 +1357,7 @@ public class Resource implements Serializable {
         }
     }
 
-    @LayerName("code")
+	@LayerName("code")
     public class Code extends Layer {
         public final String name;
         transient public final byte[] data;
@@ -1387,9 +1427,8 @@ public class Resource implements Serializable {
         }
     }
 
-    @LayerName("codeentry")
+	@LayerName("codeentry")
     public class CodeEntry extends Layer {
-        private String clnm;
         private Map<String, Code> clmap = new TreeMap<String, Code>();
         private Map<String, String> pe = new TreeMap<String, String>();
         private Collection<Indir<Resource>> classpath = new LinkedList<Indir<Resource>>();
@@ -1543,7 +1582,7 @@ public class Resource implements Serializable {
         }
     }
 
-    @LayerName("audio")
+	@LayerName("audio")
     public class Audio extends Layer implements IDLayer<String> {
         transient public byte[] coded;
         public final String id;
@@ -1636,22 +1675,12 @@ public class Resource implements Serializable {
         }
     }
 
-    private void readall(InputStream in, byte[] buf) throws IOException {
-        int ret, off = 0;
-        while (off < buf.length) {
-            ret = in.read(buf, off, buf.length - off);
-            if (ret < 0)
-                throw (new LoadException("Incomplete resource at " + name, this));
-            off += ret;
-        }
-    }
-
     public <L extends Layer> Collection<L> layers(final Class<L> cl) {
         used = true;
         return (new AbstractCollection<L>() {
             public int size() {
                 int s = 0;
-                for (L l : this)
+                for (@SuppressWarnings("unused") L l : this)
                     s++;
                 return (s);
             }
@@ -1718,7 +1747,8 @@ public class Resource implements Serializable {
         return (o.name.equals(this.name) && (o.ver == this.ver));
     }
 
-    private void load(InputStream st) throws IOException {
+    @SuppressWarnings("resource")
+	private void load(InputStream st) throws IOException {
         Message in = new StreamMessage(st);
         byte[] sig = "Haven Resource 1".getBytes(Utils.ascii);
         if (!Arrays.equals(sig, in.bytes(sig.length)))
@@ -1751,7 +1781,7 @@ public class Resource implements Serializable {
     public Named indir() {
         if (indir != null)
             return (indir);
-        class Ret extends Named implements Serializable {
+		class Ret extends Named implements Serializable {
             Ret(String name, int ver) {
                 super(name, ver);
             }

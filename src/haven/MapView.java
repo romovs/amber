@@ -26,24 +26,34 @@
 
 package haven;
 
+import static haven.MCache.tilesz;
+
+import java.awt.Color;
+import java.awt.event.KeyEvent;
+import java.lang.ref.Reference;
+import java.lang.ref.WeakReference;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.WeakHashMap;
+
+import javax.media.opengl.GL;
+
 import haven.GLProgram.VarID;
 import haven.automation.AutoLeveler;
 import haven.automation.GobSelectCallback;
 import haven.automation.SteelRefueler;
-import haven.pathfinder.*;
+import haven.pathfinder.PFListener;
+import haven.pathfinder.Pathfinder;
 import haven.resutil.BPRadSprite;
 
-import javax.media.opengl.GL;
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.lang.ref.*;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
-import java.util.List;
-import java.util.Map;
-
-import static haven.MCache.tilesz;
 
 public class MapView extends PView implements DTarget, Console.Directory, PFListener {
     public static long plgob = -1;
@@ -69,15 +79,17 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     private static final Gob.Overlay rovlcolumn = new Gob.Overlay(new BPRadSprite(125.0F, 0));
     private static final Gob.Overlay rovltrough = new Gob.Overlay(new BPRadSprite(200.0F, -10.0F));
     private static final Gob.Overlay rovlbeehive = new Gob.Overlay(new BPRadSprite(151.0F, -10.0F));
+    private static final Gob.Overlay animalradius = new Gob.Overlay(new BPRadSprite(100.0F, -10.0F));
+    private static final Gob.Overlay bramradius = new Gob.Overlay(new BPRadSprite(125.0F, -10.0F));
     private long lastmmhittest = System.currentTimeMillis();
     private Coord lasthittestc = Coord.z;
+    private final PartyHighlight partyHighlight;
     public AreaMine areamine;
     private GobSelectCallback gobselcb;
     private Pathfinder pf;
     public Thread pfthread;
     public SteelRefueler steelrefueler;
     public AutoLeveler autoleveler;
-    private final PartyHighlight partyHighlight;
 
     public interface Delayed {
         public void run(GOut g);
@@ -201,7 +213,6 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
             if (dist > 250) {
                 curc = cc;
             } else if (dist > fr) {
-                Coord3f oc = curc;
                 float pd = (float) Math.cos(elev) * dist(elev);
                 Coord3f cambase = new Coord3f(curc.x + ((float) Math.cos(tangl) * pd), curc.y + ((float) Math.sin(tangl) * pd), 0.0f);
                 float a = cc.xyangle(curc);
@@ -630,6 +641,8 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     };
 
     void addgob(RenderList rl, final Gob gob) {
+    	/* 
+    	// At least temporarily disabling this as I added new thing in gob.java
         try {
             Resource res = gob.getres();
             if (Config.hidecrops && res != null) {
@@ -639,6 +652,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
             }
         } catch (Loading le) {
         }
+        */
 
         GLState xf;
         try {
@@ -937,9 +951,9 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
             if (glob.lightamb != null) {
                 Color lightamb, lightdif, lightspc;
                 if (Config.daylight) {
-                    lightamb = glob.dlightamb;
-                    lightdif = glob.dlightamb;
-                    lightspc = glob.dlightspc;
+                    lightamb = Glob.dlightamb;
+                    lightdif = Glob.dlightamb;
+                    lightspc = Glob.dlightspc;
                 } else {
                     lightamb = glob.lightamb;
                     lightdif = glob.lightdif;
@@ -1328,7 +1342,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
 
     private void partydraw(GOut g) {
         for (Party.Member m : ui.sess.glob.party.memb.values()) {
-            if (m.gobid == this.plgob)
+            if (m.gobid == MapView.plgob)
                 continue;
             Coord mc = m.getc();
             if (mc == null)
@@ -1403,7 +1417,8 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         }
         if (placing != null)
             placing.ctick((int) (dt * 1000));
-        partyHighlight.update();
+        	partyHighlight.update();
+
     }
 
     public void resize(Coord sz) {
@@ -1550,7 +1565,6 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
 
         public void run(GOut g) {
             GLState.Buffer bk = g.st.copy();
-            Coord mc;
             try {
                 BGL gl = g.gl;
                 g.st.set(clickbasic(g));

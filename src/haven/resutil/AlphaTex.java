@@ -26,16 +26,35 @@
 
 package haven.resutil;
 
-import java.util.*;
+import static haven.glsl.Cons.lt;
+import static haven.glsl.Cons.mul;
+import static haven.glsl.Cons.pick;
+import static haven.glsl.Cons.texture2D;
+import static haven.glsl.Type.FLOAT;
+import static haven.glsl.Type.SAMPLER2D;
+import static haven.glsl.Type.VEC2;
+import static haven.glsl.Type.VEC4;
 
-import haven.*;
-import haven.glsl.*;
-
-import static haven.glsl.Cons.*;
-import static haven.glsl.Function.PDir.*;
-import static haven.glsl.Type.*;
-
+import haven.GLState;
+import haven.GOut;
+import haven.MeshBuf;
+import haven.TexGL;
+import haven.glsl.Attribute;
+import haven.glsl.AutoVarying;
+import haven.glsl.Block;
+import haven.glsl.CodeMacro;
+import haven.glsl.Discard;
+import haven.glsl.Expression;
+import haven.glsl.FragmentContext;
+import haven.glsl.If;
+import haven.glsl.Macro1;
+import haven.glsl.ProgramContext;
+import haven.glsl.ShaderMacro;
+import haven.glsl.Uniform;
+import haven.glsl.ValBlock;
 import haven.glsl.ValBlock.Value;
+import haven.glsl.Varying.Interpol;
+import haven.glsl.VertexContext;
 
 public class AlphaTex extends GLState {
     public static final Slot<AlphaTex> slot = new Slot<AlphaTex>(Slot.Type.DRAW, AlphaTex.class);

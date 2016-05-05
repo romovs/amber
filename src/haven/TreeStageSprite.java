@@ -1,12 +1,12 @@
 package haven;
 
-import java.awt.*;
+import java.awt.Color;
 
 
 public class TreeStageSprite extends Sprite {
     private static final Text.Foundry fndr = new Text.Foundry(Text.sansb, 12).aa(true);
     private static final Tex[] treestg = new Tex[90];
-    private static final Color stagecolor = new Color(255, 227, 168);//new Color(235, 235, 235);
+    private static final Color stagecolor = new Color(235, 235, 235);//new Color(235, 235, 235);
     public int val;
     private Tex tex;
     GLState.Buffer buf;

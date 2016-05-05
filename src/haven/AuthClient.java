@@ -26,8 +26,12 @@
 
 package haven;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.Socket;
 import java.security.MessageDigest;
 
 public class AuthClient {
@@ -39,7 +43,7 @@ public class AuthClient {
     static {
         ssl = new SslHelper();
         try {
-            ssl.trust(ssl.loadX509(Resource.class.getResourceAsStream("authsrv.crt")));
+            ssl.trust(SslHelper.loadX509(Resource.class.getResourceAsStream("authsrv.crt")));
         } catch (Exception e) {
             throw (new RuntimeException(e));
         }
@@ -170,7 +174,8 @@ public class AuthClient {
         protected void finalize() {
             discard();
         }
-
+        
+        @SuppressWarnings("serial")
         public static class AuthException extends RuntimeException {
             public AuthException(String msg) {
                 super(msg);
@@ -229,7 +234,8 @@ public class AuthClient {
         }
     }
 
-    public static class TokenCred extends Credentials implements Serializable {
+    @SuppressWarnings("serial")
+	public static class TokenCred extends Credentials implements Serializable {
         public final String acctname;
         public final byte[] token;
 

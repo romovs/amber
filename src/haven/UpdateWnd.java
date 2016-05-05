@@ -1,11 +1,11 @@
 package haven;
 
-import java.awt.*;
+import java.awt.Desktop;
 import java.awt.event.KeyEvent;
 import java.net.URI;
 
 public class UpdateWnd extends Window {
-    private static final String dwnurl = "https://github.com/romovs/amber/releases/download/";
+    private static final String dwnurl = "https://github.com/puruscor/purus-pasta/releases/download/";
 
     public UpdateWnd(final String version) {
         super(Coord.z, "Update");
@@ -15,7 +15,7 @@ public class UpdateWnd extends Window {
                 Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
                 if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
                     try {
-                        desktop.browse(new URI(dwnurl + version + "/amber-" + version + "-upd.zip"));
+                        desktop.browse(new URI(dwnurl + version + "/update.zip"));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -27,13 +27,25 @@ public class UpdateWnd extends Window {
                 Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
                 if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
                     try {
-                        desktop.browse(new URI(dwnurl + version + "/amber-" + version + ".zip"));
+                        desktop.browse(new URI(dwnurl + version + "/build.zip"));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             }
-        }, new Coord(0, 125));
+        }, new Coord(0, 112));
+        add(new Button(200, "Automatic Launcher Download") {
+            public void click() {
+                Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+                if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+                    try {
+                        desktop.browse(new URI("https://github.com/puruscor/Pasta-Launcher/releases/latest"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, new Coord(0, 145));
         pack();
         this.c = new Coord(HavenPanel.w/2-sz.x/2, HavenPanel.h/2-sz.y/2);
     }

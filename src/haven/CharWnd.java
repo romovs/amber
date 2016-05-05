@@ -26,15 +26,27 @@
 
 package haven;
 
+import static haven.PUtils.blurmask2;
+import static haven.PUtils.convolvedown;
+import static haven.PUtils.imgblur;
+import static haven.PUtils.rasterimg;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.awt.font.TextAttribute;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
-import static haven.Window.wbox;
-import static haven.PUtils.*;
-
+import haven.PUtils.BlurFurn;
+import haven.PUtils.Convolution;
+import haven.PUtils.Hanning;
+import haven.PUtils.TexFurn;
 import haven.resutil.FoodInfo;
 
 public class CharWnd extends Window {
@@ -62,7 +74,7 @@ public class CharWnd extends Window {
     public int exp, enc;
     private int scost;
     private final Tabs.Tab sattr, fgt;
-
+    
     public static class FoodMeter extends Widget {
         public static final Tex frame = Resource.loadtex("gfx/hud/chr/foodm");
         public static final Coord marg = new Coord(5, 5), trmg = new Coord(10, 10);
@@ -73,7 +85,8 @@ public class CharWnd extends Window {
         private Tex trol;
         private long trtm = 0;
 
-        @Resource.LayerName("foodev")
+        @SuppressWarnings("serial")
+		@Resource.LayerName("foodev")
         public static class Event extends Resource.Layer {
             public final Color col;
             public final String nm;
@@ -200,15 +213,23 @@ public class CharWnd extends Window {
                 trtm = 0;
             }
         }
+        
+        public double lastTotal = -1;
 
         public void update(Object... args) {
             int n = 0;
+            	double sum = 0;
             this.cap = (Float) args[n++];
             List<El> enew = new LinkedList<El>();
             while (n < args.length) {
                 Indir<Resource> res = ui.sess.getres((Integer) args[n++]);
                 double a = (Float) args[n++];
                 enew.add(new El(res, a));
+                sum += a;
+            }
+            if (sum!=lastTotal) {
+            	if (Config.logfoodchanges && lastTotal>=0 && lastTotal<sum)
+            		ui.gui.syslog.append(String.format("FEP +%.6f", sum - lastTotal), Color.WHITE);
             }
             this.enew = enew;
         }
@@ -225,15 +246,16 @@ public class CharWnd extends Window {
                 List<El> els = this.els;
                 BufferedImage cur = null;
                 double sum = 0.0;
+                for (El el : els)
+					sum += el.a;
                 for (El el : els) {
                     Event ev = el.res.get().layer(Event.class);
                     Color col = Utils.blendcol(ev.col, Color.WHITE, 0.5);
-                    BufferedImage ln = Text.render(String.format("%s: %s", ev.nm, Utils.odformat2(el.a, 2)), col).img;
+                    BufferedImage ln = Text.render(String.format("%s: %s (%.1f%%)", ev.nm, Utils.odformat2(el.a, 2), el.a/sum*100), col).img;
                     Resource.Image icon = el.res.get().layer(Resource.imgc);
                     if (icon != null)
                         ln = ItemInfo.catimgsh(5, icon.img, ln);
                     cur = ItemInfo.catimgs(0, cur, ln);
-                    sum += el.a;
                 }
                 cur = ItemInfo.catimgs(0, cur, Text.render(String.format(Resource.getLocString(Resource.l10nLabel, "Total: %s/%s"), Utils.odformat2(sum, 2), Utils.odformat(cap, 2))).img);
                 rtip = new TexI(cur);
@@ -248,6 +270,9 @@ public class CharWnd extends Window {
         public Color fg, bg;
         public double glut, lglut, gmod;
         public String lbl;
+        
+        public double lglut1 = 100, lglut2 = 100, lglut3 = 100;
+        private long prevTime, glutTime, finishedTime;
 
         public GlutMeter() {
             super(frame.sz());
@@ -271,18 +296,38 @@ public class CharWnd extends Window {
             this.lbl = Resource.getLocString(Resource.l10nLabel, (String) args[a++]);
             this.bg = (Color) args[a++];
             this.fg = (Color) args[a++];
-            rtip = null;
+            if (lglut < lglut1) {
+    			if (lglut3 > 1) {
+    				lglut3 = lglut2;
+    				lglut2 = lglut1;
+    				prevTime = glutTime;
+    			}
+    			lglut1 = lglut;
+    			glutTime = System.currentTimeMillis();
+    			if (lglut3 < 1) {
+    				finishedTime = System.currentTimeMillis()+(long)((lglut1)*(glutTime - prevTime)/(lglut2-lglut1));
+    			}
+    		} else if (lglut > lglut1) {
+    			if (Config.logfoodchanges)
+    				ui.message(String.format("Satiation +%.6f", lglut - lglut1), Color.WHITE);
+    			lglut3 = lglut2 = 100;
+    			lglut1 = lglut;
+    			glutTime = System.currentTimeMillis();
+    			finishedTime = -1;
+    		}
         }
-
+        
         private Tex rtip = null;
 
+
+
         public Object tooltip(Coord c, Widget prev) {
-            if (rtip == null) {
-                rtip = RichText.render(String.format(
-                        Resource.getLocString(Resource.l10nLabel, "%s: %d%%\nFood efficacy: %d%%"), lbl, Math.round((lglut) * 100), Math.round(gmod * 100)), -1).tex();
-            }
-            return (rtip);
+            String add = "";
+		if (finishedTime>System.currentTimeMillis())
+			add = "\nNext level: " + Utils.timeLeft(finishedTime);
+		return RichText.render(String.format("%s: %.3f%%\nFood efficacy: %d%%"+add, lbl, lglut * 100, Math.round(gmod * 100)), -1).tex();
         }
+
     }
 
     public static class Constipations extends Listbox<Constipations.El> {
@@ -563,6 +608,7 @@ public class CharWnd extends Window {
             g.aimage(img, cn.add(5, 0), 0, 0.5);
             g.aimage(rnm.tex(), cn.add(img.sz().x + 10, 1), 0, 0.5);
             g.aimage(ct.tex(), cn.add(sz.x - 40, 1), 1, 0.5);
+            
         }
 
         private void updcost() {
@@ -661,7 +707,6 @@ public class CharWnd extends Window {
             public Integer value() {
                 return (tenc);
             }
-
             public String text(Integer v) {
                 return (Integer.toString(tenc));
             }
@@ -681,11 +726,13 @@ public class CharWnd extends Window {
             this.study = study;
             add(new Label("Attention:"), 2, 2);
             add(new Label("Experience cost:"), 2, 32);
-            add(new Label("LP/hour"), 2, sz.y - 64);
+            // Use LPH instead
+            //add(new Label("LP/hour"), 2, sz.y - 64);
             add(new Label("Learning points:"), 2, sz.y - 32);
+            add(new Label("LPH:"), 2, 72);
         }
 
-        private void upd() {
+        void upd() {
             int texp = 0, tw = 0, tenc = 0, tlph = 0;
             for (GItem item : study.children(GItem.class)) {
                 try {
@@ -694,17 +741,7 @@ public class CharWnd extends Window {
                         texp += ci.exp;
                         tw += ci.mw;
                         tenc += ci.enc;
-
-                        try {
-                            Resource res = item.getres();
-                            if (res != null) {
-                                Double t = CurioStudyTimes.curios.get(res.basename());
-                                if (t != null) {
-                                    tlph += Math.round(ci.exp / t);
-                                }
-                            }
-                        } catch (Loading l) {
-                        }
+                        tlph += ci.LPH(ci.exp);
                     }
                 } catch (Loading l) {
                 }
@@ -1917,7 +1954,8 @@ public class CharWnd extends Window {
         if (place == "study") {
             sattr.add(child, new Coord(260, 35).add(wbox.btloff()));
             Frame.around(sattr, Collections.singletonList(child));
-            Widget inf = sattr.add(new StudyInfo(new Coord(attrw - 150, child.sz.y), child), new Coord(260 + 150, child.c.y).add(wbox.btloff().x, 0));
+      		StudyInfo inf = sattr.add(new StudyInfo(new Coord(attrw - 150, child.sz.y), child), new Coord(260 + 150, child.c.y).add(wbox.btloff().x, 0));
+      		ui.gui.addMeterAt(new AttnMeter(inf), 3, 0);
             sattr.add(new CheckBox("Lock") {
                 {
                     a = Config.studylock;
@@ -1941,6 +1979,7 @@ public class CharWnd extends Window {
                 }
             }, new Coord(460, 10));
             Frame.around(sattr, Collections.singletonList(inf));
+            getparent(GameUI.class).studywnd.setStudy((Inventory)child);
         } else if (place == "fmg") {
             fgt.add(child, 0, 0);
             if (child instanceof FightWnd)

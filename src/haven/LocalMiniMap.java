@@ -28,10 +28,16 @@ package haven;
 
 import static haven.MCache.cmaps;
 import static haven.MCache.tilesz;
-import java.awt.*;
-import java.awt.image.*;
-import java.util.*;
+
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import haven.resutil.Ridges;
 
@@ -45,8 +51,12 @@ public class LocalMiniMap extends Widget {
     private Coord cc = null;
     private MapTile cur = null;
     private UI.Grab dragging;
+    private static final Resource ramalarmsfx = Resource.local().loadwait("sfx/alarmram");
+    private static final Resource playeralarmWhite = Resource.local().loadwait("sfx/alarmWhite");
+    private static final Resource playeralarmRed = Resource.local().loadwait("sfx/alarmRed");
     private Coord doff = Coord.z;
     private Coord delta = Coord.z;
+    private Coord off = Coord.z;
 	private static final Resource alarmplayersfx = Resource.local().loadwait("sfx/alarmplayer");
     private static final Resource foragablesfx = Resource.local().loadwait("sfx/awwyeah");
     private static final Resource bearsfx = Resource.local().loadwait("sfx/bear");
@@ -55,6 +65,7 @@ public class LocalMiniMap extends Widget {
     private static final Resource doomedsfx = Resource.local().loadwait("sfx/doomed");
 	private final HashSet<Long> sgobs = new HashSet<Long>();
     private final HashMap<Coord, BufferedImage> maptiles = new HashMap<Coord, BufferedImage>(28, 0.75f);
+    @SuppressWarnings("serial")
     private final Map<Pair<MCache.Grid, Integer>, Defer.Future<MapTile>> cache = new LinkedHashMap<Pair<MCache.Grid, Integer>, Defer.Future<MapTile>>(7, 0.75f, true) {
         protected boolean removeEldestEntry(Map.Entry<Pair<MCache.Grid, Integer>, Defer.Future<MapTile>> eldest) {
             return size() > 7;
@@ -290,6 +301,7 @@ public class LocalMiniMap extends Widget {
             for (Gob gob : oc) {
                 try {
                     Resource res = gob.getres();
+                    KinInfo kininfo = gob.getattr(KinInfo.class);
                     if (res == null)
                         continue;
 
@@ -299,9 +311,21 @@ public class LocalMiniMap extends Widget {
                             ispartymember = ui.sess.glob.party.memb.containsKey(gob.id);
                         }
 
+                                    if ((Config.alarmunknown || Config.autohearth) && kininfo == null) {
+                                        if (!sgobs.contains(gob.id)) {
+                                            sgobs.add(gob.id);
+                                            Audio.play(playeralarmWhite, Config.alarmunknownvol);
+                                            if (Config.autohearth)
+                                                gameui().menu.wdgmsg("act", new Object[]{"travel", "hearth"});
+                                        }
+                                    } else if (Config.alarmred && kininfo != null && kininfo.group == 2) {
+                                        if (!sgobs.contains(gob.id)) {
+                                            sgobs.add(gob.id);
+                                            Audio.play(playeralarmRed, Config.alarmredvol);
+                                    }
+                                  }
                         Coord pc = p2c(gob.rc).add(delta);
                         if (!ispartymember) {
-                            KinInfo kininfo = gob.getattr(KinInfo.class);
                             if (pc.x >= 0 && pc.x <= sz.x && pc.y >= 0 && pc.y < sz.y) {
                                 g.chcolor(Color.BLACK);
                                 g.fellipse(pc, new Coord(5, 5));
@@ -380,6 +404,19 @@ public class LocalMiniMap extends Widget {
                             Audio.play(doomedsfx, Config.alarmbramvol);
                         }
                     }
+                    if (Config.alarmram) {
+                    	 try {
+                             if (res != null && "bram".equals(res.basename())) {
+                                 if (!sgobs.contains(gob.id)) {
+                                     sgobs.add(gob.id);
+                                     Audio.play(ramalarmsfx, Config.timersalarmvol);
+                                 }
+                             }
+                    } 
+                    	 catch (Exception e) { 
+                    	 }
+                    	 }
+                } catch (Loading l) {
                 } catch (Exception e) { // fail silently
                 }
             }
@@ -441,7 +478,12 @@ public class LocalMiniMap extends Widget {
     }
 
     public void tick(double dt) {
-        Gob pl = ui.sess.glob.oc.getgob(mv.plgob);
+        Gob pl = ui.sess.glob.oc.getgob(MapView.plgob);
+        if (pl == null) {
+            this.cc = null;
+            return;
+        }
+        this.cc = pl.rc.div(tilesz);
         if(pl == null)
             this.cc = mv.cc.div(tilesz);
         else
@@ -534,31 +576,40 @@ public class LocalMiniMap extends Widget {
 
             g.image(resize, sz.sub(resize.sz()));
 
-            if (Config.mapshowviewdist) {
+            /*if (Config.mapshowviewdist) {
                 Gob player = mv.player();
                 if (player != null)
                     g.image(gridblue, p2c(player.rc).add(delta).sub(44, 44));
-            }
+            }*/
 
             try {
                 synchronized (ui.sess.glob.party.memb) {
                     Collection<Party.Member> members = ui.sess.glob.party.memb.values();
                     for (Party.Member m : members) {
-                        Coord ptc;
+                        Coord mc;
                         try {
-                            ptc = m.getc();
+                            mc = m.getc();
                         } catch (MCache.LoadingMap e) {
-                            continue;
+                            mc = null;
                         }
-                        try {
-                            ptc = p2c(ptc);
+                        if(mc == null)
+            			    continue;
+                            Coord ptc = p2c(mc);
                             Tex tex = xmap.get(m.col);
                             if (tex == null) {
                                 tex = Text.renderstroked("\u2716",  m.col, Color.BLACK, partyf).tex();
                                 xmap.put(m.col, tex);
                             }
                             g.image(tex, ptc.add(delta).sub(6, 6));
-                        } catch (NullPointerException npe) { // in case chars are in different words
+                        if (Config.mapshowviewdist && m.gobid == MapView.plgob) {
+                            // view radius is 9x9 "server" grids
+                            Coord rc = p2c(mc.div(MCache.sgridsz).sub(4, 4).mul(MCache.sgridsz)).sub(off);
+                            Coord rs = MCache.sgridsz.mul(9).div(tilesz);
+                            g.chcolor(255, 255, 255, 60);
+                            g.frect(rc, rs);
+                            g.chcolor(0, 0, 0, 128);
+                            g.rect(rc, rs);
+                            g.chcolor();
                         }
                     }
                 }
@@ -570,6 +621,7 @@ public class LocalMiniMap extends Widget {
 
     public void center() {
         delta = Coord.z;
+        off = Coord.z;
     }
 
     public boolean mousedown(Coord c, int button) {
@@ -605,6 +657,7 @@ public class LocalMiniMap extends Widget {
 
     public void mousemove(Coord c) {
         if (dragging != null) {
+        	 off = off.add(doff.sub(c));
             delta = delta.add(c.sub(doff));
             doff = c;
         }

@@ -26,8 +26,6 @@
 
 package haven;
 
-import java.awt.Color;
-
 public class ResDrawable extends Drawable {
     public final Indir<Resource> res;
     public Sprite spr = null;

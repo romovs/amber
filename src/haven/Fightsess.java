@@ -26,10 +26,14 @@
 
 package haven;
 
-import java.text.DecimalFormat;
-import java.util.*;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Fightsess extends Widget {
     private static final Text.Foundry cdfndr = new Text.Foundry(Text.serif, 18).aa(true);
@@ -57,7 +61,6 @@ public class Fightsess extends Widget {
         put("Punch", 30);
         put("Sting", 35);
     }};
-
     @RName("fsess")
     public static class $_ implements Factory {
         public Widget create(Widget parent, Object[] args) {
@@ -139,11 +142,20 @@ public class Fightsess extends Widget {
         updatepos();
         double now = System.currentTimeMillis() / 1000.0;
 
-        for (Buff buff : fv.buffs.children(Buff.class))
-            buff.draw(g.reclip(pcc.add(-buff.c.x - Buff.cframe.sz().x - 20, buff.c.y + pho - Buff.cframe.sz().y), buff.sz));
-        if (fv.current != null) {
-            for (Buff buff : fv.current.buffs.children(Buff.class))
+        DefBar my = new DefBar();
+        for(Buff buff : fv.buffs.children(Buff.class)) {
+            Coord c = pcc.add(-buff.c.x - Buff.cframe.sz().x - 20, buff.c.y + pho - Buff.cframe.sz().y);
+    		buff.draw(g.reclip(c, buff.sz));
+            my.addBuff(buff);
+    	}
+        my.draw(g, pcc.add(-Buff.cframe.sz().x - 20,pho - Buff.cframe.sz().y));
+    	if(fv.current != null) {
+            DefBar opp = new DefBar();
+    	    for(Buff buff : fv.current.buffs.children(Buff.class)) {
                 buff.draw(g.reclip(pcc.add(buff.c.x + 20, buff.c.y + pho - Buff.cframe.sz().y), buff.sz));
+                opp.addBuff(buff);
+            }
+            opp.draw(g, pcc.add(20, pho - Buff.cframe.sz().y));
 
             g.aimage(ip.get().tex(), pcc.add(-75, 0), 1, 0.5);
             g.aimage(oip.get().tex(), pcc.add(75, 0), 0, 0.5);
@@ -159,13 +171,13 @@ public class Fightsess extends Widget {
         }
 
         if (now < fv.atkct) {
-            double cd = fv.atkct - now;
-            int w = (int) (cd * 20);
+        	int w = (int) ((fv.atkct - now) * 20);
             g.chcolor(255, 0, 128, 255);
             g.frect(pcc.add(-w, 20), new Coord(w * 2, 15));
             g.chcolor();
-            if (Config.showcooldown)
-                g.atextstroked(cdfmt.format(cd), pcc.add(0, 27), 0.5, 0.5, Color.WHITE, Color.BLACK);
+            double cc = (fv.atkct - now);
+            DecimalFormat df = new DecimalFormat("#.#");
+            g.astext(df.format(cc) + "s", pcc.add(11, 35), 1, 1, Color.WHITE, Color.BLACK);
         }
         Coord ca = pcc.add(-(actions.length * actpitch) / 2, 45);
         for (int i = 0; i < actions.length; i++) {
@@ -173,8 +185,19 @@ public class Fightsess extends Widget {
             try {
                 if (act != null) {
                     Tex img = act.get().layer(Resource.imgc).tex();
-                    g.image(img, ca);
-                    g.image(dyn[i] ? lframe : Buff.frame, ca.sub(Buff.imgoff));
+                    if (Config.smallicon) { 
+                    g.image(img, ca, new Coord((img.sz().x/2), img.sz().y/2));
+                    g.image(dyn[i] ? lframe : Buff.frame, ca.sub(Buff.imgoff), new Coord(lframe.sz().x/2, lframe.sz().y/2));
+                    String hotkeyText;
+                    hotkeyText = ""+(i+1);
+                    g.astext(hotkeyText, ca.add( img.sz().x/4 + 5, img.sz().y/2 + 10), 1, 1, Color.WHITE, Color.BLACK);
+                    } else {
+                        g.image(img, ca);
+                        g.image(dyn[i] ? lframe : Buff.frame, ca.sub(Buff.imgoff));
+                         String hotkeyText;
+                         hotkeyText = ""+(i+1);
+                         g.astext(hotkeyText, ca.add( img.sz().x/2 + 5, img.sz().y + 1), 1, 1, Color.WHITE, Color.BLACK);
+                    }
                     if (i == use) {
                         g.chcolor(255, 0, 128, 255);
                         g.frect(ca.add(0, img.sz().y + 3), new Coord(img.sz().x, 5));
@@ -184,7 +207,7 @@ public class Fightsess extends Widget {
             } catch (Loading l) {
             }
             ca.x += actpitch;
-        }
+        	}
     }
 
     private Widget prevtt = null;
@@ -279,5 +302,43 @@ public class Fightsess extends Widget {
             return (true);
         }
         return (super.globtype(key, ev));
+    }
+    private static class DefBar {
+        private static final Coord bsz = new Coord(20, 10);
+
+        private final Map<AttackType, List<Buff>> defs = new HashMap<AttackType, List<Buff>>();
+
+        public void addBuff(Buff buff) {
+            Resource.Image img = buff.getImage();
+            if (img != null) {
+                int attackType = CombatHelper.getAttackType(img.img);
+                for (AttackType type : AttackType.All) {
+                    if ((type.value & attackType) != 0) {
+                        List<Buff> buffs = defs.get(type);
+                        if (buffs == null) {
+                            buffs = new ArrayList<Buff>();
+                            defs.put(type, buffs);
+                        }
+                        buffs.add(buff);
+                    }
+                }
+            }
+        }
+
+        public void draw(GOut g, Coord c) {
+            int y = 15;
+            for (AttackType type : defs.keySet()) {
+                int x = 0;
+                for (Buff buff : defs.get(type)) {
+                    g.chcolor(type.color, 128);
+                    g.frect(c.add(x, -y), new Coord((buff.ameter * bsz.x) / 100, bsz.y));
+                    g.chcolor(Color.LIGHT_GRAY);
+                    g.rect(c.add(x, -y), bsz);
+                    g.chcolor();
+                    x += bsz.x + 5;
+                }
+                y += bsz.y + 5;
+            }
+        }
     }
 }

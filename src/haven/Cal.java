@@ -27,8 +27,6 @@
 package haven;
 
 import static java.lang.Math.PI;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 
 public class Cal extends Widget {
     public static final double hbr = 20;
@@ -59,5 +57,7 @@ public class Cal extends Widget {
 	g.image(sun, sc);
 	g.image(a.night?nlnd:dlnd, Coord.z);
 	g.image(bg, Coord.z);
+	String tt = String.format("Day %d,   %02d:%02d\nMoon: %s", a.day, a.hh, a.mm, Astronomy.phase[mp]);
+	tooltip = RichText.render(tt, 200);
     }
 }

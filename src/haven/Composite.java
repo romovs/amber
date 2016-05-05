@@ -26,14 +26,14 @@
 
 package haven;
 
-import java.util.*;
-import java.lang.reflect.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
+import haven.Composited.ED;
+import haven.Composited.MD;
 import haven.Skeleton.Pose;
 import haven.Skeleton.PoseMod;
-
-import static haven.Composited.ED;
-import static haven.Composited.MD;
 
 public class Composite extends Drawable {
     public final static float ipollen = 0.2f;

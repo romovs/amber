@@ -26,15 +26,17 @@
 
 package haven;
 
-import haven.glsl.*;
-
-import java.awt.Color;
-import java.util.*;
-import java.awt.image.*;
-import java.nio.*;
-import javax.media.opengl.*;
-
 import static haven.GOut.checkerr;
+
+import java.util.Collection;
+
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
+
+import haven.glsl.ProgramContext;
+import haven.glsl.ShaderMacro;
+import haven.glsl.Tex2D;
+import haven.glsl.Varying;
 
 public abstract class TexGL extends Tex {
     public static boolean disableall = false;
@@ -110,13 +112,11 @@ public abstract class TexGL extends Tex {
         }
 
         public void apply(GOut g) {
-            BGL gl = g.gl;
             sampler = lbind(g, tex);
             reapply(g);
         }
 
         public void unapply(GOut g) {
-            BGL gl = g.gl;
             sampler.ufree(g);
             sampler = null;
         }
@@ -187,7 +187,6 @@ public abstract class TexGL extends Tex {
         }
 
         public void unapply(GOut g) {
-            BGL gl = g.gl;
             if (g.st.old(TexDraw.slot) == null) {
                 sampler.act(g);
                 sampler.free();

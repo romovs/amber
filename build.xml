@@ -1,13 +1,14 @@
 <?xml version="1.0" ?>
 
 <project name="hafen" default="deftgt">
-  <property name="name" value="amber"/>
-  <property name="version" value=""/>
+  <property name="name" value="Purus Pasta"/>
+	<!-- MUISTA PÄIVITTÄÄ VERSIO -->
+  <property name="version" value="2.15.1"/>
 
   <target name="build-env">
     <mkdir dir="build" />
     <mkdir dir="build/classes" />
-    <available property="has-res-jar" file="build/hafen-res.jar" />
+    <available property="has-res-jar" file="build/lib/hafen-res.jar" />
     <available property="has-buildinfo" file="build/classes/buildinfo" />
     <available property="unpacked-lib" file="build/classes-lib" />
   </target>
@@ -26,6 +27,9 @@
 	<pathelement path="lib/jogl.jar" />
 	<pathelement path="lib/gluegen-rt.jar" />
 	<pathelement path="lib/jglob.jar" />
+    <pathelement path="lib/commons-io-2.4.jar" />
+    <pathelement path="lib/gson-2.3.1.jar" />
+      	
       </classpath>
       <compilerarg value="-Xlint:unchecked" />
       <compilerarg value="-Xlint:-options" />
@@ -40,6 +44,7 @@
     <copy todir="build/classes/haven" file="etc/res-preload" />
     <copy todir="build/classes/haven" file="etc/res-bgload" />
     <copy todir="build/classes/haven" file="etc/icon.png" />
+  	<copy todir="build/classes/haven" file="etc/curio.config" />
   </target>
 
   <target name="lib-classes" depends="build-env" unless="unpacked-lib">
@@ -53,9 +58,11 @@
     <jar destfile="build/hafen.jar" update="true">
       <fileset dir="build/classes" />
       <fileset dir="build/classes-lib" />
+    	<zipgroupfileset dir="lib" includes="commons-io-2.4.jar"/>
+    	<zipgroupfileset dir="lib" includes="gson-2.3.1.jar"/>
       <manifest>
 	<attribute name="Main-Class" value="haven.MainFrame" />
-	<attribute name="Class-Path" value="jogl.jar gluegen-rt.jar builtin-res.jar hafen-res.jar amber-res.jar l10n.jar" />
+	<attribute name="Class-Path" value="lib/jogl.jar lib/gluegen-rt.jar lib/builtin-res.jar lib/hafen-res.jar lib/amber-res.jar lib/pasta-res.jar lib/l10n.jar" />
       </manifest>
     </jar>
     <chmod file="build/hafen.jar" perm="a+x" />
@@ -67,39 +74,55 @@
     <get src="http://game.havenandhearth.com/java/hafen-res.jar" dest="lib/hafen-res.jar"
 	 usetimestamp="true" />
   </target>
+	
+	  <target name="custom-encode" depends="build-env">
+	    <java jar="lib/LayerUtil.jar" fork="true">
+	      <arg line="-re custom-res build/custom-res" />
+	    </java>
+	  </target>
 
+	  <target name="custom-jar" depends="custom-encode">
+	    <jar basedir="build/custom-res" destfile="build/lib/pasta-res.jar"/>
+	    <delete dir="build/custom-res" />
+	  </target>
+	
   <target name="l10n-jar" depends="build-env">
-    <jar destfile="build/l10n.jar">
+    <jar destfile="build/lib/l10n.jar">
       <fileset dir="." includes="l10n/*.properties" excludes="l10n/*_new.properties"/>
     </jar>
   </target>
+
   
-  <target name="jars" depends="build-env, jar, res-jar, l10n-jar">
-    <copy todir="build">
+  <target name="jars" depends="build-env, jar, res-jar, custom-jar, l10n-jar">
+    <copy todir="build/lib">
       <fileset dir="lib">
 	<include name="jogl.jar" />
 	<include name="gluegen-rt.jar" />
 	<include name="hafen-res.jar" />
 	<include name="builtin-res.jar" />
 	<include name="amber-res.jar" />
+      	
       </fileset>
       <fileset dir="lib/jogl-natives" includes="*.jar">
       </fileset>
     </copy>
+  	<copy todir="build">
+  	<fileset dir="etc">
+  		
+  	    		<include name="run.bat" />
+  	    		<include name="run_debug.bat" />
+  	    	</fileset>
+  		</copy>
   </target>
-
- <target name="dist" depends="rebuild">
-    <zip destfile="${basedir}/${name}-${version}.zip" update="false">
-        <fileset dir="build" includes="*.jar" excludes="*natives*.jar"/>
-        <fileset dir="${basedir}" includes="README, CHANGELOG"/>
-        <fileset dir="lib/jogl-natives" includes="*.jar"/>
-        <fileset dir="etc" includes="*.bat,run.sh"/>
-    </zip>
-    <zip destfile="${basedir}/${name}-${version}-upd.zip" update="false">
-        <fileset dir="build" includes="amber-res.jar, hafen.jar, l10n.jar" />
-        <fileset dir="${basedir}" includes="CHANGELOG"/>
-    </zip>
-  </target>
+	
+	 <target name="dist" depends="rebuild">
+	    <zip destfile="${basedir}/${name}-${version}.zip" update="false">
+	        <fileset dir="${basedir}" includes="README"/>
+	    	<fileset dir="build" includes="hafen.jar"/>
+	    	<fileset dir="build" includes="lib/*.jar"/>
+	        <fileset dir="etc" includes="*.bat"/>
+	    </zip>
+	  </target>
 
   <target name="deftgt" depends="jars" />
 
@@ -112,9 +135,6 @@
   </target>
 
   <target name="rebuild" depends="clean, jars">
-    <copy todir="build/res">
-        <fileset dir="custom_res/"/>
-    </copy>
   </target>
   
   <target name="profile" depends="jars">

@@ -1,27 +1,36 @@
 package haven;
 
-import java.io.*;
-import java.nio.charset.Charset;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.charset.Charset;
+
 import org.json.JSONObject;
 
 public class UpdateChecker extends Thread {
-    private final String url = "https://api.github.com/repos/romovs/amber/releases/latest";
+    private final String url = "https://api.github.com/repos/puruscor/purus-pasta/releases/latest";
 
-    public void run() {
+    public void run() { 
+    	
         try {
             JSONObject json = getjson();
             String latestver = json.getString("tag_name");
             if (isnewer(Config.version, latestver) && HavenPanel.lui != null && HavenPanel.lui.root != null) {
+            	System.out.println("Client is not up to date, current client version: " + Config.version + " Newest client version: " + latestver);
                 Window updwnd = new UpdateWnd(latestver);
                 HavenPanel.lui.root.add(updwnd);
                 updwnd.show();
                 updwnd.raise();
             }
+            else
+            	System.out.println("Client is up to date, current client version: " + Config.version + " Newest client version: " + latestver);
         } catch (Exception e) {
             System.err.println("WARNING: error checking for updates");
             e.printStackTrace();
         }
+        
     }
 
     private JSONObject getjson() throws IOException {

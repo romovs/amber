@@ -26,8 +26,6 @@
 
 package haven.glsl;
 
-import java.util.*;
-
 public class Add extends Expression {
     public final Expression[] terms;
 

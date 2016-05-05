@@ -1,5 +1,5 @@
 /*
- *  This file is part of the Haven & Hearth game client.
+o *  This file is part of the Haven & Hearth game client.
  *  Copyright (C) 2009 Fredrik Tolf <fredrik@dolda2000.com>, and
  *                     Björn Johannessen <johannessen.bjorn@gmail.com>
  *
@@ -26,15 +26,25 @@
 
 package haven;
 
-import haven.error.ErrorHandler;
+import static haven.Utils.getprop;
+
+import java.io.InputStream;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.*;
-import java.net.URL;
-import java.util.*;
-
-import static haven.Utils.getprop;
+import haven.error.ErrorHandler;
 
 public class Config {
     public static final boolean iswindows = System.getProperty("os.name").startsWith("Windows");
@@ -66,12 +76,16 @@ public class Config {
     public static boolean chattimestamp = Utils.getprefb("chattimestamp", false);
     public static boolean alarmunknown = Utils.getprefb("alarmunknown", false);
     public static double alarmunknownvol = Utils.getprefd("alarmunknownvol", 0.32);
+    public static boolean alarmram = Utils.getprefb("alarmram", false);
+    public static double alarmramvol = Utils.getprefd("alarmramvol", 0.32);
     public static boolean alarmred = Utils.getprefb("alarmred", false);
     public static double alarmredvol = Utils.getprefd("alarmredvol", 0.32);
     public static boolean showquality = Utils.getprefb("showquality", false);
+    public static boolean nohidebox = Utils.getprefb("nohidebox", false);
     public static int showqualitymode = Utils.getprefi("showqualitymode", 0);
     public static boolean arithavg = Utils.getprefb("arithavg", false);
     public static boolean qualitywhole = Utils.getprefb("qualitywhole", true);
+    public static boolean hideum = Utils.getprefb("hideum", false);
     public static boolean showlpgainmult = Utils.getprefb("showlpgainmult", false);
     public static int badcamsensitivity = Utils.getprefi("badcamsensitivity", 5);
     public static List<LoginData> logins = new ArrayList<LoginData>();
@@ -87,6 +101,7 @@ public class Config {
     public static int chatfontsize = Utils.getprefi("chatfontsize", 0);
     public static boolean quickslots = Utils.getprefb("quickslots", false);
     public static boolean statuswdgvisible = Utils.getprefb("statuswdgvisible", false);
+    public static boolean smallicon = Utils.getprefb("smallicon", false);
     public static boolean chatalarm = Utils.getprefb("chatalarm", false);
     public static boolean partychatalarm = Utils.getprefb("partychatalarm", false);
     public static double chatalarmvol = Utils.getprefd("chatalarmvol", 0.8);
@@ -107,8 +122,22 @@ public class Config {
     public static boolean simplecrops = Utils.getprefb("simplecrops", false);
     public static boolean simpleforage = Utils.getprefb("simpleforage", false);
     public static boolean hidecrops = Utils.getprefb("hidecrops", false);
+    public static boolean hidetrees = Utils.getprefb("hidetrees", false);
+    public static boolean hidewalls = Utils.getprefb("hidewalls", false);
+    public static boolean hidewagons = Utils.getprefb("hidewagons", false);
+    public static boolean hidehouses = Utils.getprefb("hidehouses", false);
+    public static boolean hidebushes = Utils.getprefb("hidebushes", false);
+    public static boolean hidedframes = Utils.getprefb("hidedframes", false);
+    public static boolean hidehfs = Utils.getprefb("hidehfs", false);
+    public static boolean hidedcatchers = Utils.getprefb("hidedcatchers", false);
+    public static boolean hideall = Utils.getprefb("hideall", false);
+    public static double hidered = Utils.getprefd("hidered", 155);
+    public static double hidegreen = Utils.getprefd("hidegreen", 155);
+    public static double hideblue = Utils.getprefd("hideblue", 155);
     public static boolean showfps = Utils.getprefb("showfps", false);
     public static boolean autohearth = Utils.getprefb("autohearth", false);
+    public static boolean studywndlock = Utils.getprefb("studywndlock", true);
+    public static boolean servertime = Utils.getprefb("servertime", false);
     public static boolean servertimesyslog = Utils.getprefb("servertimesyslog", false);
     public static boolean showplayerpaths = Utils.getprefb("showplayerpaths", false);
     public static boolean showanimalpaths = Utils.getprefb("showanimalpaths", false);
@@ -116,13 +145,23 @@ public class Config {
     public static boolean syslogonlogin = Utils.getprefb("syslogonlogin", false);
     public static boolean showinvonlogin = Utils.getprefb("showinvonlogin", false);
     public static boolean autopick = Utils.getprefb("autopick", false);
+    public static boolean fastflower = Utils.getprefb("fastflower", false);
+    public static boolean afklogout = Utils.getprefb("afklogout", false);
     public static boolean autoharvest = Utils.getprefb("autoharvest", false);
+    public static boolean logfoodchanges = Utils.getprefb("logfoodchanges", false);
+    public static boolean toggletracking = Utils.getprefb("toggletracking", false);
+    public static boolean togglecriminalacts = Utils.getprefb("togglecriminalacts", false);
+    public static boolean toggleuinot = Utils.getprefb("toggleuinot", false);
+    public static boolean fepmeter = Utils.getprefb("fepmeter", false);
+    public static boolean hungermeter = Utils.getprefb("hungermeter", false);
     public static boolean autosplit = Utils.getprefb("autosplit", false);
     public static boolean autoeat = Utils.getprefb("autoeat", false);
     public static boolean runonlogin = Utils.getprefb("runonlogin", false);
     public static Coord chatsz = Utils.getprefc("chatsz", Coord.z);
     public static boolean alternmapctrls = Utils.getprefb("alternmapctrls", true);
     public static boolean autostudy = Utils.getprefb("autostudy", true);
+    public static boolean limitbgfps = Utils.getprefb("limitbgfps", false);
+    public static boolean showfillamount = Utils.getprefb("showfillamount", false);
     public static boolean showcontentsbars = Utils.getprefb("showcontentsbars", false);
     public static boolean showdmgop = Utils.getprefb("showdmgop", false);
     public static boolean showdmgmy = Utils.getprefb("showdmgmy", false);
@@ -142,6 +181,8 @@ public class Config {
     public static boolean enabletracking = Utils.getprefb("enabletracking", false);
     public static boolean enablecrime = Utils.getprefb("enablecrime", false);
     public static boolean nometallicsfx = Utils.getprefb("nometallicsfx", false);
+    public static boolean highlightParty = Utils.getprefb("highlightParty", false);
+    public static boolean dropleeches = Utils.getprefb("dropleeches", false);
     public static boolean resinfo = Utils.getprefb("resinfo", false);
     public static boolean showanimalrad = Utils.getprefb("showanimalrad", false);
     public static boolean hwcursor = Utils.getprefb("hwcursor", false);
@@ -428,4 +469,19 @@ public class Config {
             }
         });
     }
+    public static Coord getStudyPosition() {
+		return Utils.getprefc("haven.study.position", new Coord(100, 100));
+	}
+
+	public static void setStudyPosition(Coord value) {
+		Utils.setprefc("haven.study.position", value);
+	}
+
+	public static boolean getStudyVisible() {
+		return Utils.getprefb("haven.study.visible", false);
+	}
+
+	public static void setStudyVisible(boolean value) {
+		Utils.setprefb("haven.study.visible", value);
+	}
 }
