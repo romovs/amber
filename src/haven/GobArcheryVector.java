@@ -8,9 +8,11 @@ public class GobArcheryVector extends Sprite {
     private static final float[] foe = Utils.c2fa(new Color(164, 0, 6));
     private final static int DISTANCE = 400;
     private float[] clr;
+    private final Gob followGob;
 
-    public GobArcheryVector(Gob gob) {
-        super(gob, null);
+    public GobArcheryVector(Gob pl, Gob followGob) {
+        super(pl, null);
+        this.followGob = followGob;
     }
 
     public boolean setup(RenderList rl) {
@@ -26,8 +28,9 @@ public class GobArcheryVector extends Sprite {
     public void draw(GOut g) {
         Gob gob = (Gob) owner;
         Coord3f pc = gob.getrc();
-        float x = (float) (DISTANCE * Math.cos(-gob.a));
-        float y = (float) (DISTANCE * Math.sin(-gob.a));
+        double a = followGob != null ? followGob.a : gob.a;
+        float x = (float) (DISTANCE * Math.cos(a));
+        float y = (float) (DISTANCE * Math.sin(-a));
         float z = gob.glob.map.getcz(pc.x + x, pc.y + y) - pc.z;
 
         g.apply();

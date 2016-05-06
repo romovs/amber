@@ -36,6 +36,7 @@ public class Charlist extends Widget {
     public static final int margin = 6;
     public int height, y, sel = 0;
     public List<Char> chars = new ArrayList<Char>();
+    public static Charlist instance;
 
     public static class Char {
         static Text.Foundry tf = new Text.Foundry(Text.serif, 20);
@@ -62,6 +63,7 @@ public class Charlist extends Widget {
         this.height = height;
         y = 0;
         setcanfocus(true);
+        instance = this;
     }
 
     protected void added() {
@@ -111,6 +113,10 @@ public class Charlist extends Widget {
     public boolean mousewheel(Coord c, int amount) {
         scroll(amount);
         return (true);
+    }
+    
+    public static void choose_player(String name) {
+		instance.wdgmsg("play", name);
     }
 
     public void wdgmsg(Widget sender, String msg, Object... args) {

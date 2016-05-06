@@ -667,13 +667,19 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
 
             if (Config.showarchvector && res != null && res.name.equals("gfx/borka/body") && d instanceof Composite) {
                 boolean targetting = false;
+
+                Gob followGob = null;
+                Moving moving = getattr(Moving.class);
+                if (moving != null && moving instanceof Following)
+                    followGob = ((Following)moving).tgt();
+
                 for (Composited.ED ed : ((Composite) d).comp.cequ) {
                     try {
                         res = ed.res.res.get();
                         if (res != null && res.name.endsWith("huntersbow") && ed.res.sdt.peekrbuf(0) == 5) {
                             targetting = true;
                             if (bowvector == null) {
-                                bowvector = new Overlay(new GobArcheryVector(this));
+                                bowvector = new Overlay(new GobArcheryVector(this, followGob));
                                 ols.add(bowvector);
                             }
                             break;

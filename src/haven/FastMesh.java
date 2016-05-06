@@ -138,8 +138,10 @@ public class FastMesh implements FRendered, Rendered.Instanced, Disposable {
         public abstract Compiled create(GOut g);
 
         public void dispose() {
-            for(Compiled c : vcache)
-                c.dispose();
+            for(Compiled c : vcache) {
+                if (c != null)
+                    c.dispose();
+            }
             kcache = new GLProgram[0];
             vcache = new Compiled[0];
         }
