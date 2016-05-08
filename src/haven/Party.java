@@ -59,6 +59,16 @@ public class Party {
             }
             return (c);
         }
+
+        public double geta() {
+            try {
+                Gob gob = getgob();
+                if (gob != null)
+                    return gob.geta();
+            } catch (Loading e) {
+            }
+            return 0.0;
+        }
     }
 
     public void msg(Message msg) {

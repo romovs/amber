@@ -64,6 +64,7 @@ public class LocalMiniMap extends Widget {
     private final static Tex treeicn = Text.renderstroked("\u25B2", Color.CYAN, Color.BLACK, bushf).tex();
     private Map<Color, Tex> xmap = new HashMap<Color, Tex>(6);
     public static Coord plcrel = null;
+    public final static double partymemberarrowsize = 14;
 
     private static class MapTile {
         public MCache.Grid grid;
@@ -545,19 +546,16 @@ public class LocalMiniMap extends Widget {
                     Collection<Party.Member> members = ui.sess.glob.party.memb.values();
                     for (Party.Member m : members) {
                         Coord ptc;
+                        double angle;
                         try {
                             ptc = m.getc();
+                            angle = m.geta();
                         } catch (MCache.LoadingMap e) {
                             continue;
                         }
                         try {
                             ptc = p2c(ptc);
-                            Tex tex = xmap.get(m.col);
-                            if (tex == null) {
-                                tex = Text.renderstroked("\u2716",  m.col, Color.BLACK, partyf).tex();
-                                xmap.put(m.col, tex);
-                            }
-                            g.image(tex, ptc.add(delta).sub(6, 6));
+                            drawpartymember(g, ptc, angle);
                         } catch (NullPointerException npe) { // in case chars are in different words
                         }
                     }
@@ -616,5 +614,13 @@ public class LocalMiniMap extends Widget {
             dragging = null;
         }
         return (true);
+    }
+
+    private void drawpartymember(GOut g, Coord position, double angle) {
+        final Coord top = position.add(Coord.sc(0, partymemberarrowsize / 2).rotate(angle));
+        final Coord left = position.add(Coord.sc(Math.PI / 4, -partymemberarrowsize / 2).rotate(angle));
+        final Coord right = position.add(Coord.sc(-Math.PI / 4, -partymemberarrowsize / 2).rotate(angle));
+        g.polygon(new Color(255, 0, 0), top, left, right);
+        g.polyline(new Color(0, 0, 0), top, left, right);
     }
 }
