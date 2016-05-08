@@ -347,6 +347,32 @@ public class GOut {
         checkerr();
     }
 
+    public void polygon(Color color, Coord... c) {
+        st.set(cur2d);
+        st.put(States.color, States.vertexcolor);
+        apply();
+        gl.glBegin(GL2.GL_POLYGON);
+        gl.glColor4f((color.getRed() / 255.0f), (color.getGreen() / 255.0f), (color.getBlue() / 255.0f), (color.getAlpha() / 255.0f));
+        for (Coord vc : c) {
+            vertex(vc);
+        }
+        gl.glEnd();
+        checkerr();
+    }
+
+    public void polyline(Color color, Coord... c) {
+        st.set(cur2d);
+        st.put(States.color, States.vertexcolor);
+        apply();
+        gl.glBegin(GL2.GL_LINE_LOOP);
+        gl.glColor4f((color.getRed() / 255.0f), (color.getGreen() / 255.0f), (color.getBlue() / 255.0f), (color.getAlpha() / 255.0f));
+        for (Coord vc : c) {
+            vertex(vc);
+        }
+        gl.glEnd();
+        checkerr();
+    }
+
     public void poly2(Object... c) {
         st.set(cur2d);
         st.put(States.color, States.vertexcolor);

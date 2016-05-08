@@ -275,6 +275,10 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
         return (new Coord3f(rc.x, rc.y, glob.map.getcz(rc)));
     }
 
+    public double geta() {
+        return a;
+    }
+
     private Class<? extends GAttrib> attrclass(Class<? extends GAttrib> cl) {
         while (true) {
             Class<?> p = cl.getSuperclass();
