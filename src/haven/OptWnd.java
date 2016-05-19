@@ -27,6 +27,7 @@
 package haven;
 
 
+import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.URL;
@@ -1219,6 +1220,18 @@ public class OptWnd extends Window {
         //appender.addRow(new Label("Button font size (req. restart):"), makeFontSizeButtonDropdown());
         //appender.addRow(new Label("Window title font size (req. restart):"), makeFontSizeWndCapDropdown());
         appender.addRow(new Label("Chat font size (req. restart):"), makeFontSizeChatDropdown());
+        appender.add(new CheckBox("Use custom font") {
+            {
+                a = Config.usefont;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("usefont", val);
+                Config.usefont = val;
+                a = val;
+            }
+        });
+        appender.addRow(new Label("Custom interface font (req. restart):"), makeFontsDropdown());
 
         Button resetWndBtn = new Button(220, "Reset Windows (req. logout)") {
             @Override
@@ -1296,7 +1309,6 @@ public class OptWnd extends Window {
         quality.pack();
     }
 
-
     private void initFlowermenus() {
         final WidgetVerticalAppender appender = new WidgetVerticalAppender(flowermenus);
 
@@ -1329,7 +1341,6 @@ public class OptWnd extends Window {
             {
                 a = Config.autoharvest;
             }
-
             public void set(boolean val) {
                 Utils.setprefb("autoharvest", val);
                 Config.autoharvest = val;
@@ -1738,6 +1749,41 @@ public class OptWnd extends Window {
             public void change(Locale item) {
                 super.change(item);
                 Utils.setpref("language", item.toString());
+            }
+        };
+    }
+
+    @SuppressWarnings("unchecked")
+    private Dropbox<String> makeFontsDropdown() {
+        final List<String> fonts = Arrays.asList(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
+        final List<Integer> widths = fonts.stream().map((v) -> Text.render(v).sz().x).collect(Collectors.toList());
+        final int width = widths.stream().reduce(Integer::max).get() + 20;
+        final int height = Text.render(fonts.get(0)).sz().y;
+        return new Dropbox<String>(width, 8, height) {
+            {
+                super.change(Config.font);
+            }
+
+            @Override
+            protected String listitem(int i) {
+                return fonts.get(i);
+            }
+
+            @Override
+            protected int listitems() {
+                return fonts.size();
+            }
+
+            @Override
+            protected void drawitem(GOut g, String item, int i) {
+                g.text(item, Coord.z);
+            }
+
+            @Override
+            public void change(String item) {
+                super.change(item);
+                Config.font = item;
+                Utils.setpref("font", item);
             }
         };
     }
