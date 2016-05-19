@@ -379,6 +379,7 @@ public class Config {
         add(new Pair<String, String>("Idle animals", "/idle"));
     }};
     public final static Set<String> disableanimSet = new HashSet<String>(disableanim.size());
+    public static boolean fontaa = Utils.getprefb("fontaa", false);
 
 
     static {
