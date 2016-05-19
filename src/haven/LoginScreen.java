@@ -153,8 +153,9 @@ public class LoginScreen extends Widget {
 
     private static class LoginList extends Widget {
         private static final int ITEM_HEIGHT = 20;
+        private static final Text.Foundry specialFnd = new Text.Foundry(Text.special, 14);
         private static final Text.Foundry fnd = new Text.Foundry(Text.sans, 14);
-        private Tex xicon = Text.render("\u2716", Color.RED, fnd).tex();
+        private Tex xicon = Text.render("\u2716", Color.RED, specialFnd).tex();
         private LoginData curLD;
 
         public LoginList(Coord c, Coord sz, Widget parent) {
