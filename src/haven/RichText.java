@@ -579,7 +579,7 @@ public class RichText extends Text {
     public static class Foundry {
         private Parser parser;
         private RState rs;
-        public boolean aa = false;
+        public boolean aa = Config.fontaa;
 
         public Foundry(Parser parser) {
             this.parser = parser;
