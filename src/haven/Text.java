@@ -44,7 +44,7 @@ public class Text {
     public static final Font dfont = sans;
     public static final Font special = new Font("Sans", Font.BOLD, Config.fontsizeglobal);
     public static final Foundry std;
-    public static final Foundry numfnd = new Foundry(sans, 10);
+    public static final Foundry numfnd = new Text.Foundry(Text.sans, Config.fontsizeglobal);
     public final BufferedImage img;
     public final String text;
     private Tex tex;

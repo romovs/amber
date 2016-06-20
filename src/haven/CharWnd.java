@@ -40,7 +40,7 @@ public class CharWnd extends Window {
     public static final Text.Furnace catf = new BlurFurn(new TexFurn(new Text.Foundry(Text.sans, 20).aa(true), Window.ctex), 2, 2, new Color(96, 48, 0));
     public static final Text.Furnace failf = new BlurFurn(new TexFurn(new Text.Foundry(Text.fraktur, 25).aa(true), Resource.loadimg("gfx/hud/fontred")), 3, 2, new Color(96, 48, 0));
     public static final Text.Foundry attrf = new Text.Foundry(Text.sans.deriveFont(Font.BOLD), Config.fontsizeattr).aa(true);
-    public static final Text.Foundry numfnd = new Text.Foundry(Text.sans, 12);
+    public static final Text.Foundry numfnd = new Text.Foundry(Text.sans, 12 * Config.fontsizeglobal / 10);
     public static final Color debuff = new Color(255, 128, 128);
     public static final Color buff = new Color(128, 255, 128);
     public static final Color tbuff = new Color(128, 128, 255);

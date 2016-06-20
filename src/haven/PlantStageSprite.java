@@ -4,7 +4,7 @@ import java.awt.*;
 
 
 public class PlantStageSprite extends Sprite {
-    private static final Text.Foundry fndr = new Text.Foundry(Text.sans.deriveFont(Font.BOLD), 12).aa(true);
+    private static final Text.Foundry fndr = new Text.Foundry(Text.sans.deriveFont(Font.BOLD),Config.fontsizeglobal * 12 / 10).aa(true);
     private static final Text.Foundry fndrmax = new Text.Foundry(Text.sans.deriveFont(Font.BOLD), 20).aa(true);
     private static final Color stagecolor = new Color(255, 227, 168);
     private static final Color stagemaxcolor = new Color(254, 100, 100);

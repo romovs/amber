@@ -4,7 +4,7 @@ import java.awt.*;
 
 
 public class TreeStageSprite extends Sprite {
-    private static final Text.Foundry fndr = new Text.Foundry(Text.sans.deriveFont(Font.BOLD), 12).aa(true);
+    private static final Text.Foundry fndr = new Text.Foundry(Text.sans.deriveFont(Font.BOLD), Config.fontsizeglobal * 12 / 10).aa(true);
     private static final Tex[] treestg = new Tex[90];
     private static final Color stagecolor = new Color(255, 227, 168);//new Color(235, 235, 235);
     public int val;

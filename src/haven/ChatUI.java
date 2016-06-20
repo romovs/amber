@@ -44,7 +44,7 @@ import java.awt.datatransfer.*;
 public class ChatUI extends Widget {
     private static final Resource alarmsfx = Resource.local().loadwait("sfx/chatalarm");
     public static final RichText.Foundry fnd = new RichText.Foundry(new ChatParser(TextAttribute.FONT, Text.dfont.deriveFont((float)Config.fontsizechat)));
-    public static final Text.Foundry qfnd = new Text.Foundry(Text.dfont, 12, new java.awt.Color(192, 255, 192));
+    public static final Text.Foundry qfnd = new Text.Foundry(Text.dfont, Config.fontsizeglobal * 12 / 10, new java.awt.Color(192, 255, 192));
     public static final int selw = 130;
     private static final int brpw = 142, beltw = 410;
     public static final Coord marg = new Coord(9, 9);
@@ -967,7 +967,7 @@ public class ChatUI extends Widget {
 
     private class Selector extends Widget {
         public final BufferedImage ctex = Resource.loadimg("gfx/hud/chantex");
-        public final Text.Foundry tf = new Text.Foundry(Text.serif.deriveFont(Font.BOLD, 12)).aa(true);
+        public final Text.Foundry tf = new Text.Foundry(Text.serif.deriveFont(Font.BOLD, Config.fontsizeglobal * 12 / 10)).aa(true);
         public final Text.Furnace[] nf = {
                 new PUtils.BlurFurn(new PUtils.TexFurn(tf, ctex), 1, 1, new Color(80, 40, 0)),
                 new PUtils.BlurFurn(new PUtils.TexFurn(tf, ctex), 1, 1, new Color(0, 128, 255)),

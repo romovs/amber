@@ -32,7 +32,7 @@ import java.awt.image.BufferedImage;
 
 public class TextEntry extends SIWidget {
     public static final Color defcol = new Color(255, 205, 109), dirtycol = new Color(255, 232, 209);
-    public static final Text.Foundry fnd = new Text.Foundry(Text.serif, 12).aa(true);
+    public static final Text.Foundry fnd = new Text.Foundry(Text.serif, Config.fontsizeglobal + 2).aa(true);
     public static final BufferedImage lcap = Resource.loadimg("gfx/hud/text/l");
     public static final BufferedImage rcap = Resource.loadimg("gfx/hud/text/r");
     public static final BufferedImage mext = Resource.loadimg("gfx/hud/text/m");
