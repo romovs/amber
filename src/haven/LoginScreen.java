@@ -41,7 +41,7 @@ public class LoginScreen extends Widget {
 
     static {
         textf = new Text.Foundry(Text.sans, 16).aa(true);
-        textfs = new Text.Foundry(Text.sans, 14).aa(true);
+        textfs = new Text.Foundry(Text.sans, Config.fontsizeglobal * 14 / 10).aa(true);
     }
 
     public LoginScreen() {
@@ -153,8 +153,8 @@ public class LoginScreen extends Widget {
 
     private static class LoginList extends Widget {
         private static final int ITEM_HEIGHT = 20;
-        private static final Text.Foundry specialFnd = new Text.Foundry(Text.special, 14);
-        private static final Text.Foundry fnd = new Text.Foundry(Text.sans, 14);
+        private static final Text.Foundry specialFnd = new Text.Foundry(Text.special, Config.fontsizeglobal * 14 / 10);
+        private static final Text.Foundry fnd = new Text.Foundry(Text.sans, Config.fontsizeglobal * 14 / 10);
         private Tex xicon = Text.render("\u2716", Color.RED, specialFnd).tex();
         private LoginData curLD;
 

@@ -1095,7 +1095,8 @@ public class OptWnd extends Window {
     }
 
     private void initUis() {
-        final WidgetVerticalAppender appender = new WidgetVerticalAppender(uis);
+        final Scrollport internal = new Scrollport(new Coord(740, 310));
+        final WidgetVerticalAppender appender = new WidgetVerticalAppender(internal.cont);
 
         appender.setVerticalMargin(VERTICAL_MARGIN);
         appender.setHorizontalMargin(HORIZONTAL_MARGIN);
@@ -1254,6 +1255,8 @@ public class OptWnd extends Window {
                 Utils.delpref("fbelt_vertical");
             }
         };
+        internal.cont.update();
+        uis.add(internal, new Coord(0, 0));
         uis.add(resetWndBtn, new Coord(620 / 2 - resetWndBtn.sz.x / 2 , 320));
         uis.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
         uis.pack();
