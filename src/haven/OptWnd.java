@@ -1216,7 +1216,7 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
-        //appender.addRow(new Label("Interface font size (req. restart):"), makeFontSizeGlobalDropdown());
+        appender.addRow(new Label("Interface font size (req. restart):"), makeFontSizeGlobalDropdown());
         //appender.addRow(new Label("Button font size (req. restart):"), makeFontSizeButtonDropdown());
         //appender.addRow(new Label("Window title font size (req. restart):"), makeFontSizeWndCapDropdown());
         appender.addRow(new Label("Chat font size (req. restart):"), makeFontSizeChatDropdown());
@@ -1871,6 +1871,37 @@ public class OptWnd extends Window {
     }
 
     private static final List<Integer> fontSize = Arrays.asList(10, 11, 12, 13, 14, 15, 16);
+
+    private Dropbox<Integer> makeFontSizeGlobalDropdown() {
+        List<String> values = fontSize.stream().map(x -> x.toString()).collect(Collectors.toList());
+        return new Dropbox<Integer>(fontSize.size(), values) {
+            {
+                super.change(Config.fontsizeglobal);
+            }
+
+            @Override
+            protected Integer listitem(int i) {
+                return fontSize.get(i);
+            }
+
+            @Override
+            protected int listitems() {
+                return fontSize.size();
+            }
+
+            @Override
+            protected void drawitem(GOut g, Integer item, int i) {
+                g.text(item.toString(), Coord.z);
+            }
+
+            @Override
+            public void change(Integer item) {
+                super.change(item);
+                Config.fontsizeglobal = item;
+                Utils.setprefi("fontsizeglobal", item);
+            }
+        };
+    }
 
     private Dropbox<Integer> makeFontSizeChatDropdown() {
         List<String> values = fontSize.stream().map(x -> x.toString()).collect(Collectors.toList());
