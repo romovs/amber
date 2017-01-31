@@ -44,7 +44,7 @@ public class RichText extends Text {
 
     static {
         Map<Attribute, Object> a = new HashMap<Attribute, Object>();
-        a.put(TextAttribute.FAMILY, "SansSerif");
+        a.put(TextAttribute.FAMILY, Config.font);
         a.put(TextAttribute.SIZE,  Config.fontsizeglobal);
         std = new Parser(a);
         stdf = new Foundry(std);
@@ -579,7 +579,7 @@ public class RichText extends Text {
     public static class Foundry {
         private Parser parser;
         private RState rs;
-        public boolean aa = false;
+        public boolean aa = Config.fontaa;
 
         public Foundry(Parser parser) {
             this.parser = parser;

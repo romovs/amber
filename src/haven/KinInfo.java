@@ -31,7 +31,7 @@ import java.awt.image.BufferedImage;
 
 public class KinInfo extends GAttrib {
     public static final BufferedImage vlg = Resource.loadimg("gfx/hud/vilind");
-    public static final Text.Foundry nfnd = new Text.Foundry(Text.dfont, Config.fontsizeglobal);
+    public static final Text.Foundry nfnd = new Text.Foundry(Text.dfont, Config.fontsizeglobal).aa(false);
     public String name;
     public int group, type;
     private Tex rnm = null;

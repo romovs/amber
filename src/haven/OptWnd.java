@@ -27,6 +27,7 @@
 package haven;
 
 
+import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.URL;
@@ -1094,7 +1095,8 @@ public class OptWnd extends Window {
     }
 
     private void initUis() {
-        final WidgetVerticalAppender appender = new WidgetVerticalAppender(uis);
+        final Scrollport internal = new Scrollport(new Coord(740, 310));
+        final WidgetVerticalAppender appender = new WidgetVerticalAppender(internal.cont);
 
         appender.setVerticalMargin(VERTICAL_MARGIN);
         appender.setHorizontalMargin(HORIZONTAL_MARGIN);
@@ -1204,10 +1206,33 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
-        //appender.addRow(new Label("Interface font size (req. restart):"), makeFontSizeGlobalDropdown());
+        appender.add(new CheckBox("Font antialiasing") {
+            {
+                a = Config.fontaa;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("fontaa", val);
+                Config.fontaa = val;
+                a = val;
+            }
+        });
+        appender.addRow(new Label("Interface font size (req. restart):"), makeFontSizeGlobalDropdown());
         //appender.addRow(new Label("Button font size (req. restart):"), makeFontSizeButtonDropdown());
         //appender.addRow(new Label("Window title font size (req. restart):"), makeFontSizeWndCapDropdown());
         appender.addRow(new Label("Chat font size (req. restart):"), makeFontSizeChatDropdown());
+        appender.add(new CheckBox("Use custom font") {
+            {
+                a = Config.usefont;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("usefont", val);
+                Config.usefont = val;
+                a = val;
+            }
+        });
+        appender.addRow(new Label("Custom interface font (req. restart):"), makeFontsDropdown());
 
         Button resetWndBtn = new Button(220, "Reset Windows (req. logout)") {
             @Override
@@ -1225,6 +1250,8 @@ public class OptWnd extends Window {
                 Utils.delpref("fbelt_vertical");
             }
         };
+        internal.cont.update();
+        uis.add(internal, new Coord(0, 0));
         uis.add(resetWndBtn, new Coord(620 / 2 - resetWndBtn.sz.x / 2 , 320));
         uis.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
         uis.pack();
@@ -1280,7 +1307,6 @@ public class OptWnd extends Window {
         quality.pack();
     }
 
-
     private void initFlowermenus() {
         final WidgetVerticalAppender appender = new WidgetVerticalAppender(flowermenus);
 
@@ -1313,7 +1339,6 @@ public class OptWnd extends Window {
             {
                 a = Config.autoharvest;
             }
-
             public void set(boolean val) {
                 Utils.setprefb("autoharvest", val);
                 Config.autoharvest = val;
@@ -1748,6 +1773,41 @@ public class OptWnd extends Window {
         };
     }
 
+    @SuppressWarnings("unchecked")
+    private Dropbox<String> makeFontsDropdown() {
+        final List<String> fonts = Arrays.asList(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
+        final List<Integer> widths = fonts.stream().map((v) -> Text.render(v).sz().x).collect(Collectors.toList());
+        final int width = widths.stream().reduce(Integer::max).get() + 20;
+        final int height = Text.render(fonts.get(0)).sz().y;
+        return new Dropbox<String>(width, 8, height) {
+            {
+                super.change(Config.font);
+            }
+
+            @Override
+            protected String listitem(int i) {
+                return fonts.get(i);
+            }
+
+            @Override
+            protected int listitems() {
+                return fonts.size();
+            }
+
+            @Override
+            protected void drawitem(GOut g, String item, int i) {
+                g.text(item, Coord.z);
+            }
+
+            @Override
+            public void change(String item) {
+                super.change(item);
+                Config.font = item;
+                Utils.setpref("font", item);
+            }
+        };
+    }
+
     private List<Locale> enumerateLanguages() {
         Set<Locale> languages = new HashSet<>();
         languages.add(new Locale("en"));
@@ -1812,6 +1872,37 @@ public class OptWnd extends Window {
     }
 
     private static final List<Integer> fontSize = Arrays.asList(10, 11, 12, 13, 14, 15, 16);
+
+    private Dropbox<Integer> makeFontSizeGlobalDropdown() {
+        List<String> values = fontSize.stream().map(x -> x.toString()).collect(Collectors.toList());
+        return new Dropbox<Integer>(fontSize.size(), values) {
+            {
+                super.change(Config.fontsizeglobal);
+            }
+
+            @Override
+            protected Integer listitem(int i) {
+                return fontSize.get(i);
+            }
+
+            @Override
+            protected int listitems() {
+                return fontSize.size();
+            }
+
+            @Override
+            protected void drawitem(GOut g, Integer item, int i) {
+                g.text(item.toString(), Coord.z);
+            }
+
+            @Override
+            public void change(Integer item) {
+                super.change(item);
+                Config.fontsizeglobal = item;
+                Utils.setprefi("fontsizeglobal", item);
+            }
+        };
+    }
 
     private Dropbox<Integer> makeFontSizeChatDropdown() {
         List<String> values = fontSize.stream().map(x -> x.toString()).collect(Collectors.toList());

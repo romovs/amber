@@ -31,17 +31,20 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 
 public class Text {
+    public static final Font plain = new Font(Config.font, Font.PLAIN, Config.fontsizeglobal);
+    public static final Font bold = new Font(Config.font, Font.BOLD, Config.fontsizeglobal);
     // Following fonts should not be removed even if unused, since they could be needed for remotely loaded resources.
     // Serif - used for misc numerical values, quest panel title, village names, text input boxes.
     // Mono - used by the console.
     // Sans - everything else.
-    public static final Font serif = new Font("Serif", Font.PLAIN, Config.fontsizeglobal);
-    public static final Font sans = new Font("Sans", Font.PLAIN, Config.fontsizeglobal);
+    public static final Font serif = Config.usefont ? plain : new Font("Serif", Font.PLAIN, Config.fontsizeglobal);
+    public static final Font sans = Config.usefont ? plain : new Font("Sans", Font.PLAIN, Config.fontsizeglobal);
     public static final Font mono = new Font("Monospaced", Font.PLAIN, Config.fontsizeglobal);
     public static final Font fraktur = Resource.local().loadwait("ui/fraktur").layer(Resource.Font.class).font;
     public static final Font dfont = sans;
+    public static final Font special = new Font("Sans", Font.BOLD, Config.fontsizeglobal);
     public static final Foundry std;
-    public static final Foundry numfnd = new Foundry(sans, 10);
+    public static final Foundry numfnd = new Text.Foundry(Text.sans, Config.fontsizeglobal);
     public final BufferedImage img;
     public final String text;
     private Tex tex;
@@ -109,7 +112,7 @@ public class Text {
         private FontMetrics m;
         Font font;
         Color defcol;
-        public boolean aa = false;
+        public boolean aa = Config.fontaa;
         private RichText.Foundry wfnd = null;
 
         public Foundry(Font f, Color defcol) {
@@ -321,7 +324,7 @@ public class Text {
         if (cmd == "render") {
             PosixArgs opt = PosixArgs.getopt(args, 1, "aw:f:s:");
             boolean aa = false;
-            String font = "SansSerif";
+            String font = Config.font;
             int width = 100, size = 10;
             for (char c : opt.parsed()) {
                 if (c == 'a') {

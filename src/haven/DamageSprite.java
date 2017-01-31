@@ -4,8 +4,8 @@ import java.awt.*;
 
 public class DamageSprite extends Sprite implements PView.Render2D {
     public static final int ID = -1000;
-    private static final Text.Furnace dfrn = new PUtils.BlurFurn(new Text.Foundry(Text.sans, 14, new Color(251, 78, 78)).aa(true), 1, 1, new Color(188, 0, 0));
-    private static final Text.Furnace afrn = new PUtils.BlurFurn(new Text.Foundry(Text.sans, 14, new Color(76, 202, 98)).aa(true), 1, 1, new Color(0, 142, 24));
+    private static final Text.Furnace dfrn = new PUtils.BlurFurn(new Text.Foundry(Text.sans, Config.fontsizeglobal * 14 / 10, new Color(251, 78, 78)).aa(true), 1, 1, new Color(188, 0, 0));
+    private static final Text.Furnace afrn = new PUtils.BlurFurn(new Text.Foundry(Text.sans, Config.fontsizeglobal * 14 / 10, new Color(76, 202, 98)).aa(true), 1, 1, new Color(0, 142, 24));
     public int dmg, arm;
     private Tex dmgtex, armtex;
     private Gob gob;

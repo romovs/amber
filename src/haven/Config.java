@@ -381,6 +381,9 @@ public class Config {
         add(new Pair<String, String>("Idle animals", "/idle"));
     }};
     public final static Set<String> disableanimSet = new HashSet<String>(disableanim.size());
+    public static boolean fontaa = Utils.getprefb("fontaa", false);
+    public static boolean usefont = Utils.getprefb("usefont", false);
+    public static String font = Utils.getpref("font", "SansSerif");
 
     public final static HashMap<String, String[]> cures = new HashMap<String, String[]>(14) {{
         put("paginae/wound/antburn", new String[]{
