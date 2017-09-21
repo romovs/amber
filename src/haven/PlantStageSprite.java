@@ -1,6 +1,9 @@
 package haven;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class PlantStageSprite extends Sprite {
@@ -15,7 +18,10 @@ public class PlantStageSprite extends Sprite {
             Text.renderstroked("6", stagecolor, Color.BLACK, Text.num12boldFnd).tex()
     };
     public int stg;
+    public int stgmax;
     private Tex tex;
+    private static final Map<String, Tex> plantTex = new HashMap<>();
+    private static final Text.Foundry gobhpf = new Text.Foundry(Text.sans, 14).aa(true);
     private static Matrix4f mv = new Matrix4f();
     private Projection proj;
     private Coord wndsz;
@@ -49,12 +55,20 @@ public class PlantStageSprite extends Sprite {
 
     public void update(int stg, int stgmax) {
         this.stg = stg;
-        if (multistg && stg == stgmax - 1)
-            tex = stghrvtex;
-        else if (stg == stgmax)
-            tex = stgmaxtex;
-        else
-            tex = stgtex[stg - 1];
+        if(Config.showplantgrowstageastext) {
+            String str = String.format("%d/%d", new Object[]{stg, stgmax});
+            if (!plantTex.containsKey(str)) {
+                plantTex.put(str, Text.renderstroked(str, stg >= stgmax ? Color.GREEN : Color.RED, Color.BLACK, gobhpf).tex());
+            }
+            tex = plantTex.get(str);
+        } else {
+            if (multistg && stg == stgmax - 1)
+                tex = stghrvtex;
+            else if (stg == stgmax)
+                tex = stgmaxtex;
+            else
+                tex = stgtex[stg - 1];
+        }
     }
 
     public Object staticp() {

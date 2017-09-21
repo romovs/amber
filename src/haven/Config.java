@@ -85,6 +85,7 @@ public class Config {
     public static boolean showcraftcap = Utils.getprefb("showcraftcap", true);
     public static boolean showgobhp = Utils.getprefb("showgobhp", false);
     public static boolean showplantgrowstage = Utils.getprefb("showplantgrowstage", false);
+    public static boolean showplantgrowstageastext = Utils.getprefb("showplantgrowstageastext", false);
     public static boolean notifykinonline = Utils.getprefb("notifykinonline", true);
     public static boolean showminerad = Utils.getprefb("showminerad", false);
     public static boolean showfarmrad = Utils.getprefb("showfarmrad", false);

@@ -986,6 +986,11 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                 map.removeCustomSprites(Sprite.GROWTH_STAGE_ID);
             if (map != null)
                 map.refreshGobsGrowthStages();
+        } else if (ev.isControlDown() && ev.getKeyCode() == KeyEvent.VK_Y) {
+            Config.showplantgrowstageastext = !Config.showplantgrowstageastext;
+            Utils.setprefb("showplantgrowstageastext", Config.showplantgrowstageastext);
+            map.removeCustomSprites(Sprite.GROWTH_STAGE_ID);
+            map.refreshGobsGrowthStages();
         } else if (ev.isControlDown() && ev.getKeyCode() == KeyEvent.VK_X) {
             Config.tilecenter = !Config.tilecenter;
             Utils.setprefb("tilecenter", Config.tilecenter);
