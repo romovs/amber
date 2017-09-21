@@ -7,9 +7,11 @@ public class QuickSlotsWdg extends Widget implements DTarget {
     private static final Coord ssz = new Coord(44, 44);
     private UI.Grab dragging;
     private Coord dc;
+    private int chatsize;
 
-    public QuickSlotsWdg() {
+    public QuickSlotsWdg(int chatsize) {
         super(new Coord(44 + 44 + 6, 44));
+        this.chatsize = chatsize;
     }
 
     @Override
@@ -67,6 +69,10 @@ public class QuickSlotsWdg extends Widget implements DTarget {
             } catch (Exception ex) { // fail silently if info is not ready
             }
         }
+    }
+
+    public void presize() {
+        c.y = HavenPanel.h - (Utils.getprefb("chatvis", true) ? gameui().chat.savedh : 0) - 52;
     }
 
     @Override
