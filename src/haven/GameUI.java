@@ -193,10 +193,9 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         livestockwnd.hide();
         add(livestockwnd, new Coord(HavenPanel.w / 2 - timerswnd.sz.x / 2, 100));
 
-        quickslots = new QuickSlotsWdg();
+        quickslots = add(new QuickSlotsWdg(chat.sz.y), new Coord(430, HavenPanel.h - chat.sz.y - 52));
         if (!Config.quickslots)
             quickslots.hide();
-        add(quickslots, Utils.getprefc("quickslotsc", new Coord(430, HavenPanel.h - 160)));
 
         if (Config.statuswdgvisible) {
             statuswindow = new StatusWdg();
@@ -986,6 +985,11 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                 map.removeCustomSprites(Sprite.GROWTH_STAGE_ID);
             if (map != null)
                 map.refreshGobsGrowthStages();
+        } else if (ev.isControlDown() && ev.getKeyCode() == KeyEvent.VK_Y) {
+            Config.showplantgrowstageastext = !Config.showplantgrowstageastext;
+            Utils.setprefb("showplantgrowstageastext", Config.showplantgrowstageastext);
+            map.removeCustomSprites(Sprite.GROWTH_STAGE_ID);
+            map.refreshGobsGrowthStages();
         } else if (ev.isControlDown() && ev.getKeyCode() == KeyEvent.VK_X) {
             Config.tilecenter = !Config.tilecenter;
             Utils.setprefb("tilecenter", Config.tilecenter);
@@ -1199,6 +1203,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                         chat.sresize(0);
                     }
                     Utils.setprefb("chatvis", chat.targeth != 0);
+                    quickslots.presize();
                 }
 
                 public void draw(GOut g) {
