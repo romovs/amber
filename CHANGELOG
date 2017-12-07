@@ -1,3 +1,8 @@
+Version 1.65.5
+    Misc:
+        * Russian localization updates.
+        * Upstream code merge.
+
 Version 1.65.4
     Fixed:
         * Barter stands crash.

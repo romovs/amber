@@ -9,6 +9,7 @@ import java.util.List;
 public class RealmBuff extends Buff implements ResOwner {
     public final Indir<Resource> res;
     public Object[] rawinfo;
+    public static final ClassResolver<UI> uictx = (new ClassResolver<UI>()).add(Glob.class, (var0) -> var0.sess.glob).add(Session.class, (var0) -> var0.sess);
     private List<ItemInfo> info = Collections.emptyList();
     private Tex rtip;
 
@@ -24,6 +25,10 @@ public class RealmBuff extends Buff implements ResOwner {
 
     public Resource resource() {
         return this.res.get();
+    }
+
+    public <C> C context(Class<C> var1) {
+        return uictx.context(var1, this.ui);
     }
 
     public Glob glob() {
@@ -69,10 +74,5 @@ public class RealmBuff extends Buff implements ResOwner {
         } else {
             super.uimsg(var1, var2);
         }
-    }
-
-    @Override
-    public <T> T context(Class<T> cl) {
-        return null;
     }
 }
