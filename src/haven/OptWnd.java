@@ -963,7 +963,40 @@ public class OptWnd extends Window {
 
             public void set(boolean val) {
                 Utils.setprefb("proximityaggro", val);
-                Config.combshowkeys = val;
+                Config.proximityaggro = val;
+                a = val;
+            }
+        });
+        appender.add(new CheckBox("Aggro animals in proximity to the mouse cursor") {
+            {
+                a = Config.proximityaggroanimal;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("proximityaggroanimal", val);
+                Config.proximityaggroanimal = val;
+                a = val;
+            }
+        });
+        appender.add(new CheckBox("Chase small games in proximity to the mouse cursor (Alt+RMB)") {
+            {
+                a = Config.proximitychase;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("proximitychase", val);
+                Config.proximitychase = val;
+                a = val;
+            }
+        });
+        appender.add(new CheckBox("Lift corpses etc in proximity to the mouse cursor") {
+            {
+                a = Config.proximitylift;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("proximitylift", val);
+                Config.proximitylift = val;
                 a = val;
             }
         });
