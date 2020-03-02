@@ -1731,6 +1731,50 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         return (new Object[0]);
     }
 
+    private interface GobCheck {
+        boolean check(Gob gob);
+    }
+    
+    private class GobCheckAtk implements GobCheck {
+        public boolean check(Gob gob) {
+            if (gob == null || gob.type == null) {
+                return false;
+            }
+            Gob.Type type = gob.type;
+            switch (type) {
+            case PLAYER:
+                return Config.proximityaggro && !gob.isFriend();
+            case MAMMOTH:
+            case BAT:
+            case EAGLE:
+            case MOB:
+            case BEAR:
+            case LYNX:
+            case WILDGOAT:
+            case TROLL:
+            case WALRUS:
+            case TROUGH:
+                return Config.proximityaggroanimal;
+            default:
+                return false;
+            }
+        }
+    }
+
+    private class GobCheckLift implements GobCheck {
+        public boolean check(Gob gob) {
+            //TODO
+            return true;
+        }
+    }
+
+    private class GobCheckChase implements GobCheck {
+        public boolean check(Gob gob) {
+            //TODO
+            return true;
+        }
+    }
+
     private class Click extends Hittest {
         int clickb;
 
@@ -1744,6 +1788,21 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                     pfthread.interrupt();
                 }
             }
+        }
+        
+        
+        protected Gob proximity(GobCheck check, Coord2d mc) {
+            Gob target = null;
+            synchronized (glob.oc) {
+                for (Gob gob : glob.oc) {
+                    if (!gob.isplayer() && check.check(gob)) {
+                        double dist = gob.rc.dist(mc);
+                        if ((target == null || dist < target.rc.dist(mc)) && dist <= 5 * tilesz.x)
+                            target = gob;
+                    }
+                }
+            }
+            return target;
         }
 
         protected void hit(Coord pc, Coord2d mc, ClickInfo inf) {
@@ -1764,21 +1823,23 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                 }
             }
 
-            if (Config.proximityaggro && clickb == 1 && curs != null && curs.name.equals("gfx/hud/curs/atk")) {
-                Gob target = null;
-                synchronized (glob.oc) {
-                    for (Gob gob : glob.oc) {
-                        if (gob.type == Gob.Type.PLAYER && !gob.isplayer()) {
-                            double dist = gob.rc.dist(mc);
-                            if ((target == null || dist < target.rc.dist(mc)) && dist <= 5 * tilesz.x)
-                                target = gob;
-                        }
-                    }
-                }
-                if (target != null) {
-                    wdgmsg("click", target.sc, target.rc.floor(posres), 1, 0, 0, (int) target.id, target.rc.floor(posres), 0, -1);
-                    return;
-                }
+            Gob target = null;
+            if (clickb == 1 && curs != null && curs.name.equals("gfx/hud/curs/atk")
+                    && (Config.proximityaggro || Config.proximityaggroanimal)) {
+                target = proximity(new GobCheckAtk(), mc);
+            }
+            if (clickb == 1 && curs != null && curs.name.equals("gfx/hud/curs/hand")
+                    && (Config.proximitylift)) {
+                target = proximity(new GobCheckLift(), mc);
+            }
+            if (clickb == 3 && (modflags & 4) != 0 && curs != null && curs.name.equals("gfx/hud/curs/arw")
+                    && (Config.proximitylift)) {
+                target = proximity(new GobCheckChase(), mc);
+                modflags = modflags & ~4;
+            }
+            if (target != null) {
+                wdgmsg("click", target.sc, target.rc.floor(posres), clickb, modflags, 0, (int) target.id, target.rc.floor(posres), 0, -1);
+                return;
             }
 
             Object[] args = {pc, mc.floor(posres), clickb, modflags};
